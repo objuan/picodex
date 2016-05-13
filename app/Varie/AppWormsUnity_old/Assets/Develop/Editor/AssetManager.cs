@@ -1,0 +1,58 @@
+﻿using UnityEngine;
+using UnityEditor;
+
+using System.Collections;
+using System.IO;
+
+
+//using Picodex.Unity.Vxcm;
+using Picodex.Vxcm;
+
+namespace Picodex.Volume
+{
+    public class AssetManager
+    {
+        //public static VolumeDataType CreateFromVoxelDatabase<VolumeDataType>(string relativePathToVoxelDatabase) where VolumeDataType : DFVolumeData
+        //{
+        //    VolumeDataType data = DFVolumeData.CreateFromVoxelDatabase<VolumeDataType>(relativePathToVoxelDatabase);
+        //    string assetName = Path.GetFileNameWithoutExtension(relativePathToVoxelDatabase);
+        //    CreateAssetFromInstance<VolumeDataType>(data, assetName);
+        //    return data;
+        //}
+
+        public static VolumeDataType CreateEmptyVolumeData<VolumeDataType>(VolumeRegion region) where VolumeDataType : DFVolumeData
+        {
+            VolumeDataType data = DFVolumeData.CreateEmptyVolumeData<VolumeDataType>(region, Picodex.Utility.GenerateRandomVoxelDatabaseName());
+            CreateAssetFromInstance<VolumeDataType>(data);
+            return data;
+        }
+
+        // The contents of this method are taken/derived from here:
+        // http://wiki.unity3d.com/index.php?title=CreateScriptableObjectAsset
+        protected static void CreateAssetFromInstance<T>(T instance, string assetName = "") where T : ScriptableObject
+        {
+            string path = AssetDatabase.GetAssetPath(Selection.activeObject);
+            if (path == "")
+            {
+                path = "Assets";
+            }
+            else if (Path.GetExtension(path) != "")
+            {
+                path = path.Replace(Path.GetFileName(AssetDatabase.GetAssetPath(Selection.activeObject)), "");
+            }
+
+            if (assetName == "")
+            {
+                assetName = "New " + typeof(T).Name;
+            }
+
+            string assetPathAndName = AssetDatabase.GenerateUniqueAssetPath(path + "/" + assetName + ".asset");
+
+            AssetDatabase.CreateAsset(instance, assetPathAndName);
+
+            AssetDatabase.SaveAssets();
+            EditorUtility.FocusProjectWindow();
+            Selection.activeObject = instance;
+        }
+    }
+}
