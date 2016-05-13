@@ -1,0 +1,666 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="14.0">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;AXIOM_USENEWCOMPILERS</DefineConstants>
+    <BaseAddress>285212672</BaseAddress>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <FileAlignment>4096</FileAlignment>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <NoWarn>3021,0067,00169,1030,0659,0618,0162</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <BaseAddress>285212672</BaseAddress>
+    <Optimize>true</Optimize>
+    <FileAlignment>4096</FileAlignment>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{0E7D3DEC-1343-421A-8096-1E8AA81623BD}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>
+    </ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>Picodex.Unity</AssemblyName>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Picodex.Render</RootNamespace>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <StartupObject>
+    </StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE;DEBUG;AXIOM_USENEWCOMPILERS</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>false</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>none</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <BaseAddress>285212672</BaseAddress>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <FileAlignment>4096</FileAlignment>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <BaseAddress>285212672</BaseAddress>
+    <Optimize>true</Optimize>
+    <FileAlignment>4096</FileAlignment>
+    <PlatformTarget>x64</PlatformTarget>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\..\lib\Managed\XPlatform\ICSharpCode.SharpZipLib\0.84.0.0\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK">
+      <HintPath>..\..\lib\Managed\XPlatform\OpenTK\OpenTK.dll</HintPath>
+    </Reference>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing">
+      <Name>System.Drawing</Name>
+    </Reference>
+    <Reference Include="System.Windows.Forms">
+      <Name>System.Windows.Forms</Name>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Name>System.XML</Name>
+    </Reference>
+    <Reference Include="Tao.Cg">
+      <HintPath>..\..\lib\Managed\XPlatform\Tao\2.1.0.0\bin\Tao.Cg.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Axiom\Animating\Animable.cs" />
+    <Compile Include="Axiom\Animating\Animation.cs" />
+    <Compile Include="Axiom\Animating\AnimationState.cs" />
+    <Compile Include="Axiom\Animating\AnimationStateSet.cs" />
+    <Compile Include="Axiom\Animating\AnimationTrack.cs" />
+    <Compile Include="Axiom\Animating\AttachmentPoint.cs" />
+    <Compile Include="Axiom\Animating\Bone.cs" />
+    <Compile Include="Axiom\Animating\Collections\AnimationCollection.cs" />
+    <Compile Include="Axiom\Animating\Collections\AnimationStateCollection.cs" />
+    <Compile Include="Axiom\Animating\Collections\AnimationTrackCollection.cs" />
+    <Compile Include="Axiom\Animating\Collections\BoneCollection.cs" />
+    <Compile Include="Axiom\Animating\Collections\Lists.cs" />
+    <Compile Include="Axiom\Animating\Enums.cs" />
+    <Compile Include="Axiom\Animating\KeyFrame.cs" />
+    <Compile Include="Axiom\Animating\Pose.cs" />
+    <Compile Include="Axiom\Animating\Skeleton.cs" />
+    <Compile Include="Axiom\Animating\SkeletonInstance.cs" />
+    <Compile Include="Axiom\Animating\SkeletonManager.cs" />
+    <Compile Include="Axiom\Animating\TagPoint.cs" />
+    <Compile Include="Axiom\Collections\AxiomCollection.cs" />
+    <Compile Include="Axiom\Collections\BillboardSetCollection.cs" />
+    <Compile Include="Axiom\Collections\Deque.cs" />
+    <Compile Include="Axiom\Collections\HashList.cs" />
+    <Compile Include="Axiom\Collections\KeyFrameCollection.cs" />
+    <Compile Include="Axiom\Collections\Lists.cs" />
+    <Compile Include="Axiom\Collections\MeshCollection.cs" />
+    <Compile Include="Axiom\Collections\NamedCollection.cs" />
+    <Compile Include="Axiom\Collections\NamedParameterList.cs" />
+    <Compile Include="Axiom\Collections\NameValuePairList.cs" />
+    <Compile Include="Axiom\Collections\RadixSort.cs" />
+    <Compile Include="Axiom\Collections\ReadOnlyDictionary~2.cs" />
+    <Compile Include="Axiom\Collections\SortedList.cs" />
+    <Compile Include="Axiom\Collections\SubEntityCollection.cs" />
+    <Compile Include="Axiom\Collections\TextureLayerCollection.cs" />
+    <Compile Include="Axiom\Collections\UnsortedCollection.cs" />
+    <Compile Include="Axiom\Configuration\Config.cs" />
+    <Compile Include="Axiom\Configuration\ConfigOption.cs" />
+    <Compile Include="Axiom\Controllers\BaseControllerFunction.cs" />
+    <Compile Include="Axiom\Controllers\Canned\AnimationControllerFunction.cs" />
+    <Compile Include="Axiom\Controllers\Canned\FloatGpuParamControllerValue.cs" />
+    <Compile Include="Axiom\Controllers\Canned\MultiplyControllerFunction.cs" />
+    <Compile Include="Axiom\Controllers\Canned\NodeRotationControllerValue.cs" />
+    <Compile Include="Axiom\Controllers\Canned\PassthroughControllerFunction.cs" />
+    <Compile Include="Axiom\Controllers\Canned\TexCoordModifierControllerValue.cs" />
+    <Compile Include="Axiom\Controllers\Canned\TextureFrameControllerValue.cs" />
+    <Compile Include="Axiom\Controllers\Canned\WaveformControllerFunction.cs" />
+    <Compile Include="Axiom\Controllers\Controller.cs" />
+    <Compile Include="Axiom\Controllers\ControllerManager.cs" />
+    <Compile Include="Axiom\Controllers\Enums.cs" />
+    <Compile Include="Axiom\Controllers\FrameTimeControllerValue.cs" />
+    <Compile Include="Axiom\Controllers\IControllerFunction.cs" />
+    <Compile Include="Axiom\Controllers\IControllerValue.cs" />
+    <Compile Include="Axiom\Core\AbstractFactory~1.cs" />
+    <Compile Include="Axiom\Core\AxiomException.cs" />
+    <Compile Include="Axiom\Core\Billboard.cs" />
+    <Compile Include="Axiom\Core\BillboardChain.cs" />
+    <Compile Include="Axiom\Core\BillboardSet.cs" />
+    <Compile Include="Axiom\Core\BitConverterEx.cs" />
+    <Compile Include="Axiom\Core\Camera.cs" />
+    <Compile Include="Axiom\Core\ChainedEvent.cs" />
+    <Compile Include="Axiom\Core\Collections\CameraCollection.cs" />
+    <Compile Include="Axiom\Core\Collections\Lists.cs" />
+    <Compile Include="Axiom\Core\Collections\MovableObjectCollection.cs" />
+    <Compile Include="Axiom\Core\Collections\NodeCollection.cs" />
+    <Compile Include="Axiom\Core\Collections\SceneManagerCollection.cs" />
+    <Compile Include="Axiom\Core\Collections\SceneNodeCollection.cs" />
+    <Compile Include="Axiom\Core\Collections\SceneQueryMovableObjectIntersectionList.cs" />
+    <Compile Include="Axiom\Core\Collections\SceneQueryMovableObjectWorldFragmentIntersectionList.cs" />
+    <Compile Include="Axiom\Core\Collections\ViewportCollection.cs" />
+    <Compile Include="Axiom\Core\CoreEnums.cs" />
+    <Compile Include="Axiom\Core\DefaultShadowCameraSetup.cs" />
+    <Compile Include="Axiom\Core\DisposableObject.cs" />
+    <Compile Include="Axiom\Core\DistanceLodStrategy.cs" />
+    <Compile Include="Axiom\Core\Entity.cs" />
+    <Compile Include="Axiom\Core\Frustum.cs" />
+    <Compile Include="Axiom\Core\IAbstractFactory~1.cs" />
+    <Compile Include="Axiom\Core\IConfigurable.cs" />
+    <Compile Include="Axiom\Core\ILodListener.cs" />
+    <Compile Include="Axiom\Core\INamable.cs" />
+    <Compile Include="Axiom\Core\InstanceGeometry\InstancedEntity.cs" />
+    <Compile Include="Axiom\Core\InstanceGeometry\InstancedGeometry.cs" />
+    <Compile Include="Axiom\Core\InstanceGeometry\InstanceManager.cs" />
+    <Compile Include="Axiom\Core\IPlatformManager.cs" />
+    <Compile Include="Axiom\Core\IPlugin.cs" />
+    <Compile Include="Axiom\Core\IShadowCameraSetup.cs" />
+    <Compile Include="Axiom\Core\ITimer.cs" />
+    <Compile Include="Axiom\Core\Light.cs" />
+    <Compile Include="Axiom\Core\LodStrategy.cs" />
+    <Compile Include="Axiom\Core\LodStrategyManager.cs" />
+    <Compile Include="Axiom\Core\Log.cs" />
+    <Compile Include="Axiom\Core\LogManager.cs" />
+    <Compile Include="Axiom\Core\ManualObject.cs" />
+    <Compile Include="Axiom\Core\Memory.cs" />
+    <Compile Include="Axiom\Core\MemoryBuffer.cs" />
+    <Compile Include="Axiom\Core\Mesh.cs" />
+    <Compile Include="Axiom\Core\MeshManager.cs" />
+    <Compile Include="Axiom\Core\Meters.cs" />
+    <Compile Include="Axiom\Core\MovableObject.cs" />
+    <Compile Include="Axiom\Core\MovableText.cs" />
+    <Compile Include="Axiom\Core\NameGenerator~1.cs" />
+    <Compile Include="Axiom\Core\Node.cs" />
+    <Compile Include="Axiom\Core\ObjectCreator.cs" />
+    <Compile Include="Axiom\Core\ObjectTextDisplay.cs" />
+    <Compile Include="Axiom\Core\Pair.cs" />
+    <Compile Include="Axiom\Core\PatchMesh.cs" />
+    <Compile Include="Axiom\Core\PatchSurface.cs" />
+    <Compile Include="Axiom\Core\PixelCountStrategy.cs" />
+    <Compile Include="Axiom\Core\PlatformInformation.cs" />
+    <Compile Include="Axiom\Core\PlatformManager.cs" />
+    <Compile Include="Axiom\Core\PluginException.cs" />
+    <Compile Include="Axiom\Core\PluginManager.cs" />
+    <Compile Include="Axiom\Core\PrefabFactory.cs" />
+    <Compile Include="Axiom\Core\ProgressiveMesh.cs" />
+    <Compile Include="Axiom\Core\Rectangle.cs" />
+    <Compile Include="Axiom\Core\Resource.cs" />
+    <Compile Include="Axiom\Core\ResourceGroupManager.cs" />
+    <Compile Include="Axiom\Core\ResourceManager.cs" />
+    <Compile Include="Axiom\Core\Root.cs" />
+    <Compile Include="Axiom\Core\SceneManager.cs" />
+    <Compile Include="Axiom\Core\SceneManagerEnumerator.cs" />
+    <Compile Include="Axiom\Core\SceneNode.cs" />
+    <Compile Include="Axiom\Core\SceneQuery.cs" />
+    <Compile Include="Axiom\Core\ShadowTextureManager.cs" />
+    <Compile Include="Axiom\Core\Singleton.cs" />
+    <Compile Include="Axiom\Core\SpecialCaseRenderQueue.cs" />
+    <Compile Include="Axiom\Core\StaticGeometry\GeometryBucket.cs" />
+    <Compile Include="Axiom\Core\StaticGeometry\LODBucket.cs" />
+    <Compile Include="Axiom\Core\StaticGeometry\MaterialBucket.cs" />
+    <Compile Include="Axiom\Core\StaticGeometry\Region.cs" />
+    <Compile Include="Axiom\Core\StaticGeometry\StaticGeometry.cs" />
+    <Compile Include="Axiom\Core\StringConverter.cs" />
+    <Compile Include="Axiom\Core\SubEntity.cs" />
+    <Compile Include="Axiom\Core\SubMesh.cs" />
+    <Compile Include="Axiom\Core\Texture.cs" />
+    <Compile Include="Axiom\Core\TextureManager.cs" />
+    <Compile Include="Axiom\Core\Timer.cs" />
+    <Compile Include="Axiom\Core\Viewport.cs" />
+    <Compile Include="Axiom\Core\WindowEventMonitor.cs" />
+    <Compile Include="Axiom\Core\WireBoundingBox.cs" />
+    <Compile Include="Axiom\FileSystem\Archive.cs" />
+    <Compile Include="Axiom\FileSystem\ArchiveManager.cs" />
+    <Compile Include="Axiom\FileSystem\FileSystemArchive.cs" />
+    <Compile Include="Axiom\FileSystem\Watcher.cs" />
+    <Compile Include="Axiom\FileSystem\ZipArchive.cs" />
+    <Compile Include="Axiom\Fonts\Font.cs" />
+    <Compile Include="Axiom\Fonts\FontManager.cs" />
+    <Compile Include="Axiom\Fonts\FreetypeWrapper.cs" />
+    <Compile Include="Axiom\Fonts\FreetypeWrapper.x64.cs" />
+    <Compile Include="Axiom\Graphics\AnyBuilder.cs" />
+    <Compile Include="Axiom\Graphics\AutoParamDataSource.cs" />
+    <Compile Include="Axiom\Graphics\BufferStream.cs" />
+    <Compile Include="Axiom\Graphics\Collections\ConfigOptionCollection.cs" />
+    <Compile Include="Axiom\Graphics\Collections\Lists.cs" />
+    <Compile Include="Axiom\Graphics\Collections\RenderPriorityGroupList.cs" />
+    <Compile Include="Axiom\Graphics\Collections\RenderSystemCollection.cs" />
+    <Compile Include="Axiom\Graphics\Collections\RenderTargetCollection.cs" />
+    <Compile Include="Axiom\Graphics\Collections\RenderWindowCollection.cs" />
+    <Compile Include="Axiom\Graphics\CompositionPass.cs" />
+    <Compile Include="Axiom\Graphics\CompositionTargetPass.cs" />
+    <Compile Include="Axiom\Graphics\CompositionTechnique.cs" />
+    <Compile Include="Axiom\Graphics\Compositor.cs" />
+    <Compile Include="Axiom\Graphics\CompositorChain.cs" />
+    <Compile Include="Axiom\Graphics\CompositorInstance.cs" />
+    <Compile Include="Axiom\Graphics\CompositorManager.cs" />
+    <Compile Include="Axiom\Graphics\CompositorScriptLoader.cs" />
+    <Compile Include="Axiom\Graphics\DefaultHardwareBufferManager.cs" />
+    <Compile Include="Axiom\Graphics\DefaultHardwareBufferManagerBase.cs" />
+    <Compile Include="Axiom\Graphics\DefaultHardwareIndexBuffer.cs" />
+    <Compile Include="Axiom\Graphics\DefaultHardwareVertexBuffer.cs" />
+    <Compile Include="Axiom\Graphics\DriverVersion.cs" />
+    <Compile Include="Axiom\Graphics\EdgeData.cs" />
+    <Compile Include="Axiom\Graphics\EdgeListBuilder.cs" />
+    <Compile Include="Axiom\Graphics\Enums.cs" />
+    <Compile Include="Axiom\Graphics\GpuProgram.cs" />
+    <Compile Include="Axiom\Graphics\GpuProgramManager.cs" />
+    <Compile Include="Axiom\Graphics\GpuProgramParameters.AutoConstants.cs" />
+    <Compile Include="Axiom\Graphics\GpuProgramParameters.ConstantEntry.cs" />
+    <Compile Include="Axiom\Graphics\GpuProgramParameters.cs" />
+    <Compile Include="Axiom\Graphics\GpuProgramParameters.GpuConstantDefinition.cs" />
+    <Compile Include="Axiom\Graphics\GpuProgramParameters.NamedConstants.cs" />
+    <Compile Include="Axiom\Graphics\GpuProgramParameters.SharedParameters.cs" />
+    <Compile Include="Axiom\Graphics\GpuProgramUsage.cs" />
+    <Compile Include="Axiom\Graphics\HardwareBuffer.cs" />
+    <Compile Include="Axiom\Graphics\HardwareBufferManager.cs" />
+    <Compile Include="Axiom\Graphics\HardwareBufferManagerBase.cs" />
+    <Compile Include="Axiom\Graphics\HardwareCaps.cs" />
+    <Compile Include="Axiom\Graphics\HardwareIndexBuffer.cs" />
+    <Compile Include="Axiom\Graphics\HardwareOcclusionQuery.cs" />
+    <Compile Include="Axiom\Graphics\HardwarePixelBuffer.cs" />
+    <Compile Include="Axiom\Graphics\HardwareVertexBuffer.cs" />
+    <Compile Include="Axiom\Graphics\HighLevelGpuProgram.cs" />
+    <Compile Include="Axiom\Graphics\HighLevelGpuProgramManager.cs" />
+    <Compile Include="Axiom\Graphics\ICompositorLogic.cs" />
+    <Compile Include="Axiom\Graphics\ICustomCompositionPass.cs" />
+    <Compile Include="Axiom\Graphics\IHardwareBufferLicensee.cs" />
+    <Compile Include="Axiom\Graphics\IRenderable.cs" />
+    <Compile Include="Axiom\Graphics\Material.cs" />
+    <Compile Include="Axiom\Graphics\MaterialManager.cs" />
+    <Compile Include="Axiom\Graphics\MovablePlane.cs" />
+    <Compile Include="Axiom\Graphics\MultiRenderTarget.cs" />
+    <Compile Include="Axiom\Graphics\NullProgram.cs" />
+    <Compile Include="Axiom\Graphics\Pass.cs" />
+    <Compile Include="Axiom\Graphics\QueuedRenderableCollection.cs" />
+    <Compile Include="Axiom\Graphics\Rectangle2D.cs" />
+    <Compile Include="Axiom\Graphics\RenderOperation.cs" />
+    <Compile Include="Axiom\Graphics\RenderPriorityGroup.cs" />
+    <Compile Include="Axiom\Graphics\RenderQueue.cs" />
+    <Compile Include="Axiom\Graphics\RenderQueueGroup.cs" />
+    <Compile Include="Axiom\Graphics\RenderQueueInvocation.cs" />
+    <Compile Include="Axiom\Graphics\RenderQueueInvocationSequence.cs" />
+    <Compile Include="Axiom\Graphics\RenderSystem.cs" />
+    <Compile Include="Axiom\Graphics\RenderTarget.cs" />
+    <Compile Include="Axiom\Graphics\RenderTexture.cs" />
+    <Compile Include="Axiom\Graphics\RenderWindow.cs" />
+    <Compile Include="Axiom\Graphics\RibbonTrail.cs" />
+    <Compile Include="Axiom\Graphics\ShadowCaster.cs" />
+    <Compile Include="Axiom\Graphics\ShadowRenderable.cs" />
+    <Compile Include="Axiom\Graphics\ShadowVolumeExtrudeProgram.cs" />
+    <Compile Include="Axiom\Graphics\SimpleRenderable.cs" />
+    <Compile Include="Axiom\Graphics\SpotShadowFadePng.cs" />
+    <Compile Include="Axiom\Graphics\StaticFaceGroup.cs" />
+    <Compile Include="Axiom\Graphics\Technique.cs" />
+    <Compile Include="Axiom\Graphics\TempBlendedBufferInfo.cs" />
+    <Compile Include="Axiom\Graphics\TextureUnitState.cs" />
+    <Compile Include="Axiom\Graphics\TriangleBuilder.cs" />
+    <Compile Include="Axiom\Graphics\UnifiedHighLevelGpuProgram.cs" />
+    <Compile Include="Axiom\Graphics\VertexBufferBinding.cs" />
+    <Compile Include="Axiom\Graphics\VertexBufferLicense.cs" />
+    <Compile Include="Axiom\Graphics\VertexDeclaration.cs" />
+    <Compile Include="Axiom\Graphics\VertexElement.cs" />
+    <Compile Include="Axiom\Graphics\VertexIndexData.cs" />
+    <Compile Include="Axiom\Input\Enums.cs" />
+    <Compile Include="Axiom\Input\InputEventArgs.cs" />
+    <Compile Include="Axiom\Input\InputReader.cs" />
+    <Compile Include="Axiom\Input\KeyEventArgs.cs" />
+    <Compile Include="Axiom\Input\MouseEventArgs.cs" />
+    <Compile Include="Axiom\Math\Collections\BaseCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Axiom\Math\Collections\Lists.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Axiom\Math\Collections\Pair.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Axiom\Math\Collections\QuaternionCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Axiom\Math\Collections\Vector3Collection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Axiom\Media\Bitwise.cs" />
+    <Compile Include="Axiom\Media\CodecManager.cs" />
+    <Compile Include="Axiom\Media\DDSCodec.cs" />
+    <Compile Include="Axiom\Media\Enums.cs" />
+    <Compile Include="Axiom\Media\ICodec.cs" />
+    <Compile Include="Axiom\Media\Image.cs" />
+    <Compile Include="Axiom\Media\ImageCodec.cs" />
+    <Compile Include="Axiom\Media\LinearResampler.Byte.cs" />
+    <Compile Include="Axiom\Media\LinearResampler.cs" />
+    <Compile Include="Axiom\Media\LinearResampler.Float32.cs" />
+    <Compile Include="Axiom\Media\NearestResampler.cs" />
+    <Compile Include="Axiom\Media\OptimizedPixelConversion.cs" />
+    <Compile Include="Axiom\Media\PixelBox.cs" />
+    <Compile Include="Axiom\Media\PixelConverter.cs" />
+    <Compile Include="Axiom\Media\PixelUtil.cs" />
+    <Compile Include="Axiom\Overlays\Elements\BorderPanel.cs" />
+    <Compile Include="Axiom\Overlays\Elements\Factories.cs" />
+    <Compile Include="Axiom\Overlays\Elements\Panel.cs" />
+    <Compile Include="Axiom\Overlays\Elements\TextArea.cs" />
+    <Compile Include="Axiom\Overlays\Enums.cs" />
+    <Compile Include="Axiom\Overlays\IOverlayElementFactory.cs" />
+    <Compile Include="Axiom\Overlays\Overlay.cs" />
+    <Compile Include="Axiom\Overlays\OverlayElement.cs" />
+    <Compile Include="Axiom\Overlays\OverlayElementContainer.cs" />
+    <Compile Include="Axiom\Overlays\OverlayElementManager.cs" />
+    <Compile Include="Axiom\Overlays\OverlayManager.cs" />
+    <Compile Include="Axiom\ParticleSystems\BillboardParticleRenderer.cs" />
+    <Compile Include="Axiom\ParticleSystems\Collections.cs" />
+    <Compile Include="Axiom\ParticleSystems\Collections\Lists.cs" />
+    <Compile Include="Axiom\ParticleSystems\Particle.cs" />
+    <Compile Include="Axiom\ParticleSystems\ParticleAffector.cs" />
+    <Compile Include="Axiom\ParticleSystems\ParticleAffectorFactory.cs" />
+    <Compile Include="Axiom\ParticleSystems\ParticleEmitter.cs" />
+    <Compile Include="Axiom\ParticleSystems\ParticleEmitterFactory.cs" />
+    <Compile Include="Axiom\ParticleSystems\ParticleSystem.cs" />
+    <Compile Include="Axiom\ParticleSystems\ParticleSystemManager.cs" />
+    <Compile Include="Axiom\ParticleSystems\ParticleSystemRenderer.cs" />
+    <Compile Include="Axiom\ParticleSystems\ParticleSystemRendererFactory.cs" />
+    <Compile Include="Axiom\ParticleSystems\ParticleVisualData.cs" />
+    <Compile Include="Axiom\Plugins\CgProgramManager\CgHelper.cs" />
+    <Compile Include="Axiom\Plugins\CgProgramManager\CgPlugin.cs" />
+    <Compile Include="Axiom\Plugins\CgProgramManager\CgProgram.cs" />
+    <Compile Include="Axiom\Plugins\CgProgramManager\CgProgramFactory.cs" />
+    <Compile Include="Axiom\Plugins\Codecs\SDImageCodec.cs" />
+    <Compile Include="Axiom\Plugins\Codecs\SDImageLoader.cs" />
+    <Compile Include="Axiom\Scripting\CommandAttribute.cs" />
+    <Compile Include="Axiom\Scripting\Compiler\AbstractTreeBuilder.cs" />
+    <Compile Include="Axiom\Scripting\Compiler\AST\AbstractNode.cs" />
+    <Compile Include="Axiom\Scripting\Compiler\AST\AtomAbstractNode.cs" />
+    <Compile Include="Axiom\Scripting\Compiler\AST\ImportAbstractNode.cs" />
+    <Compile Include="Axiom\Scripting\Compiler\AST\ObjectAbstractNode.cs" />
+    <Compile Include="Axiom\Scripting\Compiler\AST\PropertyAbstractNode.cs" />
+    <Compile Include="Axiom\Scripting\Compiler\AST\VariableGetAbstractNode.cs" />
+    <Compile Include="Axiom\Scripting\Compiler\AST\VariableSetAbstractNode.cs" />
+    <Compile Include="Axiom\Scripting\Compiler\CompileError.cs" />
+    <Compile Include="Axiom\Scripting\Compiler\ConcreteNode.cs" />
+    <Compile Include="Axiom\Scripting\Compiler\Generation\CompositionPassClearTranslator.cs" />
+    <Compile Include="Axiom\Scripting\Compiler\Generation\CompositionPassStencilTranslator.cs" />
+    <Compile Include="Axiom\Scripting\Compiler\Generation\CompositionPassTranslator.cs" />
+    <Compile Include="Axiom\Scripting\Compiler\Generation\CompositionTargetPassTranslator.cs" />
+    <Compile Include="Axiom\Scripting\Compiler\Generation\CompositionTechniqueTranslator.cs" />
+    <Compile Include="Axiom\Scripting\Compiler\Generation\CompositorTranslator.cs" />
+    <Compile Include="Axiom\Scripting\Compiler\Generation\GpuProgramParametersTranslator.cs" />
+    <Compile Include="Axiom\Scripting\Compiler\Generation\GpuProgramTranslator.cs" />
+    <Compile Include="Axiom\Scripting\Compiler\Generation\MaterialTranslator.cs" />
+    <Compile Include="Axiom\Scripting\Compiler\Generation\ParticleAffectorTranslator.cs" />
+    <Compile Include="Axiom\Scripting\Compiler\Generation\ParticleEmitterTranslator.cs" />
+    <Compile Include="Axiom\Scripting\Compiler\Generation\ParticleSystemTranslator.cs" />
+    <Compile Include="Axiom\Scripting\Compiler\Generation\PassTranslator.cs" />
+    <Compile Include="Axiom\Scripting\Compiler\Generation\TechniqueTranslator.cs" />
+    <Compile Include="Axiom\Scripting\Compiler\Generation\TextureSourceTranslator.cs" />
+    <Compile Include="Axiom\Scripting\Compiler\Generation\TextureUnitTranslator.cs" />
+    <Compile Include="Axiom\Scripting\Compiler\Generation\Translator.cs" />
+    <Compile Include="Axiom\Scripting\Compiler\Keywords.cs" />
+    <Compile Include="Axiom\Scripting\Compiler\Parser\ScriptLexer.cs" />
+    <Compile Include="Axiom\Scripting\Compiler\Parser\ScriptParser.cs" />
+    <Compile Include="Axiom\Scripting\Compiler\Parser\ScriptToken.cs" />
+    <Compile Include="Axiom\Scripting\Compiler\Parser\Tokens.cs" />
+    <Compile Include="Axiom\Scripting\Compiler\ScriptCompiler.cs" />
+    <Compile Include="Axiom\Scripting\Compiler\ScriptCompilerListener.cs" />
+    <Compile Include="Axiom\Scripting\Compiler\ScriptCompilerManager.cs" />
+    <Compile Include="Axiom\Scripting\Compiler\ScriptCompilerManager.Events.cs" />
+    <Compile Include="Axiom\Scripting\ICommand.cs" />
+    <Compile Include="Axiom\Scripting\IExecuteCommand.cs" />
+    <Compile Include="Axiom\Scripting\IParser.cs" />
+    <Compile Include="Axiom\Scripting\IPropertyCommand.cs" />
+    <Compile Include="Axiom\Scripting\IScriptLoader.cs" />
+    <Compile Include="Axiom\Scripting\ParseHelper.cs" />
+    <Compile Include="Axiom\Scripting\ParserCommandAttribute.cs" />
+    <Compile Include="Axiom\Scripting\ScriptableObject.cs" />
+    <Compile Include="Axiom\Scripting\ScriptEnumAttribute.cs" />
+    <Compile Include="Axiom\Serialization\Enums.cs" />
+    <Compile Include="Axiom\Serialization\MaterialSerializer.cs" />
+    <Compile Include="Axiom\Serialization\MeshSerializer.cs" />
+    <Compile Include="Axiom\Serialization\MeshSerializerImpl.cs" />
+    <Compile Include="Axiom\Serialization\OgreSkeletonReader.cs" />
+    <Compile Include="Axiom\Serialization\Serializer.cs" />
+    <Compile Include="Axiom\Serialization\StreamSerializer.cs" />
+    <Compile Include="Axiom\Utilities\Contract.cs" />
+    <Compile Include="Axiom\Utilities\Exceptions.cs" />
+    <Compile Include="Axiom\Utilities\Proclaim.cs" />
+    <Compile Include="Picodex\CommandBufferBlurRefraction.cs" />
+    <Compile Include="Test\TestGL.cs" />
+    <Compile Include="Test\TestOrtho.cs" />
+    <Compile Include="UnityEditor\AssetDatabase.cs" />
+    <Compile Include="UnityEditor\Selection.cs" />
+    <Compile Include="UnityEngine\Imp\MaterialView.cs" />
+    <Compile Include="UnityEngine\Imp\RenderableObject.cs" />
+    <Compile Include="UnityEngine\Imp\MeshView.cs" />
+    <Compile Include="UnityEngine\Imp\Examples Axiom\FrustumCulling.cs" />
+    <Compile Include="UnityEngine\Imp\Examples Axiom\TechDemo.cs" />
+    <Compile Include="UnityEngine\Imp\Renderable\EntityMaterialView.cs" />
+    <Compile Include="UnityEngine\Imp\Renderable\MeshRenderable.cs" />
+    <Compile Include="UnityEngine\Imp\ShaderMaterialPass.cs" />
+    <Compile Include="UnityEngine\Imp\ShaderMaterial.cs" />
+    <Compile Include="UnityEngine\Imp\ShaderMaterialProperty.cs" />
+    <Compile Include="UnityEngine\Imp\Traslator\UnityPassTranslator.cs" />
+    <Compile Include="UnityEngine\Imp\Traslator\UnityTagsTranslator.cs" />
+    <Compile Include="UnityEngine\Imp\Traslator\UnityPropertiesTranslator.cs" />
+    <Compile Include="UnityEngine\Imp\Traslator\UnityCGPROGRAMTranslator.cs" />
+    <Compile Include="UnityEngine\Imp\Traslator\UnitySubShaderTranslator.cs" />
+    <Compile Include="UnityEngine\Imp\Traslator\UnityScriptTranslator.cs" />
+    <Compile Include="UnityEngine\Imp\Traslator\UnityScriptTranslatorManager.cs" />
+    <Compile Include="UnityEngine\Imp\UnityRenderPipelineAxiom.cs" />
+    <Compile Include="UnityEngine\Light.cs" />
+    <Compile Include="UnityEngine\Math\Real.cs" />
+    <Compile Include="UnityEngine\Rendering\Enums.cs" />
+    <Compile Include="UnityEngine\Rendering\GraphicsSettings.cs" />
+    <Compile Include="UnityEngine\Rendering\RenderTargetIdentifier.cs" />
+    <Compile Include="UnityEditor\EditorWindow.cs" />
+    <Compile Include="UnityEngine\Application.cs" />
+    <Compile Include="UnityEngine\Attribs\Deprecated.cs" />
+    <Compile Include="UnityEngine\Attribs\SerializeField.cs" />
+    <Compile Include="UnityEngine\Attribs\Range.cs" />
+    <Compile Include="UnityEngine\Attribs\HideInInspector.cs" />
+    <Compile Include="UnityEngine\Bounds.cs" />
+    <Compile Include="UnityEngine\Color32.cs" />
+    <Compile Include="UnityEngine\Attribs\AddComponentMenu.cs" />
+    <Compile Include="AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="UnityEngine\Attribs\ExecuteInEditMode.cs" />
+    <Compile Include="UnityEngine\Rendering\CommandBuffer.cs" />
+    <Compile Include="UnityEngine\Camera.cs" />
+    <Compile Include="UnityEngine\Color.cs" />
+    <Compile Include="UnityEngine\Gizmos.cs" />
+    <Compile Include="UnityEngine\MaterialPropertyBlock.cs" />
+    <Compile Include="UnityEngine\Renderer.cs" />
+    <Compile Include="UnityEngine\MeshRenderer.cs" />
+    <Compile Include="UnityEngine\Resources.cs" />
+    <Compile Include="UnityEngine\Rigidbody.cs" />
+    <Compile Include="UnityEngine\Texture3D.cs" />
+    <Compile Include="UnityEngine\Rect.cs" />
+    <Compile Include="UnityEngine\RenderTexture.cs" />
+    <Compile Include="UnityEngine\Screen.cs" />
+    <Compile Include="UnityEngine\Shader.cs" />
+    <Compile Include="UnityEngine\Texture.cs" />
+    <Compile Include="UnityEngine\Texture2D.cs" />
+    <Compile Include="UnityEngine\Material.cs" />
+    <Compile Include="UnityEngine\Graphics.cs" />
+    <Compile Include="UnityEngine\ScriptableObject.cs" />
+    <Compile Include="UnityEngine\SystemInfo.cs" />
+    <Compile Include="Test\TestRT.cs" />
+    <Compile Include="UnityEngine\Utils\Debug.cs" />
+    <Compile Include="Picodex\UnityExtensions\ExtensionMethods.cs" />
+    <Compile Include="UnityEngine\Utils\PrimitiveBuilder.cs" />
+    <Compile Include="UnityPlatform\AssetRunTime.cs" />
+    <Compile Include="UnityPlatform\DeferredRenderingPipeline.cs" />
+    <Compile Include="UnityPlatform\ForwardRenderingPipeline.cs" />
+    <Compile Include="UnityPlatform\GL.cs" />
+    <Compile Include="UnityPlatform\RenderingPipeline.cs" />
+    <Compile Include="UnityPlatform\UnityRenderPipeline.cs" />
+    <Compile Include="UnityEngine\Object.cs" />
+    <Compile Include="UnityEngine\Behaviour.cs" />
+    <Compile Include="UnityEngine\Component.cs" />
+    <Compile Include="UnityEngine\GameObject.cs" />
+    <Compile Include="UnityEngine\Input.cs" />
+    <Compile Include="UnityEngine\Mesh.cs" />
+    <Compile Include="UnityEngine\MeshFilter.cs" />
+    <Compile Include="UnityEngine\MonoBehaviour.cs" />
+    <Compile Include="UnityEngine\SceneManagement\Scene.cs" />
+    <Compile Include="UnityEngine\Time.cs" />
+    <Compile Include="Picodex\Meshes\BillboardPlane.cs" />
+    <Compile Include="UnityEngine\Math\AxisAlignedBox.cs" />
+    <Compile Include="UnityEngine\Math\Degree.cs" />
+    <Compile Include="UnityEngine\Math\Enums.cs" />
+    <Compile Include="UnityEngine\Math\MathHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="UnityEngine\Math\Matrix3.cs" />
+    <Compile Include="UnityEngine\Math\Matrix4.cs" />
+    <Compile Include="UnityEngine\Math\Plane.cs" />
+    <Compile Include="UnityEngine\Math\PlaneBoundedVolume.cs" />
+    <Compile Include="UnityEngine\Math\PositionalSpline.cs" />
+    <Compile Include="UnityEngine\Math\Quaternion.cs" />
+    <Compile Include="UnityEngine\Math\Radian.cs" />
+    <Compile Include="UnityEngine\Math\Ray.cs" />
+    <Compile Include="UnityEngine\Math\RotationalSpline.cs" />
+    <Compile Include="UnityEngine\Math\Sphere.cs" />
+    <Compile Include="UnityEngine\Math\Spline.cs" />
+    <Compile Include="UnityEngine\Math\Tuple.cs" />
+    <Compile Include="UnityEngine\Math\Utility.cs" />
+    <Compile Include="UnityEngine\Math\Vector2.cs" />
+    <Compile Include="UnityEngine\Math\Vector3.cs" />
+    <Compile Include="UnityEngine\Math\Vector4.cs" />
+    <Compile Include="Picodex\Camera\DragMouseOrbit.cs" />
+    <Compile Include="UnityEngine\Transform.cs" />
+    <Compile Include="UnityPlatform\UnityContext.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Axiom\lib\picodex.axiom.opengl.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Axiom\Overlays\Overlays.cd" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>

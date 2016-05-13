@@ -1,0 +1,146 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{567CBB82-A7FB-4846-9622-A7052F068E05}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>picodex.worms</RootNamespace>
+    <AssemblyName>picodex.worms</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\app\AppWormsUnity\Assets\Picodex\Plugins\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\app\AppWormsUnity\Library\UnityAssemblies\UnityEngine.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Actor.cs" />
+    <Compile Include="camera\DragMouseOrbit.cs" />
+    <Compile Include="camera\MaxCamera.cs" />
+    <Compile Include="GameParams.cs" />
+    <Compile Include="GameContext.cs" />
+    <Compile Include="unity\DFUtil.cs" />
+    <Compile Include="unity\DFVolumeOld.cs" />
+    <Compile Include="math\Vector3i.cs" />
+    <Compile Include="Player.cs" />
+    <Compile Include="planet\Planet.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="scene\CameraBo.cs" />
+    <Compile Include="unity\Paths.cs" />
+    <Compile Include="unity\VXCMTexture3D_DB_v01.cs" />
+    <Compile Include="unity\vxcm\DFVolume.cs" />
+    <Compile Include="unity\vxcm\DFVolumeCollider.cs" />
+    <Compile Include="unity\vxcm\DFVolumeData.cs" />
+    <Compile Include="unity\vxcm\DFVolumeRenderer.cs" />
+    <Compile Include="unity\vxcm\Volume.cs" />
+    <Compile Include="unity\vxcm\VolumeCollider.cs" />
+    <Compile Include="unity\vxcm\VolumeData.cs" />
+    <Compile Include="unity\vxcm\VolumeRenderer.cs" />
+    <Compile Include="math\MathUtils.cs" />
+    <Compile Include="utils\Box.cs" />
+    <Compile Include="utils\DebugUtils.cs" />
+    <Compile Include="utils\ExtensionMethods.cs" />
+    <Compile Include="utils\MemoryUtil.cs" />
+    <Compile Include="utils\Utility.cs" />
+    <Compile Include="vxcm\VolumePrimitiveRaster.cs" />
+    <Compile Include="vxcm\GeometrySample.cs" />
+    <Compile Include="vxcm\VolumeAddress.cs" />
+    <Compile Include="vxcm\VolumeRegion.cs" />
+    <Compile Include="vxcm\VXCMVolume.cs" />
+    <Compile Include="vxcm\VXCMVolumeAccessor.cs" />
+    <Compile Include="vxcm\VolumeTypes.cs" />
+    <Compile Include="vxcm\VXCMContext.cs" />
+    <Compile Include="vxcm\VXCMException.cs" />
+    <Compile Include="unity\VXCMRenderer.cs" />
+    <Compile Include="unity\VXCMTexture3D_v01.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="scene\meshes\" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
