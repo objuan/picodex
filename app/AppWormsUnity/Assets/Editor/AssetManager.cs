@@ -21,11 +21,12 @@ namespace Picodex.Volume
         //    return data;
         //}
 
-        public static VolumeDataType CreateEmptyVolumeData<VolumeDataType>(Vector3i size) where VolumeDataType : DFVolumeData
+        public static VolumeDataType CreateEmptyVolume<VolumeDataType>(Vector3i size) where VolumeDataType : DFVolume
         {
-            VolumeDataType data = DFVolumeData.CreateEmptyVolumeData<VolumeDataType>(size, PathUtils.GenerateRandomVoxelDatabaseName());
-            CreateAssetFromInstance<VolumeDataType>(data);
-            return data;
+            //VolumeDataType data = DFVolumeData.CreateEmptyVolumeData<VolumeDataType>(size, PathUtils.GenerateRandomVoxelDatabaseName());
+            //CreateAssetFromInstance<VolumeDataType>(data);
+            //return data;
+            return null;
         }
 
         // The contents of this method are taken/derived from here:

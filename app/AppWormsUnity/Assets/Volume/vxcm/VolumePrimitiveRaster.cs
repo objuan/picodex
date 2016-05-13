@@ -57,8 +57,8 @@ public class VolumePrimitiveSphere :  VolumePrimitive
 	//	AxisAlignedBox crop_bbox = volume->convertGridToLocal(gridRegion);
 
 		float dx=1;
-        float w_min = volume.DistanceFieldRangeMin;
-        float w_max = volume.DistanceFieldRangeMax;
+        float w_min = volume.distanceFieldRangeMin;
+        float w_max = volume.distanceFieldRangeMax;
 
 
 		Vector3 r0 = new Vector3 ( ((max.x - min.x) /2) / dx,((max.y - min.y) /2) / dx,((max.z - min.z) /2) / dx);

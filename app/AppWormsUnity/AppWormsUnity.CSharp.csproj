@@ -67,10 +67,14 @@
   <ItemGroup>
     <Compile Include="Assets\Camera\DragMouseOrbit.cs" />
     <Compile Include="Assets\Camera\MaxCamera.cs" />
+    <Compile Include="Assets\Math\MathUtils.cs" />
+    <Compile Include="Assets\Math\Vector3i.cs" />
+    <Compile Include="Assets\Planet\Scripts\Destroyer.cs" />
+    <Compile Include="Assets\Planet\Scripts\Planet.cs" />
+    <Compile Include="Assets\Planet\Scripts\PlanetGravity.cs" />
     <Compile Include="Assets\Utility\DebugUtils.cs" />
     <Compile Include="Assets\Utility\ExtensionMethods.cs" />
     <Compile Include="Assets\Utility\GeneralUtils.cs" />
-    <Compile Include="Assets\Math\MathUtils.cs" />
     <Compile Include="Assets\Utility\MemoryUtil.cs" />
     <Compile Include="Assets\Utility\PathUtils.cs" />
     <Compile Include="Assets\Utility\PrimitiveHelper.cs" />
@@ -78,9 +82,9 @@
     <Compile Include="Assets\Utility\TransformSerializationExtension.cs" />
     <Compile Include="Assets\Utility\UnitySingletonPersistent.cs" />
     <Compile Include="Assets\Volume\DFUtil.cs" />
-    <Compile Include="Assets\Volume\DFVolume.cs" />
     <Compile Include="Assets\Volume\DFVolumeCollider.cs" />
-    <Compile Include="Assets\Volume\DFVolumeData.cs" />
+    <Compile Include="Assets\Volume\DFVolumeDataBuilder.cs" />
+    <Compile Include="Assets\Volume\DFVolume.cs" />
     <Compile Include="Assets\Volume\DFVolumeFilter.cs" />
     <Compile Include="Assets\Volume\DFVolumeRenderer.cs" />
     <Compile Include="Assets\Volume\DFVolumeUI.cs" />
@@ -97,10 +101,9 @@
     <Compile Include="Assets\Volume\VXCMObject_v02.cs" />
     <Compile Include="Assets\Volume\vxcm\GeometrySample.cs" />
     <Compile Include="Assets\Volume\vxcm\VXCMException.cs" />
-    <Compile Include="Assets\Volume\vxcm\VXCMVolumeDef.cs" />
     <Compile Include="Assets\Volume\vxcm\VXCMVolume.cs" />
     <Compile Include="Assets\Volume\vxcm\VXCMVolumeAccessor.cs" />
-    <Compile Include="Assets\Math\Vector3i.cs" />
+    <Compile Include="Assets\Volume\vxcm\VXCMVolumeDef.cs" />
     <Compile Include="Assets\Volume\vxcm\VolumePrimitiveRaster.cs" />
     <Compile Include="Assets\Volume\vxcm\VolumeRegion.cs" />
     <Compile Include="Assets\Volume\vxcm\VolumeTypes.cs" />
@@ -134,6 +137,5 @@
     <None Include="Assets\Shaders\test\TestTrasparent.shader" />
     <None Include="Assets\Shaders\test\TestTrasparent_v02.shader" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>

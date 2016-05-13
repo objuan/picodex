@@ -7,14 +7,14 @@ using UnityEngine;
 
 namespace Picodex.Vxcm
 {
-    [System.Serializable]
-    public class VXCMVolume
+   // [System.Serializable]
+    public class VXCMVolume : ScriptableObject
     {
         int size;
         public int subSampling;
 
-        public float DistanceFieldRangeMin;
-        public float DistanceFieldRangeMax;
+        public float distanceFieldRangeMin;
+        public float distanceFieldRangeMax;
 
         //public byte[] DF;
         [HideInInspector]
@@ -34,6 +34,13 @@ namespace Picodex.Vxcm
             {
                 return region.size;
             }
+            set
+            {
+                if (value != resolution)
+                {
+                    Resize(value);
+                }
+            }
         }
 
         private VXCMVolumeAccessor accessor;
@@ -50,10 +57,11 @@ namespace Picodex.Vxcm
             }
         }
 
-        public VXCMVolume(Vector3i size, int subSampling, float distanceFieldRangeMin, float distanceFieldRangeMax)
+        public void initialize(Vector3i size, int subSampling, float distanceFieldRangeMin, float distanceFieldRangeMax)
         {
-            DistanceFieldRangeMin = distanceFieldRangeMin;
-            DistanceFieldRangeMax = distanceFieldRangeMax;
+            this.subSampling = subSampling;
+            this.distanceFieldRangeMin = distanceFieldRangeMin;
+            this.distanceFieldRangeMax = distanceFieldRangeMax;
             Resize(size);
         }
 
@@ -86,8 +94,6 @@ namespace Picodex.Vxcm
 
         }
 
-
-    
 
         // ================
 

@@ -48,7 +48,10 @@ namespace Picodex
 
         Matrix4x4 objectToVolumeTrx;
 
-        DFVolumeData data;
+        DFVolume data;
+
+        [System.NonSerialized]
+        public GameObject proxyGameObject;
 
         /// Material for this volume.
         public Material material
@@ -114,14 +117,34 @@ namespace Picodex
 
         // 
 
+        void Awake()
+        {
+            proxyGameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            DestroyImmediate(proxyGameObject.GetComponent<Collider>());
+            proxyGameObject.hideFlags = HideFlags.DontSave;
+        }
+
+    
+
         void Start() {
             volume = GetComponent<DFVolume>();
-            data = GetComponent<DFVolumeFilter>().volumeData;
+            data = GetComponent<DFVolumeFilter>().volume;
 
-           // mMaterial = new Material(Shader.Find("Vxcm/Object/ray_v05"));
+            // mMaterial = new Material(Shader.Find("Vxcm/Object/ray_v05"));
 
-            proxyMesh = volume.proxyGameObject.GetComponent<MeshFilter>().sharedMesh;
-           // volume.proxyGameObject.GetComponent<MeshFilter>().GetComponent<Renderer>().material = material;
+            if (GetComponent<DFVolumeFilter>() == null) return;
+            if (GetComponent<DFVolumeRenderer>() == null) return;
+
+            // ---------------
+
+            VXCMObject_v02 obj = proxyGameObject.AddComponent<VXCMObject_v02>();
+            obj.volume = GetComponent<DFVolumeFilter>().volume;
+
+            proxyGameObject.hideFlags = HideFlags.HideAndDontSave;
+            // proxyGameObject.hideFlags = HideFlags.DontSave;
+
+            proxyGameObject.transform.parent = this.transform;
+            proxyGameObject.transform.setLocalToIdentity();
         }
 
         void OnEnable()
@@ -134,6 +157,21 @@ namespace Picodex
             hasChanged = true;
         }
 
+
+        void OnApplicationQuit()
+        {
+            DestroyImmediate(proxyGameObject);
+        }
+
+
+        // It seems that we need to implement this function in order to make the volume pickable in the editor.
+        // It's actually the gizmo which get's picked which is often bigger than than the volume (unless all
+        // voxels are solid). So somtimes the volume will be selected by clicking on apparently empty space.
+        // We shold try and fix this by using raycasting to check if a voxel is under the mouse cursor?
+        void OnDrawGizmos()
+        {
+            DFVolumeUI.OnDrawGizmos(gameObject);
+        }
 
         //public void OnWillRenderObject()
         //{

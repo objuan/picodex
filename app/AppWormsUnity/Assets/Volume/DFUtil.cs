@@ -26,7 +26,8 @@ namespace Picodex
 
         public static VXCMVolume getVolume(int w, int h, int d)
         {
-            VXCMVolume volume = new VXCMVolume(new Vector3i(w, h,d), 1, -2, 2);
+            VXCMVolume volume = new VXCMVolume();
+            volume.initialize( new Vector3i(w, h,d), 1, -2, 2);
 
             //   VXCMVolume volume = new VXCMVolume(new VolumeRegion(-w/2,-h/2,-d / 2, w / 2, h/2,d/2), 1, -2, 2);
 

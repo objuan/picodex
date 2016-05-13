@@ -16,10 +16,11 @@ namespace Picodex.Volume
         static void CreateDFVolume()
         {
 
-            DFVolumeData data = AssetManager.CreateEmptyVolumeData<DFVolumeData>(new Vector3i(64,64,64 ));
+            DFVolume data = AssetManager.CreateEmptyVolumeData<DFVolume>();
+            data.initialize(new Vector3i(64,64,64 ),1,-2,2);
 
             // TEST 
-            VolumePrimitiveSphere raster = new VolumePrimitiveSphere(data.volume);
+            VolumePrimitiveSphere raster = new VolumePrimitiveSphere(data);
 
             GeometrySample sample = new GeometrySample();
             sample.debugColor = new Vector3(1, 0, 0);

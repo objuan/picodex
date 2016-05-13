@@ -19,7 +19,7 @@ namespace Picodex
     public class DFVolumeFilter : MonoBehaviour
     {
         [SerializeField]
-        public DFVolumeData volumeData = null;
+        public DFVolume volume = null;
 
 
     }

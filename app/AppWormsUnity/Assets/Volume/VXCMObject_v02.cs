@@ -42,10 +42,10 @@ namespace Picodex
             if (volume == null)
             {
                 DFVolumeFilter volumeFilter = GetComponent<DFVolumeFilter>();
-                if (volumeFilter != null && volumeFilter.volumeData != null)
-                    volume = volumeFilter.volumeData.volume;
-                else
-                    volume = new VXCMVolume(dimensions, 1, -2, 2);
+                if (volumeFilter != null && volumeFilter.volume != null)
+                    volume = volumeFilter.volume;
+                //else
+                //    volume = new VXCMVolume(dimensions, 1, -2, 2);
             }
 
             //  VXCMContext.Instance.useContext();
@@ -105,8 +105,8 @@ namespace Picodex
 
                 // mat
 
-                material.SetFloat("DF_MIN", volume.DistanceFieldRangeMin);
-                material.SetFloat("DF_MAX_MINUS_MIN", volume.DistanceFieldRangeMax - volume.DistanceFieldRangeMin);
+                material.SetFloat("DF_MIN", volume.distanceFieldRangeMin);
+                material.SetFloat("DF_MAX_MINUS_MIN", volume.distanceFieldRangeMax - volume.distanceFieldRangeMin);
 
                 material.SetMatrix("u_objectToVolumeTrx", objectToVolumeTrx);
                 material.SetMatrix("u_objectToVolumeInvTrx", objectToVolumeTrx.inverse);

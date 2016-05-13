@@ -37,8 +37,8 @@ namespace Picodex.Vxcm
             DF = volume.DF;
             size = volume.region.size.x;
             size2 = volume.region.size.x * volume.region.size.y;
-            distanceFieldRangeMin = volume.DistanceFieldRangeMin;
-            distanceFieldRangeMax = volume.DistanceFieldRangeMax;
+            distanceFieldRangeMin = volume.distanceFieldRangeMin;
+            distanceFieldRangeMax = volume.distanceFieldRangeMax;
             distanceFieldRangeW = distanceFieldRangeMax - distanceFieldRangeMin;
 
             localToVolumeTrx = volume.localToVolumeTrx;

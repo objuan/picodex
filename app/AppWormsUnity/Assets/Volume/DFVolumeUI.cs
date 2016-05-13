@@ -21,15 +21,15 @@ namespace Picodex
         // It's actually the gizmo which get's picked which is often bigger than than the volume (unless all
         // voxels are solid). So somtimes the volume will be selected by clicking on apparently empty space.
         // We shold try and fix this by using raycasting to check if a voxel is under the mouse cursor?
-        public static void OnDrawGizmos(DFVolume volume)
+        public static void OnDrawGizmos(GameObject volumeObj)
         {
-            DFVolumeData data = volume.GetComponent<DFVolumeFilter>().volumeData;
+            DFVolume data = volumeObj.GetComponent<DFVolumeFilter>().volume;
             if (data != null)
             {
                 // Compute the size of the volume.
-                int width = (data.Region.max.x - data.Region.min.x) + 1;
-                int height = (data.Region.max.y - data.Region.min.y) + 1;
-                int depth = (data.Region.max.z - data.Region.min.z) + 1;
+                int width = (data.region.max.x - data.region.min.x) + 1;
+                int height = (data.region.max.y - data.region.min.y) + 1;
+                int depth = (data.region.max.z - data.region.min.z) + 1;
                 float offsetX = width / 2;
                 float offsetY = height / 2;
                 float offsetZ = depth / 2;
@@ -40,7 +40,7 @@ namespace Picodex
                 // + new Vector3(offsetX, offsetY, offsetZ)
                 // Draw an invisible box surrounding the olume. This is what actually gets picked.
                 Gizmos.color = new Color(1.0f, 1.0f, 0.0f, 0.9f);
-                Gizmos.DrawWireCube(volume.transform.position , new Vector3(width, height, depth)); //  - halfVoxelOffset
+                Gizmos.DrawWireCube(volumeObj.transform.position , new Vector3(width, height, depth)); //  - halfVoxelOffset
             }
         }
 
