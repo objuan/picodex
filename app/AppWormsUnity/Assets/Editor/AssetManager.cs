@@ -9,7 +9,7 @@ using System.IO;
 using Picodex;
 using Picodex.Vxcm;
 
-namespace Picodex.Volume
+namespace Picodex
 {
     public class AssetManager
     {
@@ -31,7 +31,7 @@ namespace Picodex.Volume
 
         // The contents of this method are taken/derived from here:
         // http://wiki.unity3d.com/index.php?title=CreateScriptableObjectAsset
-        protected static void CreateAssetFromInstance<T>(T instance, string assetName = "") where T : ScriptableObject
+        public static void CreateAssetFromInstance<T>(T instance, string assetName = "") where T : ScriptableObject
         {
             string path = AssetDatabase.GetAssetPath(Selection.activeObject);
             if (path == "")
@@ -56,5 +56,12 @@ namespace Picodex.Volume
             EditorUtility.FocusProjectWindow();
             Selection.activeObject = instance;
         }
+
+        public static void SaveAsset(Object t)
+       {
+            EditorUtility.SetDirty(t);
+            EditorApplication.SaveAssets();
+            AssetDatabase.SaveAssets();
+            }
     }
 }

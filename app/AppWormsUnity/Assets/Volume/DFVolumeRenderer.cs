@@ -7,8 +7,8 @@ using Picodex.Vxcm;
 
 namespace Picodex
 {
-	/// Controls some visual aspects of the volume and allows it to be rendered.
-	/**
+    /// Controls some visual aspects of the volume and allows it to be rendered.
+    /**
 	 * The role of the VolumeRenderer component for volumes is conceptually similar to the role of Unity's MeshRenderer class for meshes.
 	 * Specifically, it can be attached to a GameObject which also has a Volume component to cause that Volume component to be drawn. It 
 	 * also exposes a number of properties such as whether a volume should cast and receive shadows.
@@ -18,8 +18,10 @@ namespace Picodex
 	 * 
 	 * \sa VolumeCollider
 	 */
-  //  [ExecuteInEditMode]
-	public class DFVolumeRenderer : MonoBehaviour
+    //  [ExecuteInEditMode]
+    [AddComponentMenu("Vxcm/DFVolumeRenderer")]
+    [ExecuteInEditMode]
+    public class DFVolumeRenderer : MonoBehaviour
     {
         [System.NonSerialized]
         Texture3D texture = null;
@@ -47,8 +49,6 @@ namespace Picodex
         DFVolume volume;
 
         Matrix4x4 objectToVolumeTrx;
-
-        DFVolume data;
 
         [System.NonSerialized]
         public GameObject proxyGameObject;
@@ -127,8 +127,8 @@ namespace Picodex
     
 
         void Start() {
-            volume = GetComponent<DFVolume>();
-            data = GetComponent<DFVolumeFilter>().volume;
+            //  volume = GetComponent<DFVolume>();
+            volume = GetComponent<DFVolumeFilter>().volume;
 
             // mMaterial = new Material(Shader.Find("Vxcm/Object/ray_v05"));
 
@@ -140,8 +140,8 @@ namespace Picodex
             VXCMObject_v02 obj = proxyGameObject.AddComponent<VXCMObject_v02>();
             obj.volume = GetComponent<DFVolumeFilter>().volume;
 
-            proxyGameObject.hideFlags = HideFlags.HideAndDontSave;
-            // proxyGameObject.hideFlags = HideFlags.DontSave;
+           // proxyGameObject.hideFlags = HideFlags.HideAndDontSave;
+            proxyGameObject.hideFlags = HideFlags.DontSave;
 
             proxyGameObject.transform.parent = this.transform;
             proxyGameObject.transform.setLocalToIdentity();
@@ -173,6 +173,7 @@ namespace Picodex
             DFVolumeUI.OnDrawGizmos(gameObject);
         }
 
+       
         //public void OnWillRenderObject()
         //{
         //    if (!enabled)// || !renderer || !renderer.sharedMaterial || !renderer.enabled)

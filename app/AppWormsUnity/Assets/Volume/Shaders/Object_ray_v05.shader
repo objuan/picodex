@@ -83,65 +83,64 @@
 	
 
 	// Pass to render object as a shadow collector
-	//Pass{
-	//		Name "ShadowCollector"
-	//		Tags{ "LightMode" = "ShadowCollector" }
+	Pass{
+			Name "ShadowCollector"
+			Tags{ "LightMode" = "ShadowCollector" }
 
-	//		Fog{ Mode Off }
-	//		ZWrite On ZTest Less
+			Fog{ Mode Off }
+			ZWrite On ZTest Less
 
-	//		CGPROGRAM
-	//		#pragma vertex vert_vxcm_object
-	//		#pragma fragment frag
-	//		#pragma fragmentoption ARB_precision_hint_fastest
-	//		#pragma multi_compile_shadowcollector
+			CGPROGRAM
+			#pragma vertex vert_vxcm_object
+			#pragma fragment frag
+			#pragma fragmentoption ARB_precision_hint_fastest
+			#pragma multi_compile_shadowcollector
 
-	//		#define SHADOW_COLLECTOR_PASS
-	//		#include "UnityCG.cginc"
-	//		#define VXCM_PROXY_VS
-	//		#include "UnityVxcm.cginc"
+			#define SHADOW_COLLECTOR_PASS
+			#include "UnityCG.cginc"
+			#define VXCM_PROXY_VS
+			#include "UnityVxcm.cginc"
 
-	//		struct v2f {
-	//			V2F_SHADOW_COLLECTOR;
-	//			float2  uv : TEXCOORD5;
-	//		};
+			struct v2f {
+				V2F_SHADOW_COLLECTOR;
+				float2  uv : TEXCOORD5;
+			};
 
-	//		uniform float4 _MainTex_ST;
+			uniform float4 _MainTex_ST;
 
-	//		v2f vert(appdata_base v)
-	//		{
-	//			v2f o;
-	//			TRANSFER_SHADOW_COLLECTOR(o)
-	//			o.uv = TRANSFORM_TEX(v.texcoord, _MainTex);
-	//			return o;
-	//		}
+			v2f vert(appdata_base v)
+			{
+				v2f o;
+				TRANSFER_SHADOW_COLLECTOR(o)
+				o.uv = TRANSFORM_TEX(v.texcoord, _MainTex);
+				return o;
+			}
 
-	//		uniform sampler2D _MainTex;
-	//		uniform float _Cutoff;
-	//		uniform float4 _Color;
+			uniform sampler2D _MainTex;
+			uniform float _Cutoff;
+			uniform float4 _Color;
 
-	//		half4 fra2g(appdata_vxcm_object i) : COLOR
-	//		{
-	//			//half4 texcol = tex2D(_MainTex, i.uv);
-	//			//clip(texcol.a*_Color.a - _Cutoff);
-	//			float3 rayDirTex, rayOriginTex;
-	//			vxcm_getPixelRay(i, rayDirTex, rayOriginTex);
+			half4 fra2g(appdata_vxcm_object i) : COLOR
+			{
+				float3 rayOriginTex = i.volumePos;
+				float4 localCameraPos = multInverse(UNITY_MATRIX_MV, float4(0, 0, 0, 1));
+				float3 rayDirTex = normalize(i.localPos - localCameraPos.xyz);
 
-	//			float4 texcol = raycast(rayOriginTex, rayDirTex);
+				float4 texcol = raycast(rayOriginTex, rayDirTex);
 
-	//			float4 objCoord = mul(u_objectToVolumeInvTrx, float4(rayOriginTex + rayDirTex * texcol.x, 1));
-	//			float4 vpos = mul(UNITY_MATRIX_MVP, objCoord);
-	//			float depth = vpos.z / vpos.w;
+				float4 objCoord = mul(u_objectToVolumeInvTrx, float4(rayOriginTex + rayDirTex * texcol.x, 1));
+				float4 vpos = mul(UNITY_MATRIX_MVP, objCoord);
+				float depth = vpos.z / vpos.w;
 
-	//			//half4 texcol = tex2D(_MainTex, i.uv);
-	//			clip(texcol.a*_Color.a - _Cutoff);
+				//half4 texcol = tex2D(_MainTex, i.uv);
+				clip(texcol.a*_Color.a - _Cutoff);
 
-	//			//SHADOW_COLLECTOR_FRAGMENT(i)
-	//			return half14(0, 0, 0, 0);
-	//		}
-	//		ENDCG
+				//SHADOW_COLLECTOR_FRAGMENT(i)
+				return half14(0, 0, 0, 0);
+			}
+			ENDCG
 
-	//	}
+		}
 	
 	} // END SUBSHADER
 	

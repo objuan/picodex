@@ -60,6 +60,12 @@
     <Reference Include="UnityEngine.Networking">
       <HintPath>Library\UnityAssemblies\UnityEngine.Networking.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.Networking">
+      <HintPath>Library\UnityAssemblies\UnityEngine.Networking.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>Library\UnityAssemblies\UnityEngine.UI.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEditor">
       <HintPath>Library\UnityAssemblies\UnityEditor.dll</HintPath>
     </Reference>
@@ -82,9 +88,9 @@
     <Compile Include="Assets\Utility\TransformSerializationExtension.cs" />
     <Compile Include="Assets\Utility\UnitySingletonPersistent.cs" />
     <Compile Include="Assets\Volume\DFUtil.cs" />
+    <Compile Include="Assets\Volume\DFVolume.cs" />
     <Compile Include="Assets\Volume\DFVolumeCollider.cs" />
     <Compile Include="Assets\Volume\DFVolumeDataBuilder.cs" />
-    <Compile Include="Assets\Volume\DFVolume.cs" />
     <Compile Include="Assets\Volume\DFVolumeFilter.cs" />
     <Compile Include="Assets\Volume\DFVolumeRenderer.cs" />
     <Compile Include="Assets\Volume\DFVolumeUI.cs" />
@@ -119,23 +125,24 @@
     <None Include="Assets\Shaders\Examples\ShadowCastCG.cginc" />
     <None Include="Assets\Shaders\Examples\Slices.shader" />
     <None Include="Assets\Shaders\FullscreenEffect\TISSAO.shader" />
-    <None Include="Assets\Shaders\Object_ray_v01.shader" />
-    <None Include="Assets\Shaders\Object_ray_v03.shader" />
-    <None Include="Assets\Shaders\Object_ray_v04.shader" />
-    <None Include="Assets\Shaders\Object_ray_v05.shader" />
+    <None Include="Assets\Volume\Shaders\Object_ray_v01.shader" />
+    <None Include="Assets\Volume\Shaders\Object_ray_v03.shader" />
+    <None Include="Assets\Volume\Shaders\Object_ray_v04.shader" />
+    <None Include="Assets\Volume\Shaders\Object_ray_v06.shader" />
+    <None Include="Assets\Volume\Shaders\Object_ray_v05.shader" />
     <None Include="Assets\Shaders\SampleDiffuse.shader" />
     <None Include="Assets\Shaders\SampleDiffuseCustom.shader" />
-    <None Include="Assets\Shaders\Texture3D_old\Texture3D_s_slice_v03.shader" />
-    <None Include="Assets\Shaders\Texture3D_old\Texture3D_slice_v01.shader" />
-    <None Include="Assets\Shaders\Texture3D_old\Texture3D_slice_v02.shader" />
-    <None Include="Assets\Shaders\Texture3D_slice_v01.shader" />
-    <None Include="Assets\Shaders\UnityVXCM.cginc" />
-    <None Include="Assets\Shaders\root_old\ClipMap3DViewer_Slice.shader" />
-    <None Include="Assets\Shaders\root_old\VXCMCamera.shader" />
-    <None Include="Assets\Shaders\root_old\Volume3DViewer_Slice.shader" />
-    <None Include="Assets\Shaders\test\RayCast shader.shader" />
-    <None Include="Assets\Shaders\test\TestTrasparent.shader" />
-    <None Include="Assets\Shaders\test\TestTrasparent_v02.shader" />
+    <None Include="Assets\Volume\Shaders\Texture3D_old\Texture3D_s_slice_v03.shader" />
+    <None Include="Assets\Volume\Shaders\Texture3D_old\Texture3D_slice_v01.shader" />
+    <None Include="Assets\Volume\Shaders\Texture3D_old\Texture3D_slice_v02.shader" />
+    <None Include="Assets\Volume\Shaders\Texture3D_slice_v01.shader" />
+    <None Include="Assets\Volume\Shaders\UnityVXCM.cginc" />
+    <None Include="Assets\Volume\Shaders\root_old\ClipMap3DViewer_Slice.shader" />
+    <None Include="Assets\Volume\Shaders\root_old\VXCMCamera.shader" />
+    <None Include="Assets\Volume\Shaders\root_old\Volume3DViewer_Slice.shader" />
+    <None Include="Assets\Volume\Shaders\test\RayCast shader.shader" />
+    <None Include="Assets\Volume\Shaders\test\TestTrasparent.shader" />
+    <None Include="Assets\Volume\Shaders\test\TestTrasparent_v02.shader" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>

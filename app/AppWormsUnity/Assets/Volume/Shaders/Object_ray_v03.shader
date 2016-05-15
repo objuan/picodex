@@ -15,17 +15,17 @@
 		// ===============================================================
 
 		CGPROGRAM
-#include "UnityCG.cginc"
+		#include "UnityCG.cginc"
 
-#define VXCM_OBJECT_VS
-#include "UnityVxcm.cginc"
+		#define VXCM_OBJECT_VS
+		#include "UnityVxcm.cginc"
 
-	struct Input {
-		float2 uv_MainTex;
-		float3 viewDir;
-		float4 screenPos;
-		float3 worldPos;
-	};
+		struct Input {
+			float2 uv_MainTex;
+			float3 viewDir;
+			float4 screenPos;
+			float3 worldPos;
+		};
 
 
 		// Physically based Standard lighting model, and enable shadows on all light types

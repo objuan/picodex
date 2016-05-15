@@ -7,41 +7,68 @@ using UnityEngine;
 
 namespace Picodex.Vxcm
 {
-   // [System.Serializable]
+    //[CustomPropertyDrawer(typeof(MyData))]
+    //public class DataDrawer : PropertyDrawer
+    //{
+    //    public override void OnGUI(Rect pos, SerializedProperty prop, GUIContent label)
+    //    {
+    //        SerializedProperty myValue = prop.FindPropertyRelative("myValue");
+    //        EditorGUI.Slider(new Rect(pos.x, pos.y, pos.width, pos.height), myValue, 0f, 1f);
+    //    }
+    //}
+
+    // [System.Serializable]
     public class VXCMVolume : ScriptableObject
     {
         int size;
-        public int subSampling;
 
-        public float distanceFieldRangeMin;
-        public float distanceFieldRangeMax;
+        [Range(1f, 4f)]
+        public int subSampling=1;
+
+        [Range(-2f, 0f)]
+        public float distanceFieldRangeMin=-2;
+        [Range(2f, 8f)]
+        public float distanceFieldRangeMax=2;
 
         //public byte[] DF;
         [HideInInspector]
         public Color32[] DF;
 
-      //  [HideInInspector]
-        public Vector3i localToVolumeTrx;
-     //   [HideInInspector]
-        public VolumeRegion region;
-       // [HideInInspector]
-        public Matrix4x4 WorldTrx;
+       // [Range(16f, 128f)]
+        public Vector3i resolution = new Vector3i(64,64,64);
 
-       // [HideInInspector]
-        public Vector3i resolution
+        [HideInInspector]
+        public Vector3i localToVolumeTrx;
+
+     //   [HideInInspector]
+        public VolumeRegion region
         {
             get
             {
-                return region.size;
-            }
-            set
-            {
-                if (value != resolution)
-                {
-                    Resize(value);
-                }
+                Vector3i s = resolution * 0.5f;
+                return new VolumeRegion(-s.x, -s.y, -s.z, s.x, s.y, s.z);
             }
         }
+        // [HideInInspector]
+        // public Matrix4x4 WorldTrx;
+
+        // [HideInInspector]
+        //public Vector3i resolution
+        //{
+        //    get
+        //    {
+        //        return size;
+        //    }
+        //    set
+        //    {
+        //        if (value != resolution)
+        //        {
+        //            Resize(value);
+        //        }
+        //    }
+        //}
+        [HideInInspector]
+        internal bool lastFrameChanged = true;
 
         private VXCMVolumeAccessor accessor;
 
@@ -65,6 +92,20 @@ namespace Picodex.Vxcm
             Resize(size);
         }
 
+        void OnEnable()
+        {
+
+        }
+
+        void OnDisable()
+        {
+
+        }
+
+        void OnDestroy()
+        {
+
+        }
         //public VXCMVolume(VolumeRegion region, int subSampling, float distanceFieldRangeMin, float distanceFieldRangeMax)
         //{
         //    DistanceFieldRangeMin = distanceFieldRangeMin;
@@ -78,22 +119,40 @@ namespace Picodex.Vxcm
         //    localToVolumeTrx = - region.min;
         //}
 
-        public void Resize(Vector3i size)
+        public void Resize(Vector3i resolution)
         {
-            Vector3i s = size * 0.5f;
-            this.region = new VolumeRegion(-s.x, -s.y, -s.z, s.x, s.y, s.z);
-            this.size = region.size.x * region.size.y * region.size.z;
+        //    Vector3i s = size * 0.5f;
+        //    this.region = new VolumeRegion(-s.x, -s.y, -s.z, s.x, s.y, s.z);
+            this.resolution = resolution;
+            size = resolution.x * resolution.y * resolution.z;
 
-            DF = new Color32[this.size];
+            DF = new Color32[size];
 
             //  MemoryUtil.MemSetG<byte>(DF, 0);
 
             localToVolumeTrx = -region.min;
 
             accessor = null; // invalidate
-
+            lastFrameChanged = true;
         }
 
+        private void ensureInit()
+        {
+            int size = resolution.x * resolution.y * resolution.z;
+            if (DF == null || DF.Length != size) Resize(resolution);
+        }
+
+        public void Clear()
+        {
+            ensureInit();
+            MemoryUtil.MemSetG<Color32>(DF, new Color32(0,0,0,0));
+            lastFrameChanged = true;
+        }
+
+        public void Invalidate()
+        {
+            lastFrameChanged = true;
+        }
 
         // ================
 

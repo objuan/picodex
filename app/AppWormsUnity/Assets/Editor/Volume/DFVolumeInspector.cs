@@ -23,6 +23,7 @@ namespace Picodex
             window.titleContent.text = "Volume Inspector"; //set a window title
         }
 
+
         void OnGUI()
         {
             if (window == null)
@@ -34,10 +35,15 @@ namespace Picodex
                 obj = Selection.activeGameObject;
                 GUILayout.Label("Current selected object: " + obj.name);
 
+                DFVolume volume = null;
                 //make sure to only show the interface
-                DFVolume comp = obj.GetComponent<DFVolume>();
+                DFVolumeFilter comp = obj.GetComponent<DFVolumeFilter>();
                 if (comp != null)
                 {
+                    volume = comp.volume;
+                }
+                if (volume)
+                { 
                     //comp.Intensity = EditorGUI.FloatField(
                     //    new Rect(5, 30, position.width - 10, 16),
                     //    "Intensity",
@@ -49,9 +55,51 @@ namespace Picodex
 
                     res = EditorGUILayout.Vector3Field("resolution", res);
 
-                    if (GUILayout.Button( "Create Mesh"))
+                    if (GUILayout.Button("Clear"))
                     {
                         // obj.AddComponent<VXCMVolume>();
+                        volume.Clear();
+
+                        UnityUtil.InvalidateObject(obj);
+                        AssetManager.SaveAsset(volume);
+                    }
+                    if (GUILayout.Button("Invalidate"))
+                    {
+                        // obj.AddComponent<VXCMVolume>();
+                        volume.Invalidate();
+
+                        UnityUtil.InvalidateObject(obj);
+                        AssetManager.SaveAsset(volume);
+                    }
+                    EditorGUILayout.EndHorizontal();
+                    EditorGUILayout.BeginHorizontal();
+
+                    if (GUILayout.Button( "Test Build"))
+                    {
+                        VolumePrimitiveSphere raster = new VolumePrimitiveSphere(volume);
+
+                        GeometrySample sample = new GeometrySample();
+                        sample.debugColor = new Vector3(1, 0, 0);
+                        //raster.Raster(new Vector3(0, 0, 0), 10, sample);
+
+                        raster.Raster(new Vector3(-5, 0, 0), 10, sample);
+                        raster.Raster(new Vector3(5, 0, 0), 10, sample);
+
+                        UnityUtil.InvalidateObject(obj);
+                        AssetManager.SaveAsset(volume);
+                    }
+                    if (GUILayout.Button("Test Build1"))
+                    {
+                        VolumePrimitiveBox raster = new VolumePrimitiveBox(volume);
+
+                        GeometrySample sample = new GeometrySample();
+                        sample.debugColor = new Vector3(1, 0, 0);
+                        //raster.Raster(new Vector3(0, 0, 0), 10, sample);
+
+                        raster.Raster(new Vector3(10, 10, 10), new Vector3(20, 20, 20), sample);
+
+                        UnityUtil.InvalidateObject(obj);
+                        AssetManager.SaveAsset(volume);
                     }
 
                     EditorGUILayout.EndHorizontal();

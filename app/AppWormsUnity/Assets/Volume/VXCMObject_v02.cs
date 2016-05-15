@@ -25,6 +25,8 @@ namespace Picodex
     
         private Matrix4x4 objectToVolumeTrx;
 
+        private bool mustInitialize=true;
+
         protected void OnValidate()
         {
             if (dimensions != volume.region.size)
@@ -44,10 +46,9 @@ namespace Picodex
                 DFVolumeFilter volumeFilter = GetComponent<DFVolumeFilter>();
                 if (volumeFilter != null && volumeFilter.volume != null)
                     volume = volumeFilter.volume;
-                //else
-                //    volume = new VXCMVolume(dimensions, 1, -2, 2);
             }
 
+            mustInitialize = true;
             //  VXCMContext.Instance.useContext();
 
             meshFilter = GetComponent<MeshFilter>();
@@ -55,10 +56,7 @@ namespace Picodex
             // material = GetComponent<Renderer>().sharedMaterial;
             material = new Material(Shader.Find("Vxcm/Object/ray_v05"));
             renderer.material = material;
-            //meshFilter.mesh = new Mesh();
-            PrimitiveHelper.CreateCube(meshFilter.sharedMesh, dimensions.x, dimensions.y, dimensions.z);
 
-       
         }
 
         public void OnWillRenderObject()
@@ -69,31 +67,32 @@ namespace Picodex
             Camera cam = Camera.current;
             if (!cam) return;
 
-            UpdateTexture();
-
             UpdateMat();
         }
 
-        public void UpdateTexture()
+        public void UpdateMat()
         {
-            if (texture == null || (texture != null && (texture.width != volume.resolution.x) || (texture.height != volume.resolution.y) || (texture.depth != volume.resolution.z)))
+            if (texture == null
+               // || (volume && volume.lastFrameChanged)
+                || (texture != null && (texture.width != volume.resolution.x) || (texture.height != volume.resolution.y) || (texture.depth != volume.resolution.z)))
             {
-                if (false)
-                {
-                    VolumePrimitiveSphere raster = new VolumePrimitiveSphere(volume);
-
-                    GeometrySample sample = new GeometrySample();
-                    sample.debugColor = new Vector3(1, 0, 0);
-
-                    raster.Raster(new Vector3(-10, 0, 0), 10, sample);
-                    raster.Raster(new Vector3(10, 0, 0), 10, sample);
-                }
-
+                // resize Proxy
                 PrimitiveHelper.CreateCube(meshFilter.sharedMesh, dimensions.x, dimensions.y, dimensions.z);
 
+                // build texture
                 texture = new Texture3D(volume.resolution.x, volume.resolution.y, volume.resolution.z, TextureFormat.RGBA32, false);
+                texture.filterMode = FilterMode.Bilinear;
+                texture.wrapMode = TextureWrapMode.Clamp;
+
+            }
+
+            if (texture && volume && (volume.lastFrameChanged || mustInitialize))
+            {
+                volume.lastFrameChanged = false;
+                mustInitialize = false;
                 texture.SetPixels32(volume.DF);
                 texture.Apply();
+
 
                 objectToVolumeTrx = new Matrix4x4();
 
@@ -101,7 +100,7 @@ namespace Picodex
 
                 float m = 1.0f / 2;
                 Vector3 scale = new Vector3(1.0f / volume.resolution.x, 1.0f / volume.resolution.y, 1.0f / volume.resolution.z);
-                objectToVolumeTrx.SetTRS(new Vector3(m,m,m), Quaternion.identity, scale);
+                objectToVolumeTrx.SetTRS(new Vector3(m, m, m), Quaternion.identity, scale);
 
                 // mat
 
@@ -112,15 +111,9 @@ namespace Picodex
                 material.SetMatrix("u_objectToVolumeInvTrx", objectToVolumeTrx.inverse);
 
                 material.SetVector("u_textureRes", scale);
-
-
             }
-        }
 
-        void UpdateMat()
-        {
-            if (Camera.current == null) return;
-            if (material == null) return;
+          
 
             material.SetTexture("_Volume", texture);
 

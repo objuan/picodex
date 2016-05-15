@@ -52,6 +52,7 @@ namespace Picodex.Vxcm
 
         public void Flush()
         {
+            volume.lastFrameChanged = true;
         }
 
         // MAX-> 0

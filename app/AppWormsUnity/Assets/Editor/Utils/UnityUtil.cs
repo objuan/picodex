@@ -1,14 +1,16 @@
-﻿using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿
 using UnityEditor;
 
 namespace Picodex
 {
     public static class UnityUtil
     {
+        public static void InvalidateObject(UnityEngine.Object obj)
+        {
+            EditorUtility.SetDirty(obj);
+            SceneView.RepaintAll();
+        }
+
         public static string GetUniqueAssetPathNameOrFallback(string filename)
         {
             string path;
@@ -39,7 +41,7 @@ namespace Picodex
 
             if (path.Length > 0)
             {
-                if (Directory.Exists(path))
+                if (System.IO.Directory.Exists(path))
                 {
                     return true;
                 }

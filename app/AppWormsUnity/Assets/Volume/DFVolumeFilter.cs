@@ -15,12 +15,28 @@ using UnityEditor;
 
 namespace Picodex
 {
-  //  [ExecuteInEditMode]
+    //  [ExecuteInEditMode]
+    [AddComponentMenu("Vxcm/DFVolumeFilter")]
+    [ExecuteInEditMode]
     public class DFVolumeFilter : MonoBehaviour
     {
         [SerializeField]
         public DFVolume volume = null;
 
+        //void FixedUpdate()
+        //{
+        //    if (volume.lastFrameChanged)
+        //    {
+        //        volume.lastFrameChanged = false;
 
+        //    }
+        //}
+        // pulisco a fine frame
+        //void OnRenderImage(RenderTexture src, RenderTexture dest) 
+        //{
+        //    if (volume)
+        //        volume.lastFrameChanged = false;
+        //}
     }
+
 }
