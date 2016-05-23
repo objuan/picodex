@@ -33,7 +33,7 @@ sysinfo.txt
 *.mdb
 *.info
 *.bin
-*.meta
+//*.meta
 
 # User-specific files
 *.suo
