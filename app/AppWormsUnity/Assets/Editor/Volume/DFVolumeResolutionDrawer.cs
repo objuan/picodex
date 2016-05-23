@@ -47,10 +47,10 @@ namespace Picodex
 
             EditorGUI.EndProperty();
 
-            if (GUILayout.Button("Test Build1"))
-            {
+            //if (GUILayout.Button("Test Build1"))
+            //{
 
-            }
+            //}
 
             // EditorGUILayout.EndVertical();
 
