@@ -1,4 +1,6 @@
 ﻿#ifndef u_vxcm_CG_VXCM_INCLUDED
+// Upgrade NOTE: excluded shader from DX11 and Xbox360; has structs without semantics (struct appdata_vcxm members vertex,worldPos,rayEnc)
+#pragma exclude_renderers d3d11 xbox360
 #define u_vxcm_CG_VXCM_INCLUDED
 
 #include "UnityCG.cginc"
@@ -107,6 +109,10 @@ inline void vxcm_getPixelRay(appdata_vxcm_raycast i, out float3 rayDirTex, out f
 // ================= VXCM PROXY ====================
 // =================================================
 
+#if defined(VXCM_PROXY_SHADOW) || defined(VXCM_PROXY_RENDER)
+#define VXCM_PROXY_VS
+#endif
+
 #if defined (VXCM_PROXY_VS)
 
 uniform float4x4 u_objectToVolumeTrx;
@@ -116,6 +122,7 @@ uniform float3 u_camPosTrx;
 uniform float4x4 u_prjInvTrx;
 // w, h , nearplane
 uniform float3 u_cameraInfo;
+
 
 struct appdata {
 	float4 vertex : POSITION;
@@ -171,8 +178,7 @@ float DF_MAX_MINUS_MIN;
 float DF_MIN;
 
 uniform float u_cut_plane_xz;
-
-uniform float3 u_textureRes;
+uniform float4 u_textureRes;
 uniform float4x4 u_objectToVolumeInvTrx;
 //uniform float4x4 u_worldToVolumeTrx;
 
@@ -193,11 +199,12 @@ float raycast(
 	float distance = 0;
 	float stepLength = length(leave - enter);
 
-	float3 sample_size = u_textureRes; // TODO
+	float3 sample_size = u_textureRes.xyz; // TODO
 	float iso_level = sample_size * 0.1;
 	float t = 0.0;
 	float d = 1.0;
 
+	//[unroll(10)]
 	for (count = 0; count < 54; ++count) {
 		float3 samplePos = enter + dir * t;
 
@@ -220,17 +227,12 @@ float raycast(
 	return distance;
 }
 
+// return 
+// x =  hit dist , ==0 no hit
+// a = 1-> hit, 0 = no hit
 float4 raycast(float3 rayOriginTex,float3 rayDirTex)
 {
 	float4 retColor = float4(0, 0, 0,0);
-
-	//o.Albedo = rayDirTex;
-	//	o.color = half4(i.uvw, 1);
-	//	return o;
-	//return;
-	//o.Albedo = viewDirVS;
-	//o.Alpha = 1;
-	//return;
 
 	float3 min = float3(0, 0, 0);
 	float3 max = float3(1, 1, 1);
@@ -239,7 +241,7 @@ float4 raycast(float3 rayOriginTex,float3 rayDirTex)
 
 	if (vxcm_intersectRayWithAABB(rayOriginTex, rayDirTex, min, max, tEnter, tLeave))
 	{
-		float3 finalColor = float3(0, 0, 0);
+		//float3 finalColor = float3(0, 0, 0);
 
 		float3 enter, exit;
 		int count = 0;
@@ -255,14 +257,14 @@ float4 raycast(float3 rayOriginTex,float3 rayDirTex)
 		// decode color
 		if (dist >0.01)
 		{
-			finalColor = float3(dist, dist, dist);
+			//finalColor = float3(dist, dist, dist);
 
 			// to eye coordinate
-			float4 objCoord = mul(u_objectToVolumeInvTrx, float4(rayOriginTex.xyz + rayDirTex * dist, 1));
-			float4 vpos = mul(UNITY_MATRIX_MVP, objCoord);
+		//	float4 objCoord = mul(u_objectToVolumeInvTrx, float4(rayOriginTex.xyz + rayDirTex * dist, 1));
+			//float4 vpos = mul(UNITY_MATRIX_MVP, objCoord);
 			//	o.depth = vpos.z / vpos.w;
 	
-			retColor = float4(finalColor,1);
+			retColor = float4(dist, dist, dist,1); //TODO BETTER
 		}
 
 	}
@@ -276,5 +278,120 @@ inline float4 multInverse(float4x4 m, float p) {
 	float4 last_column = float4(m[0][3], m[1][3], m[2][3], m[3][3]);
 	return float4(mul(p - last_column, m).xyz, 1.0);
 }
+
+
+// ===============================
+// COMMON
+// ===============================
+
+// struct per 
+struct appdata_vcxm_fs
+{
+	float4 vertex;
+	float4 worldPos;
+	float3 volumePos;
+	float4 rayEnc;
+};
+
+struct out_vcxm_fs
+{
+	float4 color	: COLOR;
+	float depth : DEPTH;
+};
+
+
+#define VXCM_RAYCAST(ORIG,DIR,o) o.rayEnc = raycast(ORIG, DIR);o.volumePos = ORIG + DIR * o.rayEnc.x;o.vertex = mul(u_objectToVolumeInvTrx, float4(o.volumePos, 1));o.worldPos = mul(UNITY_MATRIX_MVP, o.vertex);
+
+
+inline float3 calcNormal(in appdata_vcxm_fs i)
+{
+	float3 pos = i.volumePos;
+	//vec2 delta = vec2(0, SAMPLE_SIZE);
+	float3 grad;
+	grad.x = DF(pos + u_textureRes.xww) - DF(pos - u_textureRes.xww);
+	grad.y = DF(pos + u_textureRes.wyw) - DF(pos - u_textureRes.wyw);
+	grad.z = DF(pos + u_textureRes.wwz) - DF(pos - u_textureRes.wwz);
+	return normalize(grad);
+
+}
+
+// ===============================
+// SHADOW
+// ===============================
+
+// UNITY_PASS_SHADOWCASTER
+#if defined (VXCM_PROXY_SHADOW)
+
+// V2F_SHADOW_CASTER
+// float4 pos : SV_POSITION
+// (float4 hpos  OR  float3 vec ) : TEXCOORD0
+struct appdata_vcxm_shadow {
+	V2F_SHADOW_CASTER;
+	//float2  uv : TEXCOORD1;
+	float4 vertex: TEXCOORD1;// for volume
+};
+
+inline void getShadowRay(appdata_vcxm_shadow i, out float3 rayOriginTex, out float3 rayDirTex)
+{
+	rayOriginTex = mul(u_objectToVolumeTrx, float4(i.vertex.xyz, 1)).xyz;
+
+	float4 localCameraPos;
+	if (i.pos.w == 1) // TODO ????
+		localCameraPos = mul(transpose(UNITY_MATRIX_IT_MV), float4(0, 0, -10000, 1)); // from directional light
+	else
+		localCameraPos = mul(transpose(UNITY_MATRIX_IT_MV), float4(0, 0, 0, 1)); // from camera
+
+	rayDirTex = normalize(i.vertex.xyz - localCameraPos.xyz);
+}
+
+#endif
+
+
+// ===============================
+// RENDER
+// ===============================
+
+#if defined (VXCM_PROXY_RENDER)
+
+struct appdata_vxcm
+{
+	float4 pos : SV_POSITION;
+	//	float3 lightDir : TEXCOORD0;
+	float2 uv : TEXCOORD0;
+	//	float3 volumePos: TEXCOORD3; // for volume
+	float4 vertex: TEXCOORD1;// for volume
+	LIGHTING_COORDS(2,3)
+};
+
+inline appdata_vxcm vert_vxcm(in appdata v)
+{
+	appdata_vxcm o;
+	o.pos = mul(UNITY_MATRIX_MVP, v.vertex);
+	o.uv = v.texcoord;
+	//o.lightDir = normalize(ObjSpaceLightDir(v.vertex));
+	//	o.volumePos = mul(u_objectToVolumeTrx, v.vertex).xyz;
+	o.vertex = v.vertex;
+
+	TRANSFER_VERTEX_TO_FRAGMENT(o);
+	return o;
+}
+
+inline void getCameraRay(in appdata_vxcm i, out float3 rayOriginTex, out float3 rayDirTex)
+{
+	rayOriginTex = mul(u_objectToVolumeTrx, float4(i.vertex.xyz, 1)).xyz;
+	float4 localCameraPos = multInverse(UNITY_MATRIX_MV, float4(0, 0, 0, 1));
+	rayDirTex = normalize(i.vertex - localCameraPos.xyz);
+
+}
+
+inline void remapShadowMap(inout appdata_vxcm i, in appdata_vcxm_fs v)
+{
+	i.pos = v.worldPos;
+	i.vertex = v.vertex;
+	TRANSFER_VERTEX_TO_FRAGMENT(i); // REDO MAP, inutile sulel direzionali ??
+}
+
+#endif
+
 
 #endif // u_vxcm_CG_VXCM_INCLUDED

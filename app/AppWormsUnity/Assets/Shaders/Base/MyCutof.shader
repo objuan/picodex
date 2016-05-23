@@ -94,11 +94,11 @@
 		ZWrite On ZTest Less Cull Off
 
 		CGPROGRAM
-#pragma vertex vert
-#pragma fragment frag
-#pragma multi_compile_shadowcaster
-#pragma fragmentoption ARB_precision_hint_fastest
-#include "UnityCG.cginc"
+	#pragma vertex vert
+	#pragma fragment frag
+	#pragma multi_compile_shadowcaster
+	#pragma fragmentoption ARB_precision_hint_fastest
+	#include "UnityCG.cginc"
 
 	struct v2f {
 		V2F_SHADOW_CASTER;

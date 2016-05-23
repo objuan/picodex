@@ -94,17 +94,19 @@ namespace Picodex.Vxcm
 
         void OnEnable()
         {
-
+           // Debug.Log("OnEnable 1");
+            lastFrameChanged = true;
         }
 
         void OnDisable()
         {
-
+         //   Debug.Log("OnDisable 1");
         }
+
 
         void OnDestroy()
         {
-
+          //  Debug.Log("OnDestroy 1");
         }
         //public VXCMVolume(VolumeRegion region, int subSampling, float distanceFieldRangeMin, float distanceFieldRangeMax)
         //{
@@ -167,7 +169,7 @@ namespace Picodex.Vxcm
 
         public static Vector3i GetTextureInfo(Vector3 volumeSize, float samplingRate)
         {
-            int chunkSize = 1;
+          //  int chunkSize = 1;
             Vector3i info = new Vector3i();
             info = new Vector3i(1 << (1 + (int)Math.Log(volumeSize.x * samplingRate - 0.5, 2)),
                 1 << (1 + (int)Math.Log(volumeSize.y * samplingRate - 0.5, 2)),

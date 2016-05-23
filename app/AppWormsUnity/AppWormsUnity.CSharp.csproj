@@ -60,12 +60,6 @@
     <Reference Include="UnityEngine.Networking">
       <HintPath>Library\UnityAssemblies\UnityEngine.Networking.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.Networking">
-      <HintPath>Library\UnityAssemblies\UnityEngine.Networking.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.UI">
-      <HintPath>Library\UnityAssemblies\UnityEngine.UI.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEditor">
       <HintPath>Library\UnityAssemblies\UnityEditor.dll</HintPath>
     </Reference>
@@ -95,10 +89,21 @@
     <Compile Include="Assets\Volume\DFVolumeRenderer.cs" />
     <Compile Include="Assets\Volume\DFVolumeUI.cs" />
     <Compile Include="Assets\Volume\Mesh\Cache.cs" />
-    <Compile Include="Assets\Volume\Mesh\IVolumeData.cs" />
+    <Compile Include="Assets\Volume\Mesh\Helpers\Chunk.cs" />
+    <Compile Include="Assets\Volume\Mesh\Helpers\Converters.cs" />
+    <Compile Include="Assets\Volume\Mesh\Helpers\TransvoxelManager.cs" />
+    <Compile Include="Assets\Volume\Mesh\Helpers\VertexPositionTextureNormalColor.cs" />
     <Compile Include="Assets\Volume\Mesh\MarchingCubes.cs" />
     <Compile Include="Assets\Volume\Mesh\SurfaceExtractor.cs" />
     <Compile Include="Assets\Volume\Mesh\Tables.cs" />
+    <Compile Include="Assets\Volume\Mesh\VolumeData\WorldChunk.cs" />
+    <Compile Include="Assets\Volume\Mesh\VolumeData\CompactOctree\BitHacks.cs" />
+    <Compile Include="Assets\Volume\Mesh\VolumeData\CompactOctree\Octree.cs" />
+    <Compile Include="Assets\Volume\Mesh\VolumeData\CompactOctree\OctreeNode.cs" />
+    <Compile Include="Assets\Volume\Mesh\VolumeData\CompactOctree\VolumeChunk.cs" />
+    <Compile Include="Assets\Volume\Mesh\VolumeData\CompactOctree\VolumeDataCompactOctree.cs" />
+    <Compile Include="Assets\Volume\Mesh\VolumeData\HashedVolume.cs" />
+    <Compile Include="Assets\Volume\Mesh\VolumeData\IVolumeData.cs" />
     <Compile Include="Assets\Volume\Test\VXCMTexture3D_Off_v01.cs" />
     <Compile Include="Assets\Volume\Test\VXCMTexture3D_Off_v02.cs" />
     <Compile Include="Assets\Volume\Test\VXCMTexture3D_Off_v03.cs" />
@@ -107,6 +112,7 @@
     <Compile Include="Assets\Volume\VXCMObject_v02.cs" />
     <Compile Include="Assets\Volume\vxcm\GeometrySample.cs" />
     <Compile Include="Assets\Volume\vxcm\VXCMException.cs" />
+    <Compile Include="Assets\Volume\vxcm\VXCMMeshBuilder.cs" />
     <Compile Include="Assets\Volume\vxcm\VXCMVolume.cs" />
     <Compile Include="Assets\Volume\vxcm\VXCMVolumeAccessor.cs" />
     <Compile Include="Assets\Volume\vxcm\VXCMVolumeDef.cs" />
@@ -121,22 +127,28 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shaders\Base\MyCutof.shader" />
+    <None Include="Assets\Shaders\Base\SurfShader.shader" />
+    <None Include="Assets\Shaders\Base\TestFull.shader" />
     <None Include="Assets\Shaders\Base\TransparentWithShadow.shader" />
+    <None Include="Assets\Shaders\Base\surf.shader" />
     <None Include="Assets\Shaders\Examples\ShadowCastCG.cginc" />
     <None Include="Assets\Shaders\Examples\Slices.shader" />
     <None Include="Assets\Shaders\FullscreenEffect\TISSAO.shader" />
+    <None Include="Assets\Shaders\SampleDiffuse.shader" />
+    <None Include="Assets\Shaders\SampleDiffuseCustom.shader" />
     <None Include="Assets\Volume\Shaders\Object_ray_v01.shader" />
     <None Include="Assets\Volume\Shaders\Object_ray_v03.shader" />
     <None Include="Assets\Volume\Shaders\Object_ray_v04.shader" />
-    <None Include="Assets\Volume\Shaders\Object_ray_v06.shader" />
     <None Include="Assets\Volume\Shaders\Object_ray_v05.shader" />
-    <None Include="Assets\Shaders\SampleDiffuse.shader" />
-    <None Include="Assets\Shaders\SampleDiffuseCustom.shader" />
+    <None Include="Assets\Volume\Shaders\Object_ray_v06.shader" />
+    <None Include="Assets\Volume\Shaders\Object_ray_v07.shader" />
+    <None Include="Assets\Volume\Shaders\Object_ray_v08.shader" />
     <None Include="Assets\Volume\Shaders\Texture3D_old\Texture3D_s_slice_v03.shader" />
     <None Include="Assets\Volume\Shaders\Texture3D_old\Texture3D_slice_v01.shader" />
     <None Include="Assets\Volume\Shaders\Texture3D_old\Texture3D_slice_v02.shader" />
     <None Include="Assets\Volume\Shaders\Texture3D_slice_v01.shader" />
     <None Include="Assets\Volume\Shaders\UnityVXCM.cginc" />
+    <None Include="Assets\Volume\Shaders\UnityVXCMBase.shader" />
     <None Include="Assets\Volume\Shaders\root_old\ClipMap3DViewer_Slice.shader" />
     <None Include="Assets\Volume\Shaders\root_old\VXCMCamera.shader" />
     <None Include="Assets\Volume\Shaders\root_old\Volume3DViewer_Slice.shader" />

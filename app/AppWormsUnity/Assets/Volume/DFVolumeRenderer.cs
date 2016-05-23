@@ -117,34 +117,44 @@ namespace Picodex
 
         // 
 
+
         void Awake()
         {
+
+          //  Debug.Log("Awake 1");
+            // proxy
             proxyGameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
             DestroyImmediate(proxyGameObject.GetComponent<Collider>());
-            proxyGameObject.hideFlags = HideFlags.DontSave;
-        }
 
-    
 
-        void Start() {
-            //  volume = GetComponent<DFVolume>();
-            volume = GetComponent<DFVolumeFilter>().volume;
 
-            // mMaterial = new Material(Shader.Find("Vxcm/Object/ray_v05"));
 
             if (GetComponent<DFVolumeFilter>() == null) return;
             if (GetComponent<DFVolumeRenderer>() == null) return;
+
+            volume = GetComponent<DFVolumeFilter>().volume;
 
             // ---------------
 
             VXCMObject_v02 obj = proxyGameObject.AddComponent<VXCMObject_v02>();
             obj.volume = GetComponent<DFVolumeFilter>().volume;
 
-           // proxyGameObject.hideFlags = HideFlags.HideAndDontSave;
-            proxyGameObject.hideFlags = HideFlags.DontSave;
+            proxyGameObject.hideFlags = HideFlags.HideAndDontSave;
+           // proxyGameObject.hideFlags = HideFlags.DontSave;
 
             proxyGameObject.transform.parent = this.transform;
             proxyGameObject.transform.setLocalToIdentity();
+        }
+
+
+        void Start() {
+
+          ///  Debug.Log("Start 1");
+            //  volume = GetComponent<DFVolume>();
+
+            // mMaterial = new Material(Shader.Find("Vxcm/Object/ray_v05"));
+
+
         }
 
         void OnEnable()

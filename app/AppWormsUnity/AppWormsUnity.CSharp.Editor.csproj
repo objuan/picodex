@@ -13,11 +13,13 @@
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Full v3.5</TargetFrameworkProfile>
-    <CompilerResponseFile></CompilerResponseFile>
+    <CompilerResponseFile>
+    </CompilerResponseFile>
     <UnityProjectType>Editor:5</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows:5</UnityBuildTarget>
     <UnityVersion>5.3.4f1</UnityVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <LangVersion Condition=" '$(VisualStudioVersion)' != '10.0' ">4</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -82,6 +84,12 @@
     <Reference Include="UnityEditor.Graphs">
       <HintPath>Library\UnityAssemblies\UnityEditor.Graphs.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEditor.Android.Extensions">
+      <HintPath>Library\UnityAssemblies\UnityEditor.Android.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.WebGL.Extensions">
+      <HintPath>Library\UnityAssemblies\UnityEditor.WebGL.Extensions.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEditor.WindowsStandalone.Extensions">
       <HintPath>Library\UnityAssemblies\UnityEditor.WindowsStandalone.Extensions.dll</HintPath>
     </Reference>
@@ -101,6 +109,7 @@
     <Compile Include="Assets\Editor\Utils\GeneralUtils.cs" />
     <Compile Include="Assets\Editor\Utils\ObjectSelectorWrapper.cs" />
     <Compile Include="Assets\Editor\Utils\UnityUtil.cs" />
+    <Compile Include="Assets\Editor\Volume\DFVolumeResolutionDrawer.cs" />
     <Compile Include="Assets\Editor\Volume\DFVolumeInspector.cs" />
     <Compile Include="Assets\Editor\Volume\VXCMConverter.cs" />
     <Compile Include="Assets\Editor\Volume\VXCMPostProcessor.cs" />
@@ -110,7 +119,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shaders\Base\MyCutof.shader" />
+    <None Include="Assets\Shaders\Base\SurfShader.shader" />
+    <None Include="Assets\Shaders\Base\TestFull.shader" />
     <None Include="Assets\Shaders\Base\TransparentWithShadow.shader" />
+    <None Include="Assets\Shaders\Base\surf.shader" />
     <None Include="Assets\Shaders\Examples\ShadowCastCG.cginc" />
     <None Include="Assets\Shaders\Examples\Slices.shader" />
     <None Include="Assets\Shaders\FullscreenEffect\TISSAO.shader" />
@@ -121,11 +133,14 @@
     <None Include="Assets\Volume\Shaders\Object_ray_v04.shader" />
     <None Include="Assets\Volume\Shaders\Object_ray_v05.shader" />
     <None Include="Assets\Volume\Shaders\Object_ray_v06.shader" />
+    <None Include="Assets\Volume\Shaders\Object_ray_v07.shader" />
+    <None Include="Assets\Volume\Shaders\Object_ray_v08.shader" />
     <None Include="Assets\Volume\Shaders\Texture3D_old\Texture3D_s_slice_v03.shader" />
     <None Include="Assets\Volume\Shaders\Texture3D_old\Texture3D_slice_v01.shader" />
     <None Include="Assets\Volume\Shaders\Texture3D_old\Texture3D_slice_v02.shader" />
     <None Include="Assets\Volume\Shaders\Texture3D_slice_v01.shader" />
     <None Include="Assets\Volume\Shaders\UnityVXCM.cginc" />
+    <None Include="Assets\Volume\Shaders\UnityVXCMBase.shader" />
     <None Include="Assets\Volume\Shaders\root_old\ClipMap3DViewer_Slice.shader" />
     <None Include="Assets\Volume\Shaders\root_old\VXCMCamera.shader" />
     <None Include="Assets\Volume\Shaders\root_old\Volume3DViewer_Slice.shader" />

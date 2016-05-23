@@ -14,6 +14,7 @@ namespace Picodex
         public static DFVolumeInspector window;
         private static GameObject obj;
 
+        int lod = 1;
         Vector3 res = new Vector3(64,64,64);
 
         [MenuItem("Tools/Volume Inspector")] //Add a menu item to the toolbar
@@ -102,6 +103,25 @@ namespace Picodex
                         AssetManager.SaveAsset(volume);
                     }
 
+                    EditorGUILayout.EndHorizontal();
+
+                    // ===============
+
+                    EditorGUILayout.BeginHorizontal();
+
+                    if (GUILayout.Button("Build Mesh"))
+                    {
+                        VXCMMeshBuilder.CreateMesh(volume, new Vector3i(64, 64, 64));
+                    }
+                    EditorGUILayout.EndHorizontal();
+                    EditorGUILayout.BeginHorizontal();
+
+                    lod = EditorGUILayout.IntSlider("lod",lod, 1, 4);
+                
+                    if (GUILayout.Button("Build Mesh Trans"))
+                    {
+                        VXCMMeshBuilder.CreateMeshTransvoxel(volume, new Vector3i(64, 64, 64), lod);
+                    }
                     EditorGUILayout.EndHorizontal();
 
                 }

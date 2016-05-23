@@ -41,6 +41,7 @@ namespace Picodex
 
         void Start()
         {
+          //  Debug.Log("Start");
             if (volume == null)
             {
                 DFVolumeFilter volumeFilter = GetComponent<DFVolumeFilter>();
@@ -54,24 +55,31 @@ namespace Picodex
             meshFilter = GetComponent<MeshFilter>();
             renderer = GetComponent<Renderer>();
             // material = GetComponent<Renderer>().sharedMaterial;
-            material = new Material(Shader.Find("Vxcm/Object/ray_v05"));
+              material = new Material(Shader.Find("Vxcm/Object/ray_v07"));
+            //material = new Material(Shader.Find("Vxcm/Transparent"));
+       
             renderer.material = material;
 
         }
 
         public void OnWillRenderObject()
         {
+          //  Debug.Log("OnWillRenderObject");
             if (!enabled)// || !renderer || !renderer.sharedMaterial || !renderer.enabled)
                 return;
             
             Camera cam = Camera.current;
             if (!cam) return;
 
+
             UpdateMat();
         }
 
         public void UpdateMat()
         {
+            if (!meshFilter) return;
+
+           // Debug.Log("UpdateMat");
             if (texture == null
                // || (volume && volume.lastFrameChanged)
                 || (texture != null && (texture.width != volume.resolution.x) || (texture.height != volume.resolution.y) || (texture.depth != volume.resolution.z)))
@@ -84,11 +92,12 @@ namespace Picodex
                 texture.filterMode = FilterMode.Bilinear;
                 texture.wrapMode = TextureWrapMode.Clamp;
 
+                Debug.Log("Build Txt");
             }
 
             if (texture && volume && (volume.lastFrameChanged || mustInitialize))
             {
-                volume.lastFrameChanged = false;
+             //   volume.lastFrameChanged = false;
                 mustInitialize = false;
                 texture.SetPixels32(volume.DF);
                 texture.Apply();
@@ -99,7 +108,7 @@ namespace Picodex
                 Bounds bounds = meshFilter.sharedMesh.bounds;
 
                 float m = 1.0f / 2;
-                Vector3 scale = new Vector3(1.0f / volume.resolution.x, 1.0f / volume.resolution.y, 1.0f / volume.resolution.z);
+                Vector4 scale = new Vector4(1.0f / volume.resolution.x, 1.0f / volume.resolution.y, 1.0f / volume.resolution.z,0);
                 objectToVolumeTrx.SetTRS(new Vector3(m, m, m), Quaternion.identity, scale);
 
                 // mat
@@ -111,16 +120,21 @@ namespace Picodex
                 material.SetMatrix("u_objectToVolumeInvTrx", objectToVolumeTrx.inverse);
 
                 material.SetVector("u_textureRes", scale);
+
+                Debug.Log("Build Mat");
             }
 
-          
 
             material.SetTexture("_Volume", texture);
 
             material.SetFloat("u_cut_plane_xz", CutPlaneXZ);
         }
 
-
+        void OnRenderObject()
+        {
+            if (volume)
+                volume.lastFrameChanged = false;
+        }
 
     }
 

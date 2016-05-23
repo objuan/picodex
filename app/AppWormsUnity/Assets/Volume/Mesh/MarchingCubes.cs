@@ -25,6 +25,35 @@ namespace Picodex
         static float[] tetrahedronValue = new float[4];
         static Vector3[] edgeTetVertex = new Vector3[6];
 
+        static public Mesh CreateMesh(Color32[] voxels,Vector3i dims)
+        {
+            List<Vector3> verts = new List<Vector3>();
+            List<int> index = new List<int>();
+
+            float[] cube = new float[8];
+
+            for (int x = 0; x < dims.x - 1; x++)
+            {
+                for (int y = 0; y < dims.y - 1; y++)
+                {
+                    for (int z = 0; z < dims.z - 1; z++)
+                    {
+                        //Get the values in the 8 neighbours which make up a cube
+                        FillCube(x, y, z, voxels, dims, cube);
+                        //Perform algorithm
+                        Mode_Func(new Vector3(x, y, z), cube, verts, index);
+                    }
+                }
+            }
+
+            Mesh mesh = new Mesh();
+
+            mesh.vertices = verts.ToArray();
+            mesh.triangles = index.ToArray();
+
+            return mesh;
+        }
+
         static public Mesh CreateMesh(float[,,] voxels)
         {
 
@@ -51,8 +80,24 @@ namespace Picodex
 
             mesh.vertices = verts.ToArray();
             mesh.triangles = index.ToArray();
-
+            mesh.RecalculateBounds();
+            mesh.Optimize();
             return mesh;
+        }
+
+        static void FillCube(int x, int y, int z, Color32[] voxels, Vector3i dims, float[] cube)
+        {
+            float DF_MIN = -2;
+            float DF_MAX_MINUS_MIN = (2 - (-2)); 
+
+            for (int i = 0; i < 8; i++)
+            {
+                float val = voxels[x + vertexOffset[i, 0] + ((y + vertexOffset[i, 1]) * dims.x) + ((z + vertexOffset[i, 2]) * dims.x * dims.y)].r;
+
+                cube[i] = (1.0f - val) * (DF_MAX_MINUS_MIN) + DF_MIN;
+              //  cube[i] = ( val) * (DF_MAX_MINUS_MIN) + DF_MIN;
+
+            }
         }
 
         static void FillCube(int x, int y, int z, float[,,] voxels, float[] cube)
@@ -60,6 +105,7 @@ namespace Picodex
             for (int i = 0; i < 8; i++)
                 cube[i] = voxels[x + vertexOffset[i, 0], y + vertexOffset[i, 1], z + vertexOffset[i, 2]];
         }
+
 
         // GetOffset finds the approximate point of intersection of the surface
         // between two points with the values v1 and v2

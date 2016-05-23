@@ -2,95 +2,173 @@
 using System.Collections.Generic;
 //using System.Linq;
 //using System.Text;
-//using Transvoxel.VolumeData.CompactOctree;
 //using Transvoxel.Geometry;
-//using Transvoxel.VolumeData;
-//using Transvoxel.Math;
+using Picodex.VolumeData;
+using Picodex.VolumeData.CompactOctree;
 //using Transvoxel.Lengyel;
 using System.Diagnostics;
 
 using UnityEngine;
+using System;
 
 namespace Picodex
 {
 
-    public class WorldChunk
+    public class VXCMVolumeData : IVolumeData<sbyte>
     {
-        public Vector3i position;
+        Vxcm.VXCMVolume volume;
+        int multX, multXY;
+
+        public VXCMVolumeData(Vxcm.VXCMVolume volume)
+        {
+            this.volume = volume;
+            multX = volume.resolution.x;
+            multXY = volume.resolution.x* volume.resolution.y;
+        }
+
+        public sbyte this[Vector3i v]
+        {
+            get
+            {
+                return this[v.x, v.y, v.z];
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public sbyte this[int x, int y, int z]
+        {
+            get
+            {
+                int v =  volume.DF[x + y * multX + z * multXY].r;// - (sbyte)128;
+                //if (v != 0)
+                //{
+                //    int yy = 0;
+                //}
+                return (sbyte)(v -128);
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public int ChunkSize
+        {
+            get
+            {
+                return volume.resolution.x;
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
     }
 
-    public interface ISurfaceExtractor
-	{
-        Mesh GenLodCell(WorldChunk n);
-	}
+    //public interface ISurfaceExtractor
+    //{
+    //    Mesh GenLodCell(WorldChunk<sbyte> n);
+    //}
 
     class MeshBuilder
     {
-        List<Vector3> vertices = new List<Vector3>();
-        List<Vector3> normals = new List<Vector3>();
-        List<int> triList = new List<int>();
+        public Vector3 volumeToWorldTrx;
+
+        public List<Vector3> vertices = new List<Vector3>();
+        public List<Vector3> normals = new List<Vector3>();
+        public List<int> triList = new List<int>();
 
         public ushort LatestAddedVertIndex()
         {
-            return 0;
+            return (ushort)(vertices.Count-1);
         }
         public void AddIndex(int idx)
         {
-
+            triList.Add(idx);
         }
 
         public void AddVertex(Vector3 v,Vector3 n)
         {
-
+            vertices.Add(volumeToWorldTrx+v);
+            normals.Add(n);
         }
 
         public void clear()
         {
+            triList.Clear();
+            vertices.Clear();
+            normals.Clear();
         }
     }
 
 
-    public class TransvoxelExtractor : ISurfaceExtractor
+    public class TransvoxelExtractor // : ISurfaceExtractor
 	{
 		public bool UseCache { get; set; }
 		IVolumeData<sbyte> volume;
 		RegularCellCache cache;
-        MeshBuilder meshBuilder;
-      
-		public TransvoxelExtractor(IVolumeData<sbyte> data)
-		{
-			volume = data;
-			cache = new RegularCellCache(volume.ChunkSize*10);
-			UseCache = true;
-		}
+        MeshBuilder meshBuilder = new MeshBuilder();
 
-		public Mesh GenLodCell(WorldChunk chunk)
-		{
-			Mesh mesh = new Mesh();
-			int lod = 4;
+        public TransvoxelExtractor(IVolumeData<sbyte> data)
+        {
+            volume = data;
+            cache = new RegularCellCache(volume.ChunkSize * 10);
+            UseCache = false;
+        }
 
-			for (int x = 0; x < volume.ChunkSize; x++)
+		public Mesh GenLodCell(Vector3i min, Vector3i max,int lod)
+        {
+            meshBuilder.clear();
+            
+
+            Mesh mesh = new Mesh();
+            Vector3i size = max - min-new Vector3i(1,1,1);
+
+            meshBuilder.volumeToWorldTrx.x = -size.x * 0.5f;
+            meshBuilder.volumeToWorldTrx.y = -size.y * 0.5f;
+            meshBuilder.volumeToWorldTrx.z = -size.z * 0.5f;
+
+
+            size = size  *  (1.0f / lod);
+          //  Vector3i offset = min - size  * 0.5f;
+
+         
+            Vector3i position = new Vector3i();
+            for (int x = 0; x < size.x; x++)
 			{
-				for (int y = 0; y < volume.ChunkSize; y++)
+				for (int y = 0; y < size.y; y++)
 				{
-					for (int z = 0; z < volume.ChunkSize; z++)
+					for (int z = 0; z < size.z; z++)
 					{
-						Vector3i position; //new Vector3i(x, y, z);
 						position.x = x;
 						position.y = y;
 						position.z = z;
-						PolygonizeCell(chunk.position, position, ref mesh, lod);
+						PolygonizeCell(min, position, ref mesh, lod);
 					}
 				}
 			}
 
-			return mesh;
+            mesh.vertices = meshBuilder.vertices.ToArray();
+            mesh.normals= meshBuilder.normals.ToArray();
+            mesh.triangles = meshBuilder.triList.ToArray();
+            mesh.RecalculateBounds();
+            mesh.RecalculateNormals();
+            
+           // Picodex.Converters.CalculateNormals(ref mesh);
+           //   mesh.Optimize();
+
+            return mesh;
 		}
 
 		internal void PolygonizeCell(Vector3i offsetPos, Vector3i pos, ref Mesh mesh, int lod)
 		{
-            meshBuilder.clear();
-
+        
             UnityEngine.Debug.Assert(lod >= 1, "Level of Detail must be greater than 1");
 			offsetPos += pos * lod;
 
@@ -117,7 +195,7 @@ namespace Picodex
 				//cornerNormals[i] = new Vector3(nx, ny, nz);
 
 				cornerNormals[i].x = nx;
-				cornerNormals[i].y = ny;
+				cornerNormals[i].z = ny;
 				cornerNormals[i].z = nz;
 				cornerNormals[i].Normalize();
 			}
@@ -165,7 +243,7 @@ namespace Picodex
 				if (index == -1)
 				{
 					Vector3 normal = cornerNormals[v0] * t0 + cornerNormals[v1] * t1;
-					GenerateVertex(ref offsetPos, ref pos, mesh, lod, t, ref v0, ref v1, ref d0, ref d1, normal);
+					GenerateVertex(ref offsetPos, ref pos, mesh, lod, t, ref v0, ref v1, ref d0, ref d1, -normal);
 					index = meshBuilder.LatestAddedVertIndex();
 
                 }

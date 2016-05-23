@@ -179,11 +179,16 @@ namespace Picodex
 
                 GUILayout.Label(volumeDesc, EditorStyles.label);
 
-                if (GUILayout.Button("Build"))
+                if (GUILayout.Button("Build MC"))
                 {
-                 
                     build();
                 }
+
+                //if (GUILayout.Button("Build Trans"))
+                //{
+
+                //    buildTrans();
+                //}
             }
 
                 //var text = new string[] { "Asset Folder:\n" + ((assetSelected != "") ? assetSelected : "[please select one]" ),"jjj"};

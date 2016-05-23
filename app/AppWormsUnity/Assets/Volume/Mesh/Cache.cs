@@ -2,6 +2,8 @@
 //using Transvoxel.VolumeData.CompactOctree;
 using System.Diagnostics;
 
+using UnityEngine;
+
 namespace Picodex
 {
     internal class ReuseCell
@@ -46,7 +48,7 @@ namespace Picodex
             int dy = pos.y - ry;
             int dz = pos.z - rz;
 
-            Debug.Assert(dx >= 0 && dy >= 0 && dz >= 0);
+            System.Diagnostics.Debug.Assert(dx >= 0 && dy >= 0 && dz >= 0);
             return _cache[dx & 1][dy * chunkSize + dz];
         }
 
@@ -55,7 +57,7 @@ namespace Picodex
         {
             set
             {
-                Debug.Assert(x >= 0 && y >= 0 && z >= 0);
+                System.Diagnostics.Debug.Assert(x >= 0 && y >= 0 && z >= 0);
                 _cache[x & 1][y * chunkSize + z] = value;
             }
         }

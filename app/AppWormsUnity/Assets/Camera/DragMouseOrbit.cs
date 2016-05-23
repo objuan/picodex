@@ -42,8 +42,8 @@ public class DragMouseOrbit : MonoBehaviour
         if (target!=null)
         {
             if (Input.GetMouseButton(0))
-            {
-                velocityX += xSpeed * Input.GetAxis("Mouse X") * distance * 0.02f;
+            {;
+                velocityX += xSpeed * Input.GetAxis("Mouse X") *  0.02f; // *distance
                 velocityY += ySpeed * Input.GetAxis("Mouse Y") * 0.02f;
             }
 
@@ -64,7 +64,7 @@ public class DragMouseOrbit : MonoBehaviour
             }
             * */
             Vector3 negDistance = new Vector3(0.0f, 0.0f, -distance);
-            Vector3 position = rotation * negDistance;// +target.position;
+            Vector3 position = rotation * negDistance +target.position;
             transform.rotation = rotation;
             transform.position = position;
 
