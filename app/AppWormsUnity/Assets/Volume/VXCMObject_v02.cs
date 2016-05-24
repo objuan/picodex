@@ -138,28 +138,37 @@ namespace Picodex
 
         // ============================
 
-        public RenderTexture renderPickTexture;
+        public StdComputeShader compute;
+        public Texture2D txt;
+        public RenderTexture renderTexture;
 
         public bool Raycast(Vector3 origin, Vector3 dir, ref float distance)
         {
-            renderPickTexture = RenderTexture.GetTemporary(100, 100, 0, RenderTextureFormat.ARGB32);
-            renderPickTexture.name = "VXCMPickBuffer";
-            renderPickTexture.wrapMode = TextureWrapMode.Clamp;
-            renderPickTexture.filterMode = FilterMode.Point;
 
-            Material mat = new Material(Shader.Find("Vxcm/Pick/v_01"));
-            mat.SetTexture("_Volume", texture);
+            VectorInputComputeBuffer inBuffer = new VectorInputComputeBuffer(8);
+            VectorOutputComputeBuffer outBuffer = new VectorOutputComputeBuffer(inBuffer);
 
-            // mat.SetTexture();
-            Mesh mesh = new Mesh();
-            PrimitiveHelper.CreatePlane(mesh, 100, 100);
+            txt = inBuffer.texture;
+            renderTexture = outBuffer.renderTexture;
 
-          //  Graphics.DrawMeshNow(mesh,new Vector3(0,0,0),)
-            //Graphics.DrawTexture(new Rect(0,0,renderPickTexture.width, renderPickTexture.height),)
-            // Graphics.Blit()
-            //// Graphics.Blit(source, renderPickTexture, mat);
+            compute = new StdComputeShader("Vxcm/Pick/ray_v01");
 
-            // //  for(int i=0;i<)
+            float a = 0;
+            for (int i = 0; i < inBuffer.count; i++,a+= 0.0001f)
+            {
+                inBuffer.buffer[i] = new Color(a, a + 0.1f, a + 0.2f, 1);
+            }
+            inBuffer.Load();
+
+            compute.Execute(inBuffer, outBuffer);
+
+            for(int i=0;i< inBuffer.count; i++)
+            {
+                Color c = inBuffer.buffer[i];
+                Debug.Log(c);
+            }
+
+            
             return true;
         }
 

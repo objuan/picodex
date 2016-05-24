@@ -34,8 +34,6 @@ namespace Picodex.Vxcm
                     Debug.Log("loc " + localPos);
                     Debug.Log("vol " + volumePos);
 
-
-
                     if (go.GetComponent<VXCMObject_v02>().Raycast(volumePos, dir, ref distance)){
                         hitInfo.point = localPos + (dir * distance) * volume.volumeToObjectScale.x;
                         return true;
