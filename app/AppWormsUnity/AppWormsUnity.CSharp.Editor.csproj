@@ -82,6 +82,12 @@
     <Reference Include="UnityEditor.Graphs">
       <HintPath>Library\UnityAssemblies\UnityEditor.Graphs.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEditor.Android.Extensions">
+      <HintPath>Library\UnityAssemblies\UnityEditor.Android.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.WebGL.Extensions">
+      <HintPath>Library\UnityAssemblies\UnityEditor.WebGL.Extensions.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEditor.WindowsStandalone.Extensions">
       <HintPath>Library\UnityAssemblies\UnityEditor.WindowsStandalone.Extensions.dll</HintPath>
     </Reference>
@@ -127,6 +133,7 @@
     <None Include="Assets\Volume\Shaders\Object_ray_v06.shader" />
     <None Include="Assets\Volume\Shaders\Object_ray_v07.shader" />
     <None Include="Assets\Volume\Shaders\Object_ray_v08.shader" />
+    <None Include="Assets\Volume\Shaders\Pick_ray_v01.shader" />
     <None Include="Assets\Volume\Shaders\Texture3D_old\Texture3D_s_slice_v03.shader" />
     <None Include="Assets\Volume\Shaders\Texture3D_old\Texture3D_slice_v01.shader" />
     <None Include="Assets\Volume\Shaders\Texture3D_old\Texture3D_slice_v02.shader" />

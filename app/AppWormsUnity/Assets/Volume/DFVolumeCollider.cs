@@ -46,11 +46,18 @@ namespace Picodex
         GameObject proxyGameObject;
         MeshCollider collider1;
 
-        //public bool Raycast(Ray ray, out RaycastHit hitInfo, float maxDistance)
-        //{
-        //    hitInfo = new RaycastHit();
-        //    return true;
-        //}
+        public bool Raycast(Ray ray, out RaycastHit hitInfo, float maxDistance)
+        {
+            if (!volume)
+            {
+                hitInfo = new RaycastHit();
+                return false;
+            }
+            hitInfo = new RaycastHit();
+            return false;
+            //
+            //return volume.Raycast(ray,out hitInfo, maxDistance);
+        }
 
         void Start()
         {

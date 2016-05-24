@@ -92,7 +92,7 @@ namespace Picodex
                 texture.filterMode = FilterMode.Bilinear;
                 texture.wrapMode = TextureWrapMode.Clamp;
 
-                Debug.Log("Build Txt");
+             //   Debug.Log("Build Txt");
             }
 
             if (texture && volume && (volume.lastFrameChanged || mustInitialize))
@@ -121,7 +121,7 @@ namespace Picodex
 
                 material.SetVector("u_textureRes", scale);
 
-                Debug.Log("Build Mat");
+             //   Debug.Log("Build Mat");
             }
 
 
@@ -134,6 +134,33 @@ namespace Picodex
         {
             if (volume)
                 volume.lastFrameChanged = false;
+        }
+
+        // ============================
+
+        public RenderTexture renderPickTexture;
+
+        public bool Raycast(Vector3 origin, Vector3 dir, ref float distance)
+        {
+            renderPickTexture = RenderTexture.GetTemporary(100, 100, 0, RenderTextureFormat.ARGB32);
+            renderPickTexture.name = "VXCMPickBuffer";
+            renderPickTexture.wrapMode = TextureWrapMode.Clamp;
+            renderPickTexture.filterMode = FilterMode.Point;
+
+            Material mat = new Material(Shader.Find("Vxcm/Pick/v_01"));
+            mat.SetTexture("_Volume", texture);
+
+            // mat.SetTexture();
+            Mesh mesh = new Mesh();
+            PrimitiveHelper.CreatePlane(mesh, 100, 100);
+
+          //  Graphics.DrawMeshNow(mesh,new Vector3(0,0,0),)
+            //Graphics.DrawTexture(new Rect(0,0,renderPickTexture.width, renderPickTexture.height),)
+            // Graphics.Blit()
+            //// Graphics.Blit(source, renderPickTexture, mat);
+
+            // //  for(int i=0;i<)
+            return true;
         }
 
     }

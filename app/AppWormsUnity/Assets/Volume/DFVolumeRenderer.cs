@@ -29,10 +29,11 @@ namespace Picodex
         // runtime
         VXCMObject_v02 vxcmObject;
 
-        DFVolume volume;
+        [System.NonSerialized]
+        public  DFVolume volume;
 
         [System.NonSerialized]
-        public GameObject proxyGameObject;
+        public GameObject proxyGameObject=null;
 
         [RangeAttribute(1,4)]
         public int lod=1;
@@ -127,7 +128,9 @@ namespace Picodex
 
         void Start() {
 
-         //   material;
+            //   material;
+
+            Volume.AddVolume(this);
         }
 
         void OnWillRenderObject()
@@ -152,6 +155,8 @@ namespace Picodex
         void OnApplicationQuit()
         {
             DestroyImmediate(proxyGameObject);
+
+            Volume.RemoveVolume(this);
         }
 
         // It seems that we need to implement this function in order to make the volume pickable in the editor.

@@ -40,7 +40,13 @@ namespace Picodex.Vxcm
         [HideInInspector]
         public Vector3i localToVolumeTrx;
 
-     //   [HideInInspector]
+        [System.NonSerialized]
+        public Matrix4x4 objectToVolumeTrx;
+
+        [HideInInspector]
+        public Vector3 volumeToObjectScale;
+
+        //   [HideInInspector]
         public VolumeRegion region
         {
             get
@@ -49,24 +55,7 @@ namespace Picodex.Vxcm
                 return new VolumeRegion(-s.x, -s.y, -s.z, s.x, s.y, s.z);
             }
         }
-        // [HideInInspector]
-        // public Matrix4x4 WorldTrx;
-
-        // [HideInInspector]
-        //public Vector3i resolution
-        //{
-        //    get
-        //    {
-        //        return size;
-        //    }
-        //    set
-        //    {
-        //        if (value != resolution)
-        //        {
-        //            Resize(value);
-        //        }
-        //    }
-        //}
+    
         [HideInInspector]
         internal bool lastFrameChanged = true;
 
@@ -94,13 +83,20 @@ namespace Picodex.Vxcm
 
         void OnEnable()
         {
-           // Debug.Log("OnEnable 1");
             lastFrameChanged = true;
+
+            // 
+            float m = 1.0f / 2;
+            Vector4 scale = new Vector4(1.0f / resolution.x, 1.0f / resolution.y, 1.0f / resolution.z, 0);
+            objectToVolumeTrx.SetTRS(new Vector3(m, m, m), Quaternion.identity, scale);
+
+            volumeToObjectScale = new Vector3(resolution.x, resolution.y, resolution.z);
         }
 
         void OnDisable()
         {
-         //   Debug.Log("OnDisable 1");
+         
+        //    Volume.RemoveVolume(this);
         }
 
 
@@ -136,6 +132,9 @@ namespace Picodex.Vxcm
 
             accessor = null; // invalidate
             lastFrameChanged = true;
+
+        
+
         }
 
         private void ensureInit()
@@ -201,6 +200,58 @@ namespace Picodex.Vxcm
             //UpdateHeader();
         }
 
+        //float DF(Vector3 sampleLevelPos)
+        //{
+        //    float4 val = tex3Dlod(_Volume, float4(sampleLevelPos, 0));
+        //    return (1.0 - val.r) * (DF_MAX_MINUS_MIN) + DF_MIN;
+        //}
+
+        //// return distance or 0 if not hit
+        //float raycast(
+        // in float3 enter,
+        //	in float3 leave,
+        //	in float3 dir,
+        //    float clipPlaneY,
+        //    out int count)
+        //{
+        //    count = 0;
+        //    float distance = 0;
+        //    float stepLength = length(leave - enter);
+
+        //    float3 sample_size = u_textureRes.xyz; // TODO
+        //    float iso_level = sample_size * 0.1;
+        //    float t = 0.0;
+        //    float d = 1.0;
+
+        //    //[unroll(10)]
+        //    for (count = 0; count < 54; ++count)
+        //    {
+        //        float3 samplePos = enter + dir * t;
+
+        //        d = DF(samplePos);
+        //        if (d > iso_level)
+        //        {
+        //            //  vado avanti
+        //            if (t < stepLength)
+        //                t += sample_size * d;
+        //            else
+        //                break;
+        //        }
+        //        else
+        //        {
+        //            // colpito, mi fermo
+        //            distance = t;
+        //            break;
+        //        }
+        //    }
+        //    return distance;
+        //}
+
+     
+        //public bool Raycast(Vector3 origin, Vector3 dir,ref float distance)
+        //{
+            
+        //}
     }
 
 

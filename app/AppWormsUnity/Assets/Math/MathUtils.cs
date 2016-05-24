@@ -9,8 +9,19 @@ namespace Picodex
     public class MathUtility
     {
 
+        public static uint NextPowerOfTwo(uint v)
+        {
+	        v--;
+	        v |= v >> 1;
+	        v |= v >> 2;
+	        v |= v >> 4;
+	        v |= v >> 8;
+	        v |= v >> 16;
+	        v++;
+	        return v;
+        }
 
-        public static Quaternion QuaternionFromMatrix(Matrix4x4 m)
+    public static Quaternion QuaternionFromMatrix(Matrix4x4 m)
         {
             // Adapted from: http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/index.htm
             Quaternion q = new Quaternion();

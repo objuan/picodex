@@ -13,11 +13,13 @@
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
-    <CompilerResponseFile></CompilerResponseFile>
+    <CompilerResponseFile>
+    </CompilerResponseFile>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows:5</UnityBuildTarget>
     <UnityVersion>5.3.4f1</UnityVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <LangVersion Condition=" '$(VisualStudioVersion)' != '10.0' ">4</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -58,12 +60,6 @@
     <Reference Include="UnityEngine.Networking">
       <HintPath>Library\UnityAssemblies\UnityEngine.Networking.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.Networking">
-      <HintPath>Library\UnityAssemblies\UnityEngine.Networking.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.UI">
-      <HintPath>Library\UnityAssemblies\UnityEngine.UI.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEditor">
       <HintPath>Library\UnityAssemblies\UnityEditor.dll</HintPath>
     </Reference>
@@ -76,6 +72,7 @@
     <Compile Include="Assets\Planet\Scripts\Destroyer.cs" />
     <Compile Include="Assets\Planet\Scripts\Planet.cs" />
     <Compile Include="Assets\Planet\Scripts\PlanetGravity.cs" />
+    <Compile Include="Assets\Utility\StdComputeShader.cs" />
     <Compile Include="Assets\Utility\DebugUtils.cs" />
     <Compile Include="Assets\Utility\ExtensionMethods.cs" />
     <Compile Include="Assets\Utility\GeneralUtils.cs" />
@@ -93,7 +90,7 @@
     <Compile Include="Assets\Volume\DFVolumeRenderer.cs" />
     <Compile Include="Assets\Volume\DFVolumeUI.cs" />
     <Compile Include="Assets\Volume\Edit\MeshDeformer.cs" />
-    <Compile Include="Assets\Volume\Edit\MeshDeformerInput1.cs" />
+    <Compile Include="Assets\Volume\Edit\MeshDeformerInput.cs" />
     <Compile Include="Assets\Volume\Mesh\Cache.cs" />
     <Compile Include="Assets\Volume\Mesh\Helpers\Chunk.cs" />
     <Compile Include="Assets\Volume\Mesh\Helpers\Converters.cs" />
@@ -117,6 +114,7 @@
     <Compile Include="Assets\Volume\VXCMObject_v01.cs" />
     <Compile Include="Assets\Volume\VXCMObject_v02.cs" />
     <Compile Include="Assets\Volume\vxcm\GeometrySample.cs" />
+    <Compile Include="Assets\Volume\vxcm\Volume.cs" />
     <Compile Include="Assets\Volume\vxcm\VXCMException.cs" />
     <Compile Include="Assets\Volume\vxcm\VXCMMeshBuilder.cs" />
     <Compile Include="Assets\Volume\vxcm\VXCMVolume.cs" />
@@ -161,6 +159,7 @@
     <None Include="Assets\Volume\Shaders\test\RayCast shader.shader" />
     <None Include="Assets\Volume\Shaders\test\TestTrasparent.shader" />
     <None Include="Assets\Volume\Shaders\test\TestTrasparent_v02.shader" />
+    <None Include="Assets\Volume\Shaders\Pick_ray_v01.shader" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>
