@@ -77,27 +77,27 @@ namespace Picodex
 
                     if (GUILayout.Button( "Test Build"))
                     {
-                        VolumePrimitiveSphere raster = new VolumePrimitiveSphere(volume);
+                        VolumePrimitive raster = new VolumePrimitive(volume);
 
                         GeometrySample sample = new GeometrySample();
                         sample.debugColor = new Vector3(1, 0, 0);
                         //raster.Raster(new Vector3(0, 0, 0), 10, sample);
 
-                        raster.Raster(new Vector3(-5, 0, 0), 10, sample);
-                        raster.Raster(new Vector3(5, 0, 0), 10, sample);
+                        raster.RasterSphere(new Vector3(-5, 0, 0), 10, sample);
+                        raster.RasterSphere(new Vector3(5, 0, 0), 10, sample);
 
                         UnityUtil.InvalidateObject(obj);
                         AssetManager.SaveAsset(volume);
                     }
                     if (GUILayout.Button("Test Build1"))
                     {
-                        VolumePrimitiveBox raster = new VolumePrimitiveBox(volume);
+                        VolumePrimitive raster = new VolumePrimitive(volume);
 
                         GeometrySample sample = new GeometrySample();
                         sample.debugColor = new Vector3(1, 0, 0);
                         //raster.Raster(new Vector3(0, 0, 0), 10, sample);
 
-                        raster.Raster(new Vector3(10, 10, 10), new Vector3(20, 20, 20), sample);
+                        raster.RasterBox(new Vector3(10, 10, 10), new Vector3(20, 20, 20), sample);
 
                         UnityUtil.InvalidateObject(obj);
                         AssetManager.SaveAsset(volume);

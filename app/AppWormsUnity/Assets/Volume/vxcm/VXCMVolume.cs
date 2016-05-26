@@ -21,6 +21,7 @@ namespace Picodex.Vxcm
     public class VXCMVolume : ScriptableObject
     {
         int size;
+        Bounds _bounds;
 
         [Range(1f, 4f)]
         public int subSampling=1;
@@ -36,6 +37,9 @@ namespace Picodex.Vxcm
 
        // [Range(16f, 128f)]
         public Vector3i resolution = new Vector3i(64,64,64);
+
+        [System.NonSerialized]
+        public Vector4 resolutionInv;
 
         [HideInInspector]
         public Vector3i localToVolumeTrx;
@@ -55,7 +59,13 @@ namespace Picodex.Vxcm
                 return new VolumeRegion(-s.x, -s.y, -s.z, s.x, s.y, s.z);
             }
         }
-    
+
+        public Bounds bounds
+        {
+            get { return _bounds; }
+        }
+
+
         [HideInInspector]
         internal bool lastFrameChanged = true;
 
@@ -87,9 +97,10 @@ namespace Picodex.Vxcm
 
             // 
             float m = 1.0f / 2;
-            Vector4 scale = new Vector4(1.0f / resolution.x, 1.0f / resolution.y, 1.0f / resolution.z, 0);
-            objectToVolumeTrx.SetTRS(new Vector3(m, m, m), Quaternion.identity, scale);
+            resolutionInv = new Vector4(1.0f / resolution.x, 1.0f / resolution.y, 1.0f / resolution.z, 0);
+            objectToVolumeTrx.SetTRS(new Vector3(m, m, m), Quaternion.identity, resolutionInv);
 
+            _bounds = new Bounds(Vector3.zero, new Vector3(resolution.x, resolution.y, resolution.z));
             volumeToObjectScale = new Vector3(resolution.x, resolution.y, resolution.z);
         }
 

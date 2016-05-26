@@ -70,7 +70,8 @@ Shader "Vxcm/Object/ray_v07"
 						// do a shawon map remap
 						remapShadowMap(i, v);
 
-						o.depth = v.worldPos.z / v.worldPos.w;
+						//o.depth = v.worldPos.z / v.worldPos.w;
+						o.depth = (1.0 - v.worldPos.w * _ZBufferParams.w) / (v.worldPos.w * _ZBufferParams.z);
 
 						// get normal in object space
 						float3 N = normalize(calcNormal(v));
@@ -165,7 +166,10 @@ Shader "Vxcm/Object/ray_v07"
 						// do a shawon map remap
 						remapShadowMap(i, v);
 
-						o.depth = v.worldPos.z / v.worldPos.w;
+					//o.depth = v.worldPos.z / v.worldPos.w;
+						o.depth = (1.0 - v.worldPos.w * _ZBufferParams.w) / (v.worldPos.w * _ZBufferParams.z);
+					//	o.depth = 1.0f / (_ZBufferParams.x * v.worldPos.z + _ZBufferParams.y);
+
 
 						// get normal in object space
 						float3 N = normalize(calcNormal(v));

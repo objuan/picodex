@@ -18,6 +18,19 @@ namespace Picodex
         public Texture2D texture;
         public TextureFormat format;
         public Color[] buffer;
+
+        public Color this[int index]
+        {
+            get
+            {
+                return buffer[index];
+            }
+            set
+            {
+                buffer[index] = value;
+            }
+        }
+
         public InputComputeBuffer(int count, TextureFormat format)
         {
             this.count=count;
@@ -38,6 +51,22 @@ namespace Picodex
             texture.wrapMode = TextureWrapMode.Clamp;
             texture.filterMode = FilterMode.Point;
             buffer = new Color[w * h];
+        }
+
+        public void SetValue(int index, Vector3 value)
+        {
+            buffer[index].r = value.x;
+            buffer[index].g = value.y;
+            buffer[index].b = value.z;
+            buffer[index].a = 1;
+        }
+
+        public void SetValue(int index, Vector4 value)
+        {
+            buffer[index].r = value.x;
+            buffer[index].g = value.y;
+            buffer[index].b = value.z;
+            buffer[index].a = value.w;
         }
 
         public void Load()
@@ -148,24 +177,25 @@ namespace Picodex
     public class StdComputeShader
     {
         // esegue
-        Material material;
+        Material _material;
 
-        public Material Material
+        public Material material
         {
             get
             {
-                return material;
+                return _material;
             }
         }
 
+
         public StdComputeShader(String shaderName)
         {
-            material = new Material(Shader.Find(shaderName));
+            _material = new Material(Shader.Find(shaderName));
         }
 
         public void Execute(InputComputeBuffer input, OutputComputeBuffer output)
         {
-            Graphics.Blit(input.texture, output.renderTexture, material);
+            Graphics.Blit(input.texture, output.renderTexture, _material);
 
             output.Sync();
         }

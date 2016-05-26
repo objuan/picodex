@@ -10,36 +10,50 @@ using UnityEngine;
 namespace Picodex.Vxcm
 {
   
-    public class VolumePrimitive
-    {
-	    protected VXCMVolume volume;
-        protected VXCMVolumeAccessor accessor;
-        public bool CutMode;
-        public float BlendFactor;
-	    public bool IsFilled;
+    //public class VolumePrimitive
+    //{
+	   // protected VXCMVolume volume;
+    //    protected VXCMVolumeAccessor accessor;
+    //    public bool CutMode;
+    //    public float BlendFactor;
+	   // public bool IsFilled;
 
-	    public  VolumePrimitive(VXCMVolume volume)
-        {
-            this.volume=volume;
-		    accessor = volume.Accessor;
-            BlendFactor = 1;
-            CutMode = false;
-            IsFilled = true;
-	    }
-    };
+	   // public  VolumePrimitive(VXCMVolume volume)
+    //    {
+    //        this.volume=volume;
+		  //  accessor = volume.Accessor;
+    //        BlendFactor = 1;
+    //        CutMode = false;
+    //        IsFilled = true;
+	   // }
+    //};
 
-// ================================================================
-// VolumePrimitiveSphere
-// ==================================================================
 
-public class VolumePrimitiveSphere :  VolumePrimitive
+public class  VolumePrimitive
 {
-	public VolumePrimitiveSphere(VXCMVolume volume) :base(volume){
-	}
+    protected VXCMVolume volume;
+    protected VXCMVolumeAccessor accessor;
+    public bool CutMode;
+    public float BlendFactor;
+    public bool IsFilled;
 
-	public void Raster(Vector3 _center, float ray, GeometrySample voxel)
+    public  VolumePrimitive(VXCMVolume volume)
+    {
+        this.volume = volume;
+        accessor = volume.Accessor;
+        BlendFactor = 1;
+        CutMode = false;
+        IsFilled = true;
+    }
+
+    // ================================================================
+    // VolumePrimitiveSphere
+    // ==================================================================
+
+    public void RasterSphere(Vector3 _center, float ray, GeometrySample voxel)
 	{
 		Vector3 _dims = new Vector3(ray, ray, ray);
+
 		// -------------------------------
 
 		Vector3 center = _center;
@@ -50,13 +64,15 @@ public class VolumePrimitiveSphere :  VolumePrimitive
 		Vector3 min = center - dims;
 		Vector3 max = center + dims;
 
-		//if (!(dx>0.0f)) OPENVDB_THROW(ValueError, "voxel size must be positive");
-		//if (!(w>1)) OPENVDB_THROW(ValueError, "half-width must be larger than one");
+            //if (!(dx>0.0f)) OPENVDB_THROW(ValueError, "voxel size must be positive");
+            //if (!(w>1)) OPENVDB_THROW(ValueError, "half-width must be larger than one");
 
-		// crop to grid volume
-	//	AxisAlignedBox crop_bbox = volume->convertGridToLocal(gridRegion);
+       // crop to grid volume
+        Bounds crop_bbox = volume.bounds;
 
-		float dx=1;
+    //	AxisAlignedBox crop_bbox = volume->convertGridToLocal(gridRegion);
+
+            float dx=1;
         float w_min = volume.distanceFieldRangeMin;
         float w_max = volume.distanceFieldRangeMax;
 
@@ -75,14 +91,14 @@ public class VolumePrimitiveSphere :  VolumePrimitive
         int jmin = (int)System.Math.Floor(c.y - rmax.y); int jmax = (int)System.Math.Ceiling(c.y + rmax.y);
         int kmin = (int)System.Math.Floor(c.z - rmax.z); int kmax = (int)System.Math.Ceiling(c.z + rmax.z);
 
-		// crop to SVO 
-	/*	imin = std::max(imin,int(crop_bbox.min.x));
-		jmin = std::max(jmin,int(crop_bbox.min.y));
-		kmin = std::max(kmin,int(crop_bbox.min.z));
+		// crop to bouns 
+		imin = Math.Max(imin,(int)(crop_bbox.min.x));
+		jmin = Math.Max(jmin, (int)(crop_bbox.min.y));
+		kmin = Math.Max(kmin, (int)(crop_bbox.min.z));
 
-		imax = std::min(imax,int(crop_bbox.max.x));
-		jmax = std::min(jmax,int(crop_bbox.max.y));
-		kmax = std::min(kmax,int(crop_bbox.max.z));*/
+		imax = Math.Min(imax, (int)(crop_bbox.max.x-1));
+		jmax = Math.Min(jmax, (int)(crop_bbox.max.y-1));
+		kmax = Math.Min(kmax, (int)(crop_bbox.max.z-1));
 
 		Vector3 d;
 		//float wn = 0.1f;
@@ -134,18 +150,8 @@ public class VolumePrimitiveSphere :  VolumePrimitive
 
         accessor.Flush();
 	}
-};
 
-    // ==========================================================
-
-    public class VolumePrimitiveBox : VolumePrimitive
-    {
-
-        public VolumePrimitiveBox(VXCMVolume volume) : base(volume)
-        {
-        }
-
-        public void Raster(Vector3 min, Vector3 max, GeometrySample voxel)
+        public void RasterBox(Vector3 min, Vector3 max, GeometrySample voxel)
         {
 
             //Vector3 min, max,
@@ -180,6 +186,18 @@ public class VolumePrimitiveSphere :  VolumePrimitive
             int kmin = (int)System.Math.Floor(c.z - rmax.z); int kmax = (int)System.Math.Ceiling(c.z + rmax.z);
 
             Vector3i ijk = new Vector3i();
+
+            // crop to bouns 
+            Bounds crop_bbox = volume.bounds;
+
+            imin = Math.Max(imin, (int)(crop_bbox.min.x));
+            jmin = Math.Max(jmin, (int)(crop_bbox.min.y));
+            kmin = Math.Max(kmin, (int)(crop_bbox.min.z));
+
+            imax = Math.Min(imax, (int)(crop_bbox.max.x - 1));
+            jmax = Math.Min(jmax, (int)(crop_bbox.max.y - 1));
+            kmax = Math.Min(kmax, (int)(crop_bbox.max.z - 1));
+
             //	SVOAccessor accessor = tree->getAccessor();
             Vector3i minW = new Vector3i(imin, jmin, kmin);
             Vector3i maxW = new Vector3i(imax, jmax, kmax);

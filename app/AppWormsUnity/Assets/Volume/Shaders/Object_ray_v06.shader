@@ -46,6 +46,7 @@
 			o.localPos = v.vertex;
 		}
 
+	//	void frag_surf(v2f_surf IN, out fixed4 outColor : SV_Target, out float outDepth : SV_Depth)
 
 		void surf(Input IN, inout SurfaceOutput  o) {
 			// Albedo comes from a texture tinted by color

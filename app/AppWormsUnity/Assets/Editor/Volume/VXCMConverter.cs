@@ -26,11 +26,11 @@ namespace Picodex
         VXCMVolumeDef objectHeader = new VXCMVolumeDef();
 
 
-        [MenuItem("Tools/VXCMConverter")] //Add a menu item to the toolbar
+        [MenuItem("Tools/Volume Converter")] //Add a menu item to the toolbar
         static void OpenWindow()
         {
             window = (VXCMConverter)EditorWindow.GetWindow(typeof(VXCMConverter)); //create a window
-            window.titleContent.text = "VXCM Converter"; //set a window title
+            window.titleContent.text = "Volume Converter"; //set a window title
         }
 
         void OnGUI()

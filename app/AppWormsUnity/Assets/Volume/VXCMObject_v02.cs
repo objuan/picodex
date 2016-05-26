@@ -22,7 +22,8 @@ namespace Picodex
 
         public Texture3D texture = null;
         public VXCMVolume volume;
-    
+        DFVolumeEditor editor;
+
         private Matrix4x4 objectToVolumeTrx;
 
         private bool mustInitialize=true;
@@ -57,7 +58,10 @@ namespace Picodex
             // material = GetComponent<Renderer>().sharedMaterial;
               material = new Material(Shader.Find("Vxcm/Object/ray_v07"));
             //material = new Material(Shader.Find("Vxcm/Transparent"));
-       
+
+            editor = this.GetComponentInParent<DFVolumeEditor>();
+
+
             renderer.material = material;
 
         }
@@ -71,15 +75,29 @@ namespace Picodex
             Camera cam = Camera.current;
             if (!cam) return;
 
-
             UpdateMat();
+
+            // notify editor
+
+            DFVolumeEditor editor = this.GetComponentInParent<DFVolumeEditor>();
+
+            //if (editor)
+            //    editor.OnWillRenderObject(); // manual call
         }
 
+//#if UNITY_EDITOR
+//        void UpdateFixed()
+//        {
+//            if (editor)
+//                editor.Update(); // manual call
+//        }
+//#endif
         public void UpdateMat()
         {
+            if (!volume) return;
             if (!meshFilter) return;
 
-           // Debug.Log("UpdateMat");
+            // Debug.Log("UpdateMat");
             if (texture == null
                // || (volume && volume.lastFrameChanged)
                 || (texture != null && (texture.width != volume.resolution.x) || (texture.height != volume.resolution.y) || (texture.depth != volume.resolution.z)))
@@ -130,6 +148,7 @@ namespace Picodex
             material.SetFloat("u_cut_plane_xz", CutPlaneXZ);
         }
 
+
         void OnRenderObject()
         {
             if (volume)
@@ -138,39 +157,7 @@ namespace Picodex
 
         // ============================
 
-        public StdComputeShader compute;
-        public Texture2D txt;
-        public RenderTexture renderTexture;
-
-        public bool Raycast(Vector3 origin, Vector3 dir, ref float distance)
-        {
-
-            VectorInputComputeBuffer inBuffer = new VectorInputComputeBuffer(8);
-            VectorOutputComputeBuffer outBuffer = new VectorOutputComputeBuffer(inBuffer);
-
-            txt = inBuffer.texture;
-            renderTexture = outBuffer.renderTexture;
-
-            compute = new StdComputeShader("Vxcm/Pick/ray_v01");
-
-            float a = 0;
-            for (int i = 0; i < inBuffer.count; i++,a+= 0.0001f)
-            {
-                inBuffer.buffer[i] = new Color(a, a + 0.1f, a + 0.2f, 1);
-            }
-            inBuffer.Load();
-
-            compute.Execute(inBuffer, outBuffer);
-
-            for(int i=0;i< inBuffer.count; i++)
-            {
-                Color c = inBuffer.buffer[i];
-                Debug.Log(c);
-            }
-
-            
-            return true;
-        }
+    
 
     }
 

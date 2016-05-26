@@ -31,14 +31,14 @@ namespace Picodex
 
             //   VXCMVolume volume = new VXCMVolume(new VolumeRegion(-w/2,-h/2,-d / 2, w / 2, h/2,d/2), 1, -2, 2);
 
-            VolumePrimitiveSphere raster = new VolumePrimitiveSphere(volume);
+            VolumePrimitive raster = new VolumePrimitive(volume);
 
             GeometrySample sample = new GeometrySample();
             sample.debugColor = new Vector3(1, 0, 0);
             //raster.Raster(new Vector3(0, 0, 0), 10, sample);
 
-            raster.Raster(new Vector3(-5, 0, 0), 10, sample);
-            raster.Raster(new Vector3(5, 0, 0), 10, sample);
+            raster.RasterSphere(new Vector3(-5, 0, 0), 10, sample);
+            raster.RasterSphere(new Vector3(5, 0, 0), 10, sample);
 
             return volume;
         }

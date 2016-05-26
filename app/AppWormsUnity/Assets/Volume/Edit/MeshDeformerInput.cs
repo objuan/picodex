@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Picodex.Vxcm;
+using UnityEngine;
 
 namespace Picodex
 {
@@ -20,7 +21,7 @@ namespace Picodex
         void HandleInput()
         {
             Ray inputRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
+            VolumeRaycastHit hit;
 
             if (Picodex.Vxcm.Volume.Raycast(inputRay, out hit))
             {

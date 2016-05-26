@@ -295,8 +295,10 @@ struct appdata_vcxm_fs
 
 struct out_vcxm_fs
 {
-	float4 color	: COLOR;
-	float depth : DEPTH;
+	//float4 color	: COLOR;
+	//float depth : DEPTH;
+	float4 color : SV_Target;
+	float depth : SV_Depth;
 };
 
 

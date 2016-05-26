@@ -19,7 +19,7 @@
 
 			#include "UnityCG.cginc"
 			#define VXCM_RAYCAST_VS
-			//#include "UnityVxcm.cginc"
+			#include "UnityVxcm.cginc"
 
 			#pragma fragmentoption ARB_precision_hint_fastest
 			#pragma vertex vert
@@ -27,6 +27,7 @@
 			
 			float _SampleRate;
 			sampler2D _MainTex;
+			sampler2D _DirBuffer;
 
 			struct v2f {
 				float4 pos : POSITION;
@@ -46,11 +47,25 @@
 			{
 				half2 ScreenUV = IN.uv;
 
-				float4 v = tex2D(_MainTex, ScreenUV);
+				
+				float3 rayOriginTex = tex2D(_MainTex, ScreenUV); 
+				float3 rayDirTex =  tex2D(_DirBuffer, ScreenUV);
+			
+				float4 rayEnc = raycast(rayOriginTex, rayDirTex);
+			
+
+				if (rayEnc.a > 0)
+				{
+					appdata_vcxm_fs i;
+					i.volumePos = rayOriginTex + rayDirTex * rayEnc.x;
+					return float4(calcNormal(i), rayEnc.x);
+				}
+				else
+					return float4(0, 0, 0, 0);
 
 				//return float4(1, 0, 0, 1);
 				//return float4(ScreenUV, 0, 1);
-				return v;
+				//return v;
 			}
 
 			ENDCG

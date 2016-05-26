@@ -55,7 +55,7 @@ namespace Picodex.Vxcm
             volume.lastFrameChanged = true;
         }
 
-        // MAX-> 0
+        // MAX -> 0
         // MIN -> 1
         public byte EncodeDistanceField(float density){
 		    // contrario // 0 -> out 1 -> in
@@ -63,18 +63,19 @@ namespace Picodex.Vxcm
 		    //return VoxelDensity(65535 * w);
 		    return (byte)(w * 255 );
 	    }
-        public byte decodeDistanceField(byte density)
+
+        public float DecodeDistanceField(byte densityEnc)
         {
-            
-            float w = 1.0f - (density - distanceFieldRangeMin) / (distanceFieldRangeW);
-            return (byte)(w * 255);
+            float w = (-((float)densityEnc / 255.0f) + 1) * distanceFieldRangeW + distanceFieldRangeMin;
+            //return (byte)(w * 255);
+            return w;
         }
      
         // direct edit
         public bool ProbeValue(Vector3i address, ref GeometrySample voxel)
         {
             byte df = DF[address.x + address.y * size + address.z * size2].r;
-            voxel.distanceField = decodeDistanceField(df);
+            voxel.distanceField = df;// decodeDistanceField(df);
             return df != 0;
         }
 
@@ -124,7 +125,7 @@ namespace Picodex.Vxcm
             Debug.Assert(localAddress.x < volumeLocalRegion.max.x); Debug.Assert(localAddress.y < volumeLocalRegion.max.y); Debug.Assert(localAddress.z < volumeLocalRegion.max.z);
 
             byte old_density = GetDistanceField(address);
-            float new_density = voxel.distanceField;
+            byte new_density = voxel.distanceField;
 
             if (BlendFactor == 1)
             {
@@ -165,35 +166,41 @@ namespace Picodex.Vxcm
         {
         }
 
-        public void csgDifference(Vector3i address, GeometrySample voxel)
+        public void csgDifference(Vector3i localAddress, GeometrySample voxel)
         {
-            //bool active_dst = ProbeValue(address, tmpGeometrySample);
+            Vector3i address = localAddress + localToVolumeTrx;
+            Debug.Assert(address.x >= 0); Debug.Assert(address.y >= 0); Debug.Assert(address.z >= 0);
+            Debug.Assert(localAddress.x < volumeLocalRegion.max.x); Debug.Assert(localAddress.y < volumeLocalRegion.max.y); Debug.Assert(localAddress.z < volumeLocalRegion.max.z);
 
-            //float dens_src = -voxel.distanceField;
+            //  bool active_dst = ProbeValue(address, ref tmpGeometrySample);
+            byte active_dst = GetDistanceField(address);
 
-            //// a = max(a, -b)
 
-            //if (active_dst)
-            //{
-            //    //if (dens_src < 0)
-            //    //{
-            //    //	accessor_density.setValue(ijk, dens_src);
-            //    //	/*accessor_density.setValueOff(ijk);
-            //    //	accessor_mat.setValueOff(ijk);*/
-            //    //}
-            //    //else
-            //    {
-            //        if (dens_src > tmpGeometrySample.distanceField)
-            //        {
-            //            tmpGeometrySample = voxel;
-            //            tmpGeometrySample.distanceField = dens_src;
-            //            SetValue(address, tmpGeometrySample);
+            // a = max(a, -b)
 
-            //            // set the invalid tree as clear need
-            //            //tree->getInvalidTree().invalidClear();
-            //        }
-            //    }
-            //}
+            if (active_dst >0) // era pieno
+            {
+                float dens_src = -DecodeDistanceField(voxel.distanceField);
+                float dens_dst = DecodeDistanceField(active_dst);
+                //if (dens_src < 0)
+                //{
+                //	accessor_density.setValue(ijk, dens_src);
+                //	/*accessor_density.setValueOff(ijk);
+                //	accessor_mat.setValueOff(ijk);*/
+                //}
+                //else
+                {
+                    if (dens_src > dens_dst)
+                    {
+                        tmpGeometrySample = voxel;
+                        tmpGeometrySample.distanceField = EncodeDistanceField(dens_src);
+                        SetValue(address, tmpGeometrySample);
+
+                        // set the invalid tree as clear need
+                        //tree->getInvalidTree().invalidClear();
+                    }
+                }
+            }
         }
 
         // 

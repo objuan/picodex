@@ -10,13 +10,13 @@ namespace Picodex
     public class GeneralUtils
     {
      
-        public static UnityEditor.EditorWindow GetMainGameView()
-        {
-            System.Type T = System.Type.GetType("UnityEditor.GameView,UnityEditor");
-            System.Reflection.MethodInfo GetMainGameView = T.GetMethod("GetMainGameView", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
-            System.Object Res = GetMainGameView.Invoke(null, null);
-            return (UnityEditor.EditorWindow)Res;
-        }
+        //public static UnityEditor.EditorWindow GetMainGameView()
+        //{
+        //    System.Type T = System.Type.GetType("UnityEditor.GameView,UnityEditor");
+        //    System.Reflection.MethodInfo GetMainGameView = T.GetMethod("GetMainGameView", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
+        //    System.Object Res = GetMainGameView.Invoke(null, null);
+        //    return (UnityEditor.EditorWindow)Res;
+        //}
 
         // Unity requires us to use the 'Destroy' function in play mode but 'DestroyImmediate' in edit mode. Thhi function
         // wraps these and calls the appropriate one depending on the current mode. The documentation also clearly states
