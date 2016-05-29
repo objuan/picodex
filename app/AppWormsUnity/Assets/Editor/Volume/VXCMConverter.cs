@@ -16,9 +16,9 @@ namespace Picodex
         private static GameObject obj;
 
         string textureName = "Texture Name";
-        bool assetDestEnabled;
+     //   bool assetDestEnabled;
 
-        Mesh old_selectedmesh = null;
+     //   Mesh old_selectedmesh = null;
         Mesh selectedmesh = null;
         Transform meshTrx;
         string selectedAsset = "";

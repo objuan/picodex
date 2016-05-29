@@ -339,7 +339,7 @@ inline void getShadowRay(appdata_vcxm_shadow i, out float3 rayOriginTex, out flo
 
 	float4 localCameraPos;
 	if (i.pos.w == 1) // TODO ????
-		localCameraPos = mul(transpose(UNITY_MATRIX_IT_MV), float4(0, 0, -10000, 1)); // from directional light
+		localCameraPos = mul(transpose(UNITY_MATRIX_IT_MV), float4(0, 0, 10000, 1)); // from directional light
 	else
 		localCameraPos = mul(transpose(UNITY_MATRIX_IT_MV), float4(0, 0, 0, 1)); // from camera
 

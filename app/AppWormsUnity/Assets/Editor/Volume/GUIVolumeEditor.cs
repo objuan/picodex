@@ -14,7 +14,7 @@ namespace Picodex
         public static GUIVolumeEditor window;
         private static GameObject obj;
 
-        Vector3 res = new Vector3(64,64,64);
+      //  Vector3 res = new Vector3(64,64,64);
 
         DFVolumeEditor volumeEditor =null;
 

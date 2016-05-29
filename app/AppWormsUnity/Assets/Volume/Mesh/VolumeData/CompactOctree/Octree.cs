@@ -7,9 +7,8 @@ namespace Picodex.VolumeData.CompactOctree
 {
     public class Octree<T>
     {
-        Octree<T> [] childs;
-        T value = default(T);
-
+        //Octree<T> [] childs;
+        //T value = default(T);
 
     }
 }

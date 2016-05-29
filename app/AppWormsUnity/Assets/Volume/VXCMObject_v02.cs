@@ -14,7 +14,7 @@ namespace Picodex
         [Range(0, 1)]
         public float CutPlaneXZ = 1f;
 
-        public Vector3i dimensions = new Vector3i(64, 64, 64);
+     //   public Vector3i dimensions = new Vector3i(64, 64, 64);
 
         private new Renderer renderer;
         private Material material;
@@ -30,10 +30,11 @@ namespace Picodex
 
         protected void OnValidate()
         {
-            if (dimensions != volume.region.size)
-            {
-                this.volume.Resize(dimensions);
-            }
+            if (!volume) return;
+            //if (dimensions != volume.region.size)
+            //{
+            //    this.volume.Resize(dimensions);
+            //}
         }
 
         void Awake()
@@ -79,7 +80,7 @@ namespace Picodex
 
             // notify editor
 
-            DFVolumeEditor editor = this.GetComponentInParent<DFVolumeEditor>();
+         //   DFVolumeEditor editor = this.GetComponentInParent<DFVolumeEditor>();
 
             //if (editor)
             //    editor.OnWillRenderObject(); // manual call
@@ -103,7 +104,7 @@ namespace Picodex
                 || (texture != null && (texture.width != volume.resolution.x) || (texture.height != volume.resolution.y) || (texture.depth != volume.resolution.z)))
             {
                 // resize Proxy
-                PrimitiveHelper.CreateCube(meshFilter.sharedMesh, dimensions.x, dimensions.y, dimensions.z);
+                PrimitiveHelper.CreateCube(meshFilter.sharedMesh, volume.resolution.x, volume.resolution.y, volume.resolution.z);
 
                 // build texture
                 texture = new Texture3D(volume.resolution.x, volume.resolution.y, volume.resolution.z, TextureFormat.RGBA32, false);
@@ -123,7 +124,7 @@ namespace Picodex
 
                 objectToVolumeTrx = new Matrix4x4();
 
-                Bounds bounds = meshFilter.sharedMesh.bounds;
+            //    Bounds bounds = meshFilter.sharedMesh.bounds;
 
                 float m = 1.0f / 2;
                 Vector4 scale = new Vector4(1.0f / volume.resolution.x, 1.0f / volume.resolution.y, 1.0f / volume.resolution.z,0);

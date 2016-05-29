@@ -276,20 +276,20 @@ namespace Picodex
                 normals[indices[i * 3 + 2]] += normal;
 
                 // binormal/tangent
-                Vector3 v1 = vertices[indices[i * 3]];
-                Vector3 v2 = vertices[indices[i * 3 + 1]];
-                Vector3 v3 = vertices[indices[i * 3 + 2]];
+                //Vector3 v1 = vertices[indices[i * 3]];
+                //Vector3 v2 = vertices[indices[i * 3 + 1]];
+                //Vector3 v3 = vertices[indices[i * 3 + 2]];
 
                 //Vector2 w1 = vertices[indices[i * 3]].TextureCoordinate1;
                 //Vector2 w2 = vertices[indices[i * 3 + 1]].TextureCoordinate1;
                 //Vector2 w3 = vertices[indices[i * 3 + 2]].TextureCoordinate1;
 
-                float x1 = v2.x - v1.x;
-                float x2 = v3.x - v1.x;
-                float y1 = v2.y - v1.y;
-                float y2 = v3.y - v1.y;
-                float z1 = v2.z - v1.z;
-                float z2 = v3.z - v1.z;
+                //float x1 = v2.x - v1.x;
+                //float x2 = v3.x - v1.x;
+                //float y1 = v2.y - v1.y;
+                //float y2 = v3.y - v1.y;
+                //float z1 = v2.z - v1.z;
+                //float z2 = v3.z - v1.z;
 
                 //float s1 = w2.x - w1.x;
                 //float s2 = w3.x - w1.x;

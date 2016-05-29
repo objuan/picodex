@@ -17,7 +17,7 @@
 			Offset 1, 1
 
 			Fog{ Mode Off }
-			ZWrite On ZTest Less Cull Off
+			//ZWrite On ZTest Less// Cull Off
 
 			CGPROGRAM
 
@@ -62,17 +62,24 @@
 				// save to the output
 #ifdef SHADOWS_CUBE
 				float4 enc = UnityEncodeCubeShadowDepth((length(i.vec) + unity_LightShadowBias.x) * _LightPositionRange.w);;
-			//	o.depth = i.pos.z / i.pos.w; 
-				o.depth = (1.0 - i.pos.w * _ZBufferParams.w) / (i.pos.w * _ZBufferParams.z);
+				//	o.depth = i.pos.z / i.pos.w; 
+				//	o.depth = (1.0 - i.pos.w * _ZBufferParams.w) / (i.pos.w * _ZBufferParams.z);
 
 				o.color = enc;
 #else
-				o.depth = i.pos.z / i.pos.w;
-			//	o.depth = Linear01Depth(i.pos.z);
-				//o.depth = (1.0 - i.pos.w * _ZBufferParams.w) / (i.pos.w * _ZBufferParams.z);
 
+				//	o.depth = LinearEyeDepth(-i.pos.w);
+				//o.depth = (1.0 - i.pos.w * _ZBufferParams.w) / (i.pos.w * _ZBufferParams.z);
 				o.color = 1;	
 #endif
+				// DEPTH WRITE
+#if defined(SHADER_API_D3D11) || defined(SHADER_API_D3D9)
+				o.depth = (i.pos.z / i.pos.w); // directX mode
+#else
+
+				o.depth = (i.pos.z / i.pos.w) * 0.5 + 0.5; // opengl
+#endif
+
 				clip(v.rayEnc.a*_Color.a - 0.5);
 
 				return o;

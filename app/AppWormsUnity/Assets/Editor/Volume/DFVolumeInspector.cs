@@ -83,8 +83,10 @@ namespace Picodex
                         sample.debugColor = new Vector3(1, 0, 0);
                         //raster.Raster(new Vector3(0, 0, 0), 10, sample);
 
-                        raster.RasterSphere(new Vector3(-5, 0, 0), 10, sample);
-                        raster.RasterSphere(new Vector3(5, 0, 0), 10, sample);
+                        raster.RasterSphere(new Vector3(-20, 0, 0), 10, sample);
+                        raster.RasterSphere(new Vector3(20, 0, 0), 10, sample);
+                        raster.RasterSphere(new Vector3(0, 0, 20), 10, sample);
+                        raster.RasterSphere(new Vector3(0, 0, -20), 10, sample);
 
                         UnityUtil.InvalidateObject(obj);
                         AssetManager.SaveAsset(volume);

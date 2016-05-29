@@ -19,12 +19,12 @@ public class Worm : MonoBehaviour {
     // how many objects
     public int objects = 20;
     private SnakePart[] bodyList;
-    private MCBlob blob;
+  //  private MCBlob blob = null;
 
     // Use this for initialization
     void Start () {
 
-        blob = GetComponent<MCBlob>();
+      //  blob = GetComponent<MCBlob>();
 
         // init array sizes
         bodyList = new SnakePart[objects];

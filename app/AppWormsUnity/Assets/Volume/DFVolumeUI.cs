@@ -30,12 +30,12 @@ namespace Picodex
                 int width = (data.region.max.x - data.region.min.x) + 1;
                 int height = (data.region.max.y - data.region.min.y) + 1;
                 int depth = (data.region.max.z - data.region.min.z) + 1;
-                float offsetX = width / 2;
-                float offsetY = height / 2;
-                float offsetZ = depth / 2;
+                //float offsetX = width / 2;
+                //float offsetY = height / 2;
+                //float offsetZ = depth / 2;
 
                 // The origin is at the centre of a voxel, but we want this box to start at the corner of the voxel.
-                Vector3 halfVoxelOffset = new Vector3(0.5f, 0.5f, 0.5f);
+           //     Vector3 halfVoxelOffset = new Vector3(0.5f, 0.5f, 0.5f);
 
                 // + new Vector3(offsetX, offsetY, offsetZ)
                 // Draw an invisible box surrounding the olume. This is what actually gets picked.

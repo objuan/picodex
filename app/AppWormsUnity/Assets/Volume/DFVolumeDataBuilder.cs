@@ -28,7 +28,7 @@ namespace Picodex
             // Set the provided data.
             //  dfVolume.data = data;
 
-            DFVolumeFilter volumeFilter = volumeGameObject.AddComponent<DFVolumeFilter>();
+          //  DFVolumeFilter volumeFilter = volumeGameObject.AddComponent<DFVolumeFilter>();
            // volumeFilter.volumeData = data;
 
 

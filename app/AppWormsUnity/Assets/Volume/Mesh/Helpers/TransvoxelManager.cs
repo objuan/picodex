@@ -19,7 +19,7 @@ namespace Picodex
         private Dictionary<Vector3, Chunk> _chunks;
         private TransvoxelExtractor _surfaceExtractor;
         private IVolumeData<sbyte> _volumeData;
-        private Logger _logger;
+        private Logger _logger=null;
         private string _logSend;
 
         public TransvoxelManager()

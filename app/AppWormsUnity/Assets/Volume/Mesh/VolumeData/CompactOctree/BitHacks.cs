@@ -46,9 +46,9 @@ namespace Picodex.VolumeData.CompactOctree
         public static uint Mask(int i, int j)
         {
             uint ret = 0;
-            for (int x = i; i < j+1; i++)
+            for (int x = i; x < j+1; x++) // TODO ???? c'era i
             {
-                ret |= MASK_LR[i];
+                ret |= MASK_LR[x];
             }
             return ret;
         }

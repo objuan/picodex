@@ -194,7 +194,7 @@ namespace Picodex.Vxcm
         public void ImportMesh(Mesh mesh, Transform trx, VXCMVolumeDef objheader)
         {
             Matrix4x4 meshToLocalTrx = Matrix4x4.TRS(-mesh.bounds.center, Quaternion.identity, trx.lossyScale);
-            Matrix4x4 localToWorldTrx = trx.localToWorldMatrix * meshToLocalTrx.inverse;
+         //   Matrix4x4 localToWorldTrx = trx.localToWorldMatrix * meshToLocalTrx.inverse;
 
             ImportMesh(mesh, meshToLocalTrx, objheader);
 

@@ -111,14 +111,14 @@ namespace Picodex
             }
             else
             {
-                proxyGameObject = VXCMMeshBuilder.CreateMeshTransvoxel(volume, new Vector3i(64, 64, 64), lod);
+                proxyGameObject = VXCMMeshBuilder.CreateMeshTransvoxel(volume, volume.resolution, lod);
             }
 
             proxyGameObject.name = "VXCM Volume";
             proxyGameObject.transform.parent = this.transform;
             proxyGameObject.transform.setLocalToIdentity();
 
-            //proxyGameObject.hideFlags = HideFlags.HideAndDontSave;
+          //  proxyGameObject.hideFlags = HideFlags.HideAndDontSave;
             proxyGameObject.hideFlags = HideFlags.DontSave;
 
             // save
