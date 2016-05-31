@@ -19,5 +19,6 @@ namespace Picodex
 					Debug.LogWarning("Cubiquity Assert() failed: " + message);
 				}
 		    }
-		}
+
+    }
 }

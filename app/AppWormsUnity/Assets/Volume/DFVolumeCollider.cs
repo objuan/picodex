@@ -40,6 +40,8 @@ namespace Picodex
     //    }
     //}
 
+    [AddComponentMenu("Vxcm/DFVolumeCollider")]
+    [ExecuteInEditMode]
     public class DFVolumeCollider : MonoBehaviour
     {
         DFVolume volume;

@@ -203,24 +203,33 @@ float raycast(
 	float iso_level = sample_size * 0.1;
 	float t = 0.0;
 	float d = 1.0;
-
+	float2 prec = 0.0; // previous values
 	//[unroll(10)]
-	for (count = 0; count < 54; ++count) {
+	for (count = 0; count < 100; ++count) {
 		float3 samplePos = enter + dir * t;
 
+		prec.x = d;
 		d = DF(samplePos);
 		if (d > iso_level)
 		{
 			//  vado avanti
 			if (t < stepLength)
+			{
+				prec.y = t;
 				t += sample_size * d;
+			}
 			else
 				break;
 		}
 		else
 		{
 			// colpito, mi fermo
-			distance = t;
+			// calcolo l'interpolazione
+			float factor =  (iso_level - prec.x) / (d - prec.x);
+			distance = t;// +u_textureRes.x;// lerp(prec.y, t, factor);
+			distance = lerp(prec.y, t,factor);
+			//distance = t;
+			//distance = factor;
 			break;
 		}
 	}

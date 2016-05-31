@@ -34,5 +34,24 @@ namespace Picodex
 					child.SetLayerRecursively(layer);
 				}
 			}
-		}
+
+     
+            // BOUNDS
+            public static Vector3[] GetExtends(this Bounds bounds)
+            {
+                Vector3 cen = bounds.center;
+                Vector3 ext = bounds.extents;
+
+                return new Vector3[] {
+                    new Vector3(cen.x-ext.x, cen.y-ext.y, cen.z-ext.z),
+                    new Vector3(cen.x+ext.x, cen.y-ext.y, cen.z-ext.z),
+                    new Vector3(cen.x-ext.x, cen.y-ext.y, cen.z+ext.z),
+                    new Vector3(cen.x+ext.x, cen.y-ext.y, cen.z+ext.z),
+                    new Vector3(cen.x-ext.x, cen.y+ext.y, cen.z-ext.z),
+                    new Vector3(cen.x+ext.x, cen.y+ext.y, cen.z-ext.z),
+                    new Vector3(cen.x-ext.x, cen.y+ext.y, cen.z+ext.z),
+                    new Vector3(cen.x+ext.x, cen.y+ext.y, cen.z+ext.z)
+                };
+            }
+        }
 }

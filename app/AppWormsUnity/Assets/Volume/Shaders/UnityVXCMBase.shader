@@ -2,6 +2,7 @@
 {
 	Properties{
 		_Color("Main Color", Color) = (1,1,1,1)
+		_ShadowBias("Shadow Bias", Range(-10.0, 10.0)) = 0.0
 		//_MainTex("Base (RGB) Trans (A)", 2D) = "white" {}
 	}
 
@@ -14,9 +15,9 @@
 		Pass{
 			Name "Caster"
 			Tags{ "LightMode" = "ShadowCaster" }
-			Offset 1, 1
+			//Offset 1,1
 
-			Fog{ Mode Off }
+			//Fog{ Mode Off }
 			//ZWrite On ZTest Less// Cull Off
 
 			CGPROGRAM
@@ -45,6 +46,7 @@
 
 		//	uniform sampler2D _MainTex;
 			uniform float4 _Color;
+			uniform float _ShadowBias;
 		
 			out_vcxm_fs frag(appdata_vcxm_shadow i)
 			{
@@ -61,18 +63,24 @@
 
 				// save to the output
 #ifdef SHADOWS_CUBE
-				float4 enc = UnityEncodeCubeShadowDepth((length(i.vec) + unity_LightShadowBias.x) * _LightPositionRange.w);;
+				float4 enc = UnityEncodeCubeShadowDepth((length(i.vec) + unity_LightShadowBias.x) * _LightPositionRange.w);
 				//	o.depth = i.pos.z / i.pos.w; 
 				//	o.depth = (1.0 - i.pos.w * _ZBufferParams.w) / (i.pos.w * _ZBufferParams.z);
 
 				o.color = enc;
 #else
 
+				i.pos = UnityApplyLinearShadowBias(i.pos);
+			//	i.pos.z -= (_ShadowBias * u_textureRes.x) / i.pos.w);
+
 				//	o.depth = LinearEyeDepth(-i.pos.w);
 				//o.depth = (1.0 - i.pos.w * _ZBufferParams.w) / (i.pos.w * _ZBufferParams.z);
 				o.color = 1;	
 #endif
 				// DEPTH WRITE
+
+				
+
 #if defined(SHADER_API_D3D11) || defined(SHADER_API_D3D9)
 				o.depth = (i.pos.z / i.pos.w); // directX mode
 #else

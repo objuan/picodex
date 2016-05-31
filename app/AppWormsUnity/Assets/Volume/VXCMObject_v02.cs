@@ -17,6 +17,7 @@ namespace Picodex
      //   public Vector3i dimensions = new Vector3i(64, 64, 64);
 
         private new Renderer renderer;
+        private DFVolumeRenderer volumeRenderer;
         private Material material;
         private MeshFilter meshFilter;
 
@@ -41,6 +42,19 @@ namespace Picodex
         {
         }
 
+        //public void OnEnable()
+        //{
+        //   // register the callback when enabling object
+        //    Camera.onPreCull += PreCullAdjustFOV;
+        //    Camera.onPreRender += PreRenderAdjustFOV;
+        //}
+        //public void OnDisable()
+        //{
+        // //   remove the callback when disabling object
+        //    Camera.onPreCull -= PreCullAdjustFOV;
+        //    Camera.onPreRender -= PreRenderAdjustFOV;
+        //}
+
         void Start()
         {
           //  Debug.Log("Start");
@@ -56,8 +70,11 @@ namespace Picodex
 
             meshFilter = GetComponent<MeshFilter>();
             renderer = GetComponent<Renderer>();
+            volumeRenderer = transform.parent.gameObject.GetComponent<DFVolumeRenderer>();
+
+            material = volumeRenderer.material;
             // material = GetComponent<Renderer>().sharedMaterial;
-              material = new Material(Shader.Find("Vxcm/Object/ray_v07"));
+            // material = new Material(Shader.Find("Vxcm/Object/ray_v07"));
             //material = new Material(Shader.Find("Vxcm/Transparent"));
 
             editor = this.GetComponentInParent<DFVolumeEditor>();
@@ -66,6 +83,31 @@ namespace Picodex
             renderer.material = material;
 
         }
+
+        //public void PreRenderAdjustFOV(Camera cam)
+        //{
+
+        //   // if (cam == thisCamera)
+        //    {
+        //        Debug.Log("MyPreRender: " + cam.gameObject.name);
+        //        cam.fieldOfView = 60;
+        //    }
+        //}
+
+        //// callback to be called before any culling
+        //public void PreCullAdjustFOV(Camera cam)
+        //{
+        //  //  if (cam == thisCamera)
+        //    {
+        //        Debug.Log("PreCull: " + cam.gameObject.name);
+        //        cam.fieldOfView = 70;
+
+        //        //These are needed for the FOV change to take effect.
+        //        cam.ResetWorldToCameraMatrix();
+        //        cam.ResetProjectionMatrix();
+        //    }
+
+        //}
 
         public void OnWillRenderObject()
         {
@@ -104,7 +146,11 @@ namespace Picodex
                 || (texture != null && (texture.width != volume.resolution.x) || (texture.height != volume.resolution.y) || (texture.depth != volume.resolution.z)))
             {
                 // resize Proxy
-                PrimitiveHelper.CreateCube(meshFilter.sharedMesh, volume.resolution.x, volume.resolution.y, volume.resolution.z);
+                volumeRenderer.proxyBuilder.Rebuild();
+                //if (volumeRenderer.proxyType == DFVolumeRendererProxyType.Box)
+                //    PrimitiveHelper.CreateCube(meshFilter.sharedMesh, volume.resolution.x, volume.resolution.y, volume.resolution.z);
+                //else
+                //    PrimitiveHelper.CreateSphere(meshFilter.sharedMesh, volume.resolution.x * 0.5f);
 
                 // build texture
                 texture = new Texture3D(volume.resolution.x, volume.resolution.y, volume.resolution.z, TextureFormat.RGBA32, false);
@@ -147,6 +193,9 @@ namespace Picodex
             material.SetTexture("_Volume", texture);
 
             material.SetFloat("u_cut_plane_xz", CutPlaneXZ);
+
+            if (volumeRenderer.proxyBuilder!=null)
+                volumeRenderer.proxyBuilder.Update(transform, Camera.current);
         }
 
 

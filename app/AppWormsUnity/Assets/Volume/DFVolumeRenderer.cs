@@ -12,7 +12,14 @@ namespace Picodex
         Raycast = 0,
         Mesh
     }
- 
+
+    public enum DFVolumeRendererProxyType
+    {
+        Box = 0,
+        Sphere,
+        Optimized,
+    }
+
     [AddComponentMenu("Vxcm/DFVolumeRenderer")]
     [ExecuteInEditMode]
     public class DFVolumeRenderer : MonoBehaviour
@@ -20,11 +27,13 @@ namespace Picodex
         [Range(0, 1)]
         public float CutPlaneXZ = 1f;
 
-        public bool castShadows = true;
+        public UnityEngine.Rendering.ShadowCastingMode shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
 
         public bool receiveShadows = true;
 
         public DFVolumeRendererMode renderMode = DFVolumeRendererMode.Raycast;
+
+        public DFVolumeRendererProxyType proxyType = DFVolumeRendererProxyType.Box;
 
         // runtime
         VXCMObject_v02 vxcmObject;
@@ -38,44 +47,32 @@ namespace Picodex
         [RangeAttribute(1,4)]
         public int lod=1;
 
-        [System.NonSerialized]
-        Material _material;
-
-        /// Material for this volume.
-        public Material material
-        {
-            get
-            {
-                if (renderMode == DFVolumeRendererMode.Raycast)
-                {
-                    _material = vxcmObject.GetComponent<Renderer>().material;
-                }
-                else
-                    _material = proxyGameObject.GetComponent<Renderer>().material;
-                return _material;
-            }
-            set
-            {
-            }
-        }
-
- 
- 
-        [System.NonSerialized]
-        public DFVolumeRendererMode old_renderMode = DFVolumeRendererMode.Raycast;
+        public Material material;
 
         [System.NonSerialized]
-        public int old_lod =1;
+        public ProxyBuilder proxyBuilder;
 
+        // tmp vars
 
+        DFVolumeRendererMode old_renderMode = DFVolumeRendererMode.Raycast;
+        DFVolumeRendererProxyType old_proxyType = DFVolumeRendererProxyType.Box;
+        int old_lod =1;
+   
         void Awake()
         {
-
-            //  Debug.Log("Awake 1");
-            // proxy
             rebuild();
-
         }
+
+        void Start()
+        {
+
+            //   material;
+
+            material = new Material(Shader.Find("Vxcm/Object/ray_v07"));
+
+            Volume.AddVolume(this);
+        }
+
 
         void rebuild()
         {
@@ -85,24 +82,37 @@ namespace Picodex
             volume = GetComponent<DFVolumeFilter>().volume;
 
 
-            if (gameObject.transform.childCount  > 0)
-            {
-                // detach the child
-                GameObject go = gameObject.transform.GetChild(0).gameObject;
-                go.transform.parent = null;
-                DestroyImmediate(go);
-                vxcmObject = null;
-            }
+            //if (gameObject.transform.childCount  > 0)
+            //{
+            //    // detach the child
+            //    GameObject go = gameObject.transform.GetChild(0).gameObject;
+            //    go.transform.parent = null;
+            //    DestroyImmediate(go);
+            //    vxcmObject = null;
+            //}
             if (renderMode == DFVolumeRendererMode.Raycast)
             {
-                proxyGameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                DestroyImmediate(proxyGameObject.GetComponent<Collider>());
+                //if (proxyType == DFVolumeRendererProxyType.Box)
+                //    proxyGameObject = PrimitiveHelper.CreatePrimitive(PrimitiveType.Cube);
+                //else
+                //    proxyGameObject = PrimitiveHelper.CreatePrimitive(PrimitiveType.Sphere);
+
+                //proxyBuilder.Rebuild();
+                //proxyGameObject = proxyBuilder.proxyGameObject;
 
                 // link on root
 
                 // ---------------
 
-                vxcmObject = proxyGameObject.AddComponent<VXCMObject_v02>();
+                if (proxyBuilder == null)
+                {
+                    proxyBuilder = new ProxyBuilder(this);
+                    proxyGameObject = proxyBuilder.proxyGameObject;
+                }
+
+
+                if (proxyGameObject.GetComponent<VXCMObject_v02>() == null)
+                    vxcmObject = proxyGameObject.AddComponent<VXCMObject_v02>();
                 vxcmObject.volume = GetComponent<DFVolumeFilter>().volume;
 
 
@@ -118,21 +128,19 @@ namespace Picodex
             proxyGameObject.transform.parent = this.transform;
             proxyGameObject.transform.setLocalToIdentity();
 
+            proxyGameObject.GetComponent<MeshRenderer>().shadowCastingMode = shadowCastingMode;
+            proxyGameObject.GetComponent<MeshRenderer>().receiveShadows = receiveShadows;
+
           //  proxyGameObject.hideFlags = HideFlags.HideAndDontSave;
             proxyGameObject.hideFlags = HideFlags.DontSave;
 
             // save
             old_renderMode = renderMode;
+            old_proxyType = proxyType;
             old_lod = lod;
         }
 
-        void Start() {
-
-            //   material;
-
-            Volume.AddVolume(this);
-        }
-
+   
         void OnWillRenderObject()
         {
             //if (renderMode != old_renderMode || old_lod != lod)
@@ -145,9 +153,11 @@ namespace Picodex
         void Update()
         {
             // check for UI changes
-            if (renderMode != old_renderMode || old_lod != lod)
+            if (renderMode != old_renderMode  || proxyType  != old_proxyType  || old_lod != lod)
             {
                 rebuild();
+                if (proxyBuilder!=null)
+                    proxyBuilder.Rebuild();
             }
         }
 #endif

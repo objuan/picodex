@@ -8,6 +8,7 @@ Shader "Vxcm/Object/ray_v07"
 		_Shininess("Shininess", Range(0.1, 1)) = 0.7
 		_MainTex("Base (RGB) Trans (A)", 2D) = "white" {}
 	//	_Cutoff("Alpha cutoff", Range(0,1)) = 0.5
+		_ShadowBias("Shadow Bias", Range(-10.0, 10.0)) = 0.0
 	}
 	
 	// 1 texture stage GPUs
