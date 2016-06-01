@@ -56,7 +56,7 @@ namespace Picodex
         VectorOutputComputeBuffer outBuffer;
         StdComputeShader compute = null;
 
-        RenderTexture renderTexture;
+        //RenderTexture renderTexture;
 
         //public bool Raycast(Ray ray, out RaycastHit hitInfo, float maxDistance)
         //{
@@ -105,7 +105,7 @@ namespace Picodex
 
                 // debug
                 txt = originBuffer.texture;
-                renderTexture = outBuffer.renderTexture;
+                //renderTexture = outBuffer.renderTexture;
 
             }
 

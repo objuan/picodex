@@ -23,7 +23,7 @@ namespace Picodex
 
         public Texture3D texture = null;
         public VXCMVolume volume;
-        DFVolumeEditor editor;
+      ///  DFVolumeEditor editor;
 
         private Matrix4x4 objectToVolumeTrx;
 
@@ -77,8 +77,7 @@ namespace Picodex
             // material = new Material(Shader.Find("Vxcm/Object/ray_v07"));
             //material = new Material(Shader.Find("Vxcm/Transparent"));
 
-            editor = this.GetComponentInParent<DFVolumeEditor>();
-
+            //editor = this.GetComponentInParent<DFVolumeEditor>();
 
             renderer.material = material;
 
@@ -140,6 +139,7 @@ namespace Picodex
             if (!volume) return;
             if (!meshFilter) return;
 
+          
             // Debug.Log("UpdateMat");
             if (texture == null
                // || (volume && volume.lastFrameChanged)
@@ -159,6 +159,8 @@ namespace Picodex
 
              //   Debug.Log("Build Txt");
             }
+            if (volumeRenderer.proxyBuilder != null)
+                volumeRenderer.proxyBuilder.Update(transform, Camera.current);
 
             if (texture && volume && (volume.lastFrameChanged || mustInitialize))
             {
@@ -194,8 +196,7 @@ namespace Picodex
 
             material.SetFloat("u_cut_plane_xz", CutPlaneXZ);
 
-            if (volumeRenderer.proxyBuilder!=null)
-                volumeRenderer.proxyBuilder.Update(transform, Camera.current);
+           
         }
 
 

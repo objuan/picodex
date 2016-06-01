@@ -68,6 +68,10 @@
     <Compile Include="Assets\Camera\MaxCamera.cs" />
     <Compile Include="Assets\Math\MathUtils.cs" />
     <Compile Include="Assets\Math\Vector3i.cs" />
+    <Compile Include="Assets\NotUsed\MeshSplitterConcave.cs" />
+    <Compile Include="Assets\NotUsed\Splitable.cs" />
+    <Compile Include="Assets\NotUsed\Splitter.cs" />
+    <Compile Include="Assets\NotUsed\SplitterSingleCut.cs" />
     <Compile Include="Assets\Planet\Scripts\Destroyer.cs" />
     <Compile Include="Assets\Planet\Scripts\Planet.cs" />
     <Compile Include="Assets\Planet\Scripts\PlanetBuilder.cs" />
@@ -85,13 +89,9 @@
     <Compile Include="Assets\Utility\Splitter\IMeshSplitter.cs" />
     <Compile Include="Assets\Utility\Splitter\ISplitable.cs" />
     <Compile Include="Assets\Utility\Splitter\MeshContainer.cs" />
-    <Compile Include="Assets\NotUsed\MeshSplitterConcave.cs" />
     <Compile Include="Assets\Utility\Splitter\MeshSplitterConvex.cs" />
     <Compile Include="Assets\Utility\Splitter\Plane.cs" />
-    <Compile Include="Assets\NotUsed\Splitable.cs" />
-    <Compile Include="Assets\NotUsed\Splitter.cs" />
     <Compile Include="Assets\Utility\Splitter\SplitterMath.cs" />
-    <Compile Include="Assets\NotUsed\SplitterSingleCut.cs" />
     <Compile Include="Assets\Utility\StdComputeShader.cs" />
     <Compile Include="Assets\Utility\TransformSerializationExtension.cs" />
     <Compile Include="Assets\Utility\UI\CanvasAABBInvestigator.cs" />
@@ -107,7 +107,7 @@
     <Compile Include="Assets\Volume\DFVolumeFilter.cs" />
     <Compile Include="Assets\Volume\DFVolumeRenderer.cs" />
     <Compile Include="Assets\Volume\DFVolumeUI.cs" />
-    <Compile Include="Assets\Volume\Edit\DFVolumeEditor.cs" />
+    <Compile Include="Assets\Volume\Edit\DFVolumeModder.cs" />
     <Compile Include="Assets\Volume\Edit\MeshDeformer.cs" />
     <Compile Include="Assets\Volume\Edit\MeshDeformerInput.cs" />
     <Compile Include="Assets\Volume\Mesh\Cache.cs" />
@@ -115,7 +115,6 @@
     <Compile Include="Assets\Volume\Mesh\Helpers\Converters.cs" />
     <Compile Include="Assets\Volume\Mesh\Helpers\TransvoxelManager.cs" />
     <Compile Include="Assets\Volume\Mesh\Helpers\VertexPositionTextureNormalColor.cs" />
-    <Compile Include="Assets\Volume\ProxyBuilder.cs" />
     <Compile Include="Assets\Volume\Mesh\MarchingCubes.cs" />
     <Compile Include="Assets\Volume\Mesh\SurfaceExtractor.cs" />
     <Compile Include="Assets\Volume\Mesh\Tables.cs" />
@@ -127,6 +126,7 @@
     <Compile Include="Assets\Volume\Mesh\VolumeData\HashedVolume.cs" />
     <Compile Include="Assets\Volume\Mesh\VolumeData\IVolumeData.cs" />
     <Compile Include="Assets\Volume\Mesh\VolumeData\WorldChunk.cs" />
+    <Compile Include="Assets\Volume\ProxyBuilder.cs" />
     <Compile Include="Assets\Volume\Test\VXCMTexture3D_Off_v01.cs" />
     <Compile Include="Assets\Volume\Test\VXCMTexture3D_Off_v02.cs" />
     <Compile Include="Assets\Volume\Test\VXCMTexture3D_Off_v03.cs" />
@@ -144,11 +144,12 @@
     <Compile Include="Assets\Volume\vxcm\VolumeRegion.cs" />
     <Compile Include="Assets\Volume\vxcm\VolumeTypes.cs" />
     <Compile Include="Assets\Worm\Scripts\MCBlob.cs" />
-    <Compile Include="Assets\Worm\Scripts\WormTestBuilder.cs" />
     <Compile Include="Assets\Worm\Scripts\Worm.cs" />
     <Compile Include="Assets\Worm\Scripts\WormFood.cs" />
+    <Compile Include="Assets\Worm\Scripts\WormTestBuilder.cs" />
     <Compile Include="Assets\Worm\old\SnakeBody.cs" />
     <Compile Include="Assets\Worm\old\SnakeHead.cs" />
+    <Compile Include="Assets\Worm\Scripts\WormTestBuilderEditor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shaders\Base\MyCutof.shader" />

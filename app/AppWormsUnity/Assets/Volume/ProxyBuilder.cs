@@ -57,7 +57,7 @@ namespace Picodex
 
         public void Update(Transform objTrx, Camera camera)
         {
-            if (camera != Camera.main) return; // solo main camera
+           // if (camera != Camera.main) return; // solo main camera
 
             Bounds bounds = originalMesh.bounds;
 
@@ -74,10 +74,10 @@ namespace Picodex
                 }
             }
 
-            if (isBack)
+            if (isBack && camera == Camera.main) // solo per la camera principale
             {
 
-                Debug.Log("HIT");
+               // Debug.Log("HIT");
 
                 // Matrix4x4 worldToLocal = objTrx.worldToLocalMatrix;
 
@@ -106,6 +106,7 @@ namespace Picodex
                     cutTrx.position = splitPos;
                     cutTrx.rotation = splitRot;
                 }
+                // TODO, ottimizzare ??
 #endif 
             }
 
@@ -162,6 +163,7 @@ namespace Picodex
                 if (meshContainer.HasMeshUpper() & meshContainer.HasMeshLower())
                 {
                     meshFilter.sharedMesh = meshContainer.CreateMeshUpper();
+                    meshFilter.sharedMesh.name = "VXCMObjCutted";
                 }
             }
        }

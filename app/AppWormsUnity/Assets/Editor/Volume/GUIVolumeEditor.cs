@@ -16,7 +16,7 @@ namespace Picodex
 
       //  Vector3 res = new Vector3(64,64,64);
 
-        DFVolumeEditor volumeEditor =null;
+        DFVolumeModder volumeEditor =null;
 
         [MenuItem("Tools/Volume Editor")] //Add a menu item to the toolbar
         static void OpenWindow()
@@ -37,7 +37,7 @@ namespace Picodex
                 obj = Selection.activeGameObject;
                 DFVolume volume = null;
                 //make sure to only show the interface
-                volumeEditor = obj.GetComponent<DFVolumeEditor>();
+                volumeEditor = obj.GetComponent<DFVolumeModder>();
                 if (volumeEditor != null)  volume = volumeEditor.volume;
     
                 if (volume)

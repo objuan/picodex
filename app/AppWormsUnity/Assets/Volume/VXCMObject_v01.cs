@@ -20,7 +20,7 @@ namespace Picodex
         [Range(0, 3)]
         public int DebugLayer = 2;
 
-        private new Renderer renderer;
+     //   private new Renderer renderer;
         private Material material;
         private MeshFilter meshFilter;
 
@@ -38,7 +38,7 @@ namespace Picodex
         {
             //  VXCMContext.Instance.useContext();
 
-            renderer = GetComponent<Renderer>();
+         //   renderer = GetComponent<Renderer>();
             material = GetComponent<Renderer>().sharedMaterial;
             meshFilter = GetComponent<MeshFilter>();
 

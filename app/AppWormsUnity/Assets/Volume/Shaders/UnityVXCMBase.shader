@@ -2,7 +2,7 @@
 {
 	Properties{
 		_Color("Main Color", Color) = (1,1,1,1)
-		_ShadowBias("Shadow Bias", Range(-10.0, 10.0)) = 0.0
+		_ShadowBias("Shadow Bias", Range(0, 30.0)) = 20.0
 		//_MainTex("Base (RGB) Trans (A)", 2D) = "white" {}
 	}
 
@@ -33,8 +33,6 @@
 			#define VXCM_PROXY_SHADOW
 			#include "UnityVxcm.cginc"
 
-			//uniform float4 _MainTex_ST;
-
 			appdata_vcxm_shadow vert(appdata_base v)
 			{
 				appdata_vcxm_shadow o;
@@ -57,9 +55,16 @@
 				getShadowRay(i , rayOriginTex, rayDirTex);
 			
 				VXCM_RAYCAST(rayOriginTex, rayDirTex, v);
+				 
+				//v.rayEnc = raycast(rayOriginTex, rayDirTex); v.volumePos = rayOriginTex + rayDirTex * (v.rayEnc.x + (_ShadowBias / 128)); v.vertex = mul(u_objectToVolumeInvTrx, float4(v.volumePos, 1)); v.worldPos = mul(UNITY_MATRIX_MVP, v.vertex);
 
-				i.pos = v.worldPos;	// sovrrascrivo il valore non corretto
-				TRANSFER_SHADOW_CASTER(i); // chiamato qui invece che nel vertex shader, uso del fake_v2f
+				//i.pos = mul(UNITY_MATRIX_MVP, float4(v.vertex.xyz, 1));
+				//i.pos = v.worldPos;	// sovrrascrivo il valore non corretto
+				TRANSFER_SHADOW_CASTER(i); // chiamato qui invece che nel vertex shader, uso del fake appdata_vcxm_fs
+
+				// solo per le ombre aggiungo un offset
+				
+				i.pos.z += (unity_LightShadowBias.x / i.pos.w )* (_ShadowBias  ) ;
 
 				// save to the output
 #ifdef SHADOWS_CUBE
@@ -70,7 +75,7 @@
 				o.color = enc;
 #else
 
-				i.pos = UnityApplyLinearShadowBias(i.pos);
+			//	i.pos = UnityApplyLinearShadowBias(i.pos);
 			//	i.pos.z -= (_ShadowBias * u_textureRes.x) / i.pos.w);
 
 				//	o.depth = LinearEyeDepth(-i.pos.w);

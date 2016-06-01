@@ -62,7 +62,6 @@ namespace Picodex
         {
             rebuild();
         }
-
         void Start()
         {
 
@@ -71,6 +70,11 @@ namespace Picodex
             material = new Material(Shader.Find("Vxcm/Object/ray_v07"));
 
             Volume.AddVolume(this);
+
+            if (proxyBuilder != null)
+            {
+                proxyGameObject = proxyBuilder.proxyGameObject;
+            }
         }
 
 
@@ -178,6 +182,6 @@ namespace Picodex
             DFVolumeUI.OnDrawGizmos(gameObject);
         }
 
-   
+  
     }
 }

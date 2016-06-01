@@ -9,18 +9,18 @@ public class ModalWindow : MonoBehaviour
     private ModalPanel modalPanel;
     private DisplayManager displayManager;
 
-    private UnityAction myYesAction;
-    private UnityAction myNoAction;
-    private UnityAction myCancelAction;
+    //private UnityAction myYesAction;
+    //private UnityAction myNoAction;
+    //private UnityAction myCancelAction;
 
     void Awake()
     {
         modalPanel = ModalPanel.Instance();
         displayManager = DisplayManager.Instance();
 
-        myYesAction = new UnityAction(TestYesFunction);
-        myNoAction = new UnityAction(TestNoFunction);
-        myCancelAction = new UnityAction(TestCancelFunction);
+        //myYesAction = new UnityAction(TestYesFunction);
+        //myNoAction = new UnityAction(TestNoFunction);
+        //myCancelAction = new UnityAction(TestCancelFunction);
     }
 
     // TEST

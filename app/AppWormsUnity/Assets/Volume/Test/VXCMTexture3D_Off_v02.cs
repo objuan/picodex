@@ -13,7 +13,7 @@ namespace Picodex
         private bool s_InsideRendering = false;
 
         // VXCM layer
-        static readonly int VXCMLayer = 1024;
+       // static readonly int VXCMLayer = 1024;
 
         [Range(0.001f, 1)]
         public float SampleRate = 0.01f;
@@ -24,7 +24,7 @@ namespace Picodex
         [Range(0, 3)]
         public int DebugLayer = 2;
 
-        private new Renderer renderer;
+     //   private new Renderer renderer;
         private Material material;
       //  private Mesh mesh;
 
@@ -46,7 +46,7 @@ namespace Picodex
         {
             //  VXCMContext.Instance.useContext();
 
-            renderer = GetComponent<Renderer>();
+         //   renderer = GetComponent<Renderer>();
             material = GetComponent<Renderer>().sharedMaterial;
           //  mesh = GetComponent<MeshFilter>().sharedMesh;
 

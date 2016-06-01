@@ -12,9 +12,8 @@ public class WormTestBuilder : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        volume = GetComponent<DFVolumeFilter>().volume;
-
-        Build();
+       
+      //  Build();
 
     }
 	
@@ -25,6 +24,8 @@ public class WormTestBuilder : MonoBehaviour {
 
     public void Build()
     {
+        volume = GetComponent<DFVolumeFilter>().volume;
+
         // sfera
 
         volume.Clear();

@@ -226,10 +226,15 @@ float raycast(
 			// colpito, mi fermo
 			// calcolo l'interpolazione
 			float factor =  (iso_level - prec.x) / (d - prec.x);
-			distance = t;// +u_textureRes.x;// lerp(prec.y, t, factor);
-			distance = lerp(prec.y, t,factor);
+			distance = prec.y + factor  * (t - prec.y);
+			//distance = t;// +u_textureRes.x;// lerp(prec.y, t, factor);
+			//distance = lerp(prec.y, t,factor);
 			//distance = t;
 			//distance = factor;
+
+			//float factor = (d - iso_level ) / (d - prec.x);
+			//distance = t - factor * (t - prec.y);
+
 			break;
 		}
 	}
