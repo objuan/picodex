@@ -36,21 +36,43 @@ namespace Picodex
         public DFVolumeRendererProxyType proxyType = DFVolumeRendererProxyType.Box;
 
         // runtime
-        VXCMObject_v02 vxcmObject;
+        VXCMObject vxcmObject;
 
-        [System.NonSerialized]
-        public  DFVolume volume;
+      //  [System.NonSerialized]
+        public DFVolume volume
+        {
+            get
+            {
+                return GetComponent<DFVolumeFilter>().volume;
+            }
+        }
 
-        [System.NonSerialized]
-        public GameObject proxyGameObject=null;
+        //    [System.NonSerialized]
+        GameObject _proxyGameObject = null;
+
+        public GameObject proxyGameObject
+        {
+            get
+            {
+                if (_proxyGameObject == null)
+                {
+                    if (gameObject.transform.childCount > 0)
+                    {
+                        // detach the child
+                        _proxyGameObject =  gameObject.transform.GetChild(0).gameObject;
+                    }
+                }
+                return _proxyGameObject;
+            }
+        }
 
         [RangeAttribute(1,4)]
         public int lod=1;
 
         public Material material;
 
-        [System.NonSerialized]
-        public ProxyBuilder proxyBuilder;
+        //[System.NonSerialized]
+        //public ProxyBuilder proxyBuilder;
 
         // tmp vars
 
@@ -62,88 +84,16 @@ namespace Picodex
         {
             rebuild();
         }
+
         void Start()
         {
-
             //   material;
 
             material = new Material(Shader.Find("Vxcm/Object/ray_v07"));
 
             Volume.AddVolume(this);
 
-            if (proxyBuilder != null)
-            {
-                proxyGameObject = proxyBuilder.proxyGameObject;
-            }
         }
-
-
-        void rebuild()
-        {
-            if (GetComponent<DFVolumeFilter>() == null) return;
-            if (GetComponent<DFVolumeRenderer>() == null) return;
-
-            volume = GetComponent<DFVolumeFilter>().volume;
-
-
-            //if (gameObject.transform.childCount  > 0)
-            //{
-            //    // detach the child
-            //    GameObject go = gameObject.transform.GetChild(0).gameObject;
-            //    go.transform.parent = null;
-            //    DestroyImmediate(go);
-            //    vxcmObject = null;
-            //}
-            if (renderMode == DFVolumeRendererMode.Raycast)
-            {
-                //if (proxyType == DFVolumeRendererProxyType.Box)
-                //    proxyGameObject = PrimitiveHelper.CreatePrimitive(PrimitiveType.Cube);
-                //else
-                //    proxyGameObject = PrimitiveHelper.CreatePrimitive(PrimitiveType.Sphere);
-
-                //proxyBuilder.Rebuild();
-                //proxyGameObject = proxyBuilder.proxyGameObject;
-
-                // link on root
-
-                // ---------------
-
-                if (proxyBuilder == null)
-                {
-                    proxyBuilder = new ProxyBuilder(this);
-                    proxyGameObject = proxyBuilder.proxyGameObject;
-                }
-
-
-                if (proxyGameObject.GetComponent<VXCMObject_v02>() == null)
-                    vxcmObject = proxyGameObject.AddComponent<VXCMObject_v02>();
-                vxcmObject.volume = GetComponent<DFVolumeFilter>().volume;
-
-
-                // proxyGameObject.hideFlags = HideFlags.DontSave;
-
-            }
-            else
-            {
-                proxyGameObject = VXCMMeshBuilder.CreateMeshTransvoxel(volume, volume.resolution, lod);
-            }
-
-            proxyGameObject.name = "VXCM Volume";
-            proxyGameObject.transform.parent = this.transform;
-            proxyGameObject.transform.setLocalToIdentity();
-
-            proxyGameObject.GetComponent<MeshRenderer>().shadowCastingMode = shadowCastingMode;
-            proxyGameObject.GetComponent<MeshRenderer>().receiveShadows = receiveShadows;
-
-          //  proxyGameObject.hideFlags = HideFlags.HideAndDontSave;
-            proxyGameObject.hideFlags = HideFlags.DontSave;
-
-            // save
-            old_renderMode = renderMode;
-            old_proxyType = proxyType;
-            old_lod = lod;
-        }
-
    
         void OnWillRenderObject()
         {
@@ -156,15 +106,30 @@ namespace Picodex
 #if UNITY_EDITOR
         void Update()
         {
+            GameObject _proxyGameObject = proxyGameObject;
+            MeshRenderer proxyRender = _proxyGameObject.GetComponent<MeshRenderer>();
+
             // check for UI changes
-            if (renderMode != old_renderMode  || proxyType  != old_proxyType  || old_lod != lod)
+            if (renderMode != old_renderMode  || proxyType  != old_proxyType  || old_lod != lod 
+                || proxyRender.shadowCastingMode != shadowCastingMode
+                || proxyRender.receiveShadows != receiveShadows)
             {
                 rebuild();
-                if (proxyBuilder!=null)
-                    proxyBuilder.Rebuild();
             }
         }
 #endif
+
+        void OnEnable()
+        {
+            if (!proxyGameObject) return;
+            proxyGameObject.GetComponent<MeshRenderer>().enabled = true;
+        }
+
+        void OnDisable()
+        {
+            if (!proxyGameObject) return;
+            proxyGameObject.GetComponent<MeshRenderer>().enabled = false;
+        }
 
         void OnApplicationQuit()
         {
@@ -182,6 +147,61 @@ namespace Picodex
             DFVolumeUI.OnDrawGizmos(gameObject);
         }
 
-  
+        // ===================================================================
+
+        void rebuild()
+        {
+            if (GetComponent<DFVolumeFilter>() == null) return;
+            if (GetComponent<DFVolumeRenderer>() == null) return;
+
+         //   volume = GetComponent<DFVolumeFilter>().volume;
+
+            if (gameObject.transform.childCount == 0)
+            {
+                // metto il proxy object
+
+                if (renderMode == DFVolumeRendererMode.Raycast)
+                {
+
+                    // ---------------
+
+                    GameObject child = VXCMObjectProxy.CreateGameObject("VXCM Volume");
+
+                    child.transform.parent = this.transform;
+                    child.transform.setLocalToIdentity();
+
+                    vxcmObject = proxyGameObject.AddComponent<VXCMObject>();
+
+                    vxcmObject.volume = GetComponent<DFVolumeFilter>().volume;
+
+                    // proxyGameObject.hideFlags = HideFlags.DontSave;
+                    proxyGameObject.hideFlags = HideFlags.HideAndDontSave;
+
+                }
+                else
+                {
+                    GameObject child = VXCMMeshBuilder.CreateMeshTransvoxel(volume, volume.resolution, lod);
+
+                    child.transform.parent = this.transform;
+                    child.transform.setLocalToIdentity();
+                }
+            }
+            else
+                proxyGameObject.GetComponent<VXCMObjectProxy>().Rebuild();
+
+            MeshRenderer proxyRender = proxyGameObject.GetComponent<MeshRenderer>();
+            proxyRender.shadowCastingMode = shadowCastingMode;
+            proxyRender.receiveShadows = receiveShadows;
+            proxyRender.enabled = enabled;
+
+            //  proxyGameObject.hideFlags = HideFlags.HideAndDontSave;
+           // proxyGameObject.hideFlags = HideFlags.DontSave;
+
+            // save
+            old_renderMode = renderMode;
+            old_proxyType = proxyType;
+            old_lod = lod;
+        }
+
     }
 }

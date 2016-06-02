@@ -18,6 +18,7 @@ namespace Picodex.Vxcm
     //}
 
     // [System.Serializable]
+    [ExecuteInEditMode]
     public class VXCMVolume : ScriptableObject
     {
         int size;

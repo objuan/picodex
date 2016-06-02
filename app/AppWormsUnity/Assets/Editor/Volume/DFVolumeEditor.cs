@@ -23,6 +23,7 @@ namespace Picodex
         {
             if (!filter) return;
 
+            filter.volume.Invalidate();
             UnityUtil.InvalidateObject(filter.gameObject);
             AssetManager.SaveAsset(filter.volume);
         }

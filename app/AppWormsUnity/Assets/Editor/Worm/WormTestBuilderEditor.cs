@@ -14,7 +14,14 @@ namespace Picodex
     public class WormTestBuilderEditor : DFVolumeEditor
     {
         private static bool m_editMode = false;
-        WormTestBuilder builder;
+       // WormTestBuilder builder;
+
+       // private SerializedProperty ray;
+
+        void OnEnable()
+        {
+           // ray = serializedObject.FindProperty("ray");
+        }
 
         void OnSceneGUI()
         {
@@ -35,7 +42,9 @@ namespace Picodex
                     if (Picodex.Vxcm.Volume.Raycast(volumeRenderer, worldRay.origin, worldRay.direction, out hit))
                     {
 
-                        Debug.Log("HIT");
+                        //Debug.Log("HIT");
+                        ((WormTestBuilder)target).AddObstacle(hit.point);
+
                     }
                 }
                 Event.current.Use();
@@ -46,6 +55,10 @@ namespace Picodex
 
         public override void OnInspectorGUI()
         {
+            WormTestBuilder builder = ((WormTestBuilder)target);
+
+            EditorGUIHelper.ObjectFields(serializedObject);
+
             if (m_editMode)
             {
                 if (GUILayout.Button("Disable Editing"))
@@ -63,11 +76,13 @@ namespace Picodex
 
             if (GUILayout.Button("Reset"))
             {
-                ((WormTestBuilder)target).Build();
+                builder.Clear();
             }
-            if (GUILayout.Button("Save"))
+
+            // end
+            if (GUI.changed)
             {
-                SaveVolume(); // SaveVolume to asset
+                serializedObject.ApplyModifiedProperties();
             }
         }
 

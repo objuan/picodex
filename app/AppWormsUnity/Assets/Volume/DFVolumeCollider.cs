@@ -46,7 +46,7 @@ namespace Picodex
     {
         DFVolume volume;
         GameObject proxyGameObject;
-        VXCMObject_v02 vxcmObject;
+        VXCMObject vxcmObject;
            
         [System.NonSerialized]
         public Texture2D txt;// debug
@@ -85,7 +85,7 @@ namespace Picodex
 
             proxyGameObject = GetComponent<DFVolumeRenderer>().proxyGameObject;
 
-            vxcmObject = proxyGameObject.GetComponent<VXCMObject_v02>();
+            vxcmObject = proxyGameObject.GetComponent<VXCMObject>();
 
             compute = null;
         }

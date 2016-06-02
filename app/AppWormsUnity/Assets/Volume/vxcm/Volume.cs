@@ -168,6 +168,7 @@ namespace Picodex.Vxcm
             Vector3 surfaceNormal = new Vector3();
 
             GameObject go = volumeRenderer.proxyGameObject;
+            if (!go) return false;
             MeshRenderer proxyRenderer = go.GetComponent<MeshRenderer>();
             VXCMVolume volume = volumeRenderer.volume;
             DFVolumeCollider collider = volumeRenderer.gameObject.GetComponent<DFVolumeCollider>();

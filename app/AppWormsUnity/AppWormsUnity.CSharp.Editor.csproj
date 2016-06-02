@@ -105,18 +105,20 @@
   <ItemGroup>
     <Compile Include="Assets\Editor\AssetManager.cs" />
     <Compile Include="Assets\Editor\Menu.cs" />
+    <Compile Include="Assets\Editor\Utils\EditorGUIHelper.cs" />
     <Compile Include="Assets\Editor\Utils\GeneralUtils.cs" />
     <Compile Include="Assets\Editor\Utils\ObjectSelectorWrapper.cs" />
     <Compile Include="Assets\Editor\Utils\UnityUtil.cs" />
     <Compile Include="Assets\Editor\Volume\DFVolumeEditor.cs" />
     <Compile Include="Assets\Editor\Volume\DFVolumeInspector.cs" />
     <Compile Include="Assets\Editor\Volume\DFVolumeResolutionDrawer.cs" />
-    <Compile Include="Assets\Editor\Volume\GUIVolumeEditor.cs" />
-    <Compile Include="Assets\Editor\Volume\VXCMConverter.cs" />
-    <Compile Include="Assets\Editor\Volume\VXCMPostProcessor.cs" />
-    <Compile Include="Assets\Editor\Volume\VXCMTest.cs" />
+    <Compile Include="Assets\Editor\Volume\Old\GUIVolumeEditor.cs" />
+    <Compile Include="Assets\Editor\Volume\Old\VXCMConverter.cs" />
+    <Compile Include="Assets\Editor\Volume\Old\VXCMPostProcessor.cs" />
+    <Compile Include="Assets\Editor\Volume\Old\VXCMTest.cs" />
     <Compile Include="Assets\Editor\VolumeAddressDrawer.cs" />
     <Compile Include="Assets\Editor\VolumeAddressEditor.cs" />
+    <Compile Include="Assets\Editor\Volume\DFVolumeModderEditor.cs" />
     <Compile Include="Assets\Editor\Worm\WormTestBuilderEditor.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -132,6 +134,12 @@
     <None Include="Assets\Shaders\SampleDiffuse.shader" />
     <None Include="Assets\Shaders\SampleDiffuseCustom.shader" />
     <None Include="Assets\Standard\GalaxyBox1\instructions.txt" />
+    <None Include="Assets\Volume\Old\Texture3D_old\Texture3D_s_slice_v03.shader" />
+    <None Include="Assets\Volume\Old\Texture3D_old\Texture3D_slice_v01.shader" />
+    <None Include="Assets\Volume\Old\Texture3D_old\Texture3D_slice_v02.shader" />
+    <None Include="Assets\Volume\Old\root_old\ClipMap3DViewer_Slice.shader" />
+    <None Include="Assets\Volume\Old\root_old\VXCMCamera.shader" />
+    <None Include="Assets\Volume\Old\root_old\Volume3DViewer_Slice.shader" />
     <None Include="Assets\Volume\Shaders\Object_ray_v01.shader" />
     <None Include="Assets\Volume\Shaders\Object_ray_v03.shader" />
     <None Include="Assets\Volume\Shaders\Object_ray_v04.shader" />
@@ -140,15 +148,9 @@
     <None Include="Assets\Volume\Shaders\Object_ray_v07.shader" />
     <None Include="Assets\Volume\Shaders\Object_ray_v08.shader" />
     <None Include="Assets\Volume\Shaders\Pick_ray_v01.shader" />
-    <None Include="Assets\Volume\Shaders\Texture3D_old\Texture3D_s_slice_v03.shader" />
-    <None Include="Assets\Volume\Shaders\Texture3D_old\Texture3D_slice_v01.shader" />
-    <None Include="Assets\Volume\Shaders\Texture3D_old\Texture3D_slice_v02.shader" />
     <None Include="Assets\Volume\Shaders\Texture3D_slice_v01.shader" />
     <None Include="Assets\Volume\Shaders\UnityVXCM.cginc" />
     <None Include="Assets\Volume\Shaders\UnityVXCMBase.shader" />
-    <None Include="Assets\Volume\Shaders\root_old\ClipMap3DViewer_Slice.shader" />
-    <None Include="Assets\Volume\Shaders\root_old\VXCMCamera.shader" />
-    <None Include="Assets\Volume\Shaders\root_old\Volume3DViewer_Slice.shader" />
     <None Include="Assets\Volume\Shaders\test\RayCast shader.shader" />
     <None Include="Assets\Volume\Shaders\test\TestTrasparent.shader" />
     <None Include="Assets\Volume\Shaders\test\TestTrasparent_v02.shader" />

@@ -30,8 +30,8 @@ namespace Picodex
     [ExecuteInEditMode]
     public class DFVolumeModder : MonoBehaviour
     {
-        public DFVolume volume=null;
-        public DFVolumeRenderer volumeRenderer;
+        DFVolume volume=null;
+        DFVolumeRenderer volumeRenderer;
 
         public  Color matColor = Color.white;
         //  public VolumeEditor_Shape shape = new VolumeEditor_Shape();
@@ -53,7 +53,6 @@ namespace Picodex
             volume = GetComponent<DFVolumeFilter>().volume;
             volumeRenderer = GetComponent<DFVolumeRenderer>();
 
-        
         }
 
         public void Update()
@@ -115,5 +114,14 @@ namespace Picodex
 
             }
         }
+
+        // COMMANDS
+        public void Clear()
+        {
+
+            volume.Clear();
+
+        }
+
     }
 }

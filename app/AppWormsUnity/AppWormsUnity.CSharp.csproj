@@ -126,13 +126,13 @@
     <Compile Include="Assets\Volume\Mesh\VolumeData\HashedVolume.cs" />
     <Compile Include="Assets\Volume\Mesh\VolumeData\IVolumeData.cs" />
     <Compile Include="Assets\Volume\Mesh\VolumeData\WorldChunk.cs" />
-    <Compile Include="Assets\Volume\ProxyBuilder.cs" />
+    <Compile Include="Assets\Volume\VXCMObjectProxy.cs" />
     <Compile Include="Assets\Volume\Test\VXCMTexture3D_Off_v01.cs" />
     <Compile Include="Assets\Volume\Test\VXCMTexture3D_Off_v02.cs" />
     <Compile Include="Assets\Volume\Test\VXCMTexture3D_Off_v03.cs" />
     <Compile Include="Assets\Volume\VXCMCamera.cs" />
-    <Compile Include="Assets\Volume\VXCMObject_v01.cs" />
-    <Compile Include="Assets\Volume\VXCMObject_v02.cs" />
+    <Compile Include="Assets\Volume\Old\VXCMObject_v01.cs" />
+    <Compile Include="Assets\Volume\VXCMObject.cs" />
     <Compile Include="Assets\Volume\vxcm\GeometrySample.cs" />
     <Compile Include="Assets\Volume\vxcm\VXCMException.cs" />
     <Compile Include="Assets\Volume\vxcm\VXCMMeshBuilder.cs" />
@@ -149,7 +149,6 @@
     <Compile Include="Assets\Worm\Scripts\WormTestBuilder.cs" />
     <Compile Include="Assets\Worm\old\SnakeBody.cs" />
     <Compile Include="Assets\Worm\old\SnakeHead.cs" />
-    <Compile Include="Assets\Worm\Scripts\WormTestBuilderEditor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shaders\Base\MyCutof.shader" />
@@ -172,18 +171,19 @@
     <None Include="Assets\Volume\Shaders\Object_ray_v07.shader" />
     <None Include="Assets\Volume\Shaders\Object_ray_v08.shader" />
     <None Include="Assets\Volume\Shaders\Pick_ray_v01.shader" />
-    <None Include="Assets\Volume\Shaders\Texture3D_old\Texture3D_s_slice_v03.shader" />
-    <None Include="Assets\Volume\Shaders\Texture3D_old\Texture3D_slice_v01.shader" />
-    <None Include="Assets\Volume\Shaders\Texture3D_old\Texture3D_slice_v02.shader" />
+    <None Include="Assets\Volume\Old\Texture3D_old\Texture3D_s_slice_v03.shader" />
+    <None Include="Assets\Volume\Old\Texture3D_old\Texture3D_slice_v01.shader" />
+    <None Include="Assets\Volume\Old\Texture3D_old\Texture3D_slice_v02.shader" />
     <None Include="Assets\Volume\Shaders\Texture3D_slice_v01.shader" />
     <None Include="Assets\Volume\Shaders\UnityVXCM.cginc" />
     <None Include="Assets\Volume\Shaders\UnityVXCMBase.shader" />
-    <None Include="Assets\Volume\Shaders\root_old\ClipMap3DViewer_Slice.shader" />
-    <None Include="Assets\Volume\Shaders\root_old\VXCMCamera.shader" />
-    <None Include="Assets\Volume\Shaders\root_old\Volume3DViewer_Slice.shader" />
+    <None Include="Assets\Volume\Old\root_old\ClipMap3DViewer_Slice.shader" />
+    <None Include="Assets\Volume\Old\root_old\VXCMCamera.shader" />
+    <None Include="Assets\Volume\Old\root_old\Volume3DViewer_Slice.shader" />
     <None Include="Assets\Volume\Shaders\test\RayCast shader.shader" />
     <None Include="Assets\Volume\Shaders\test\TestTrasparent.shader" />
     <None Include="Assets\Volume\Shaders\test\TestTrasparent_v02.shader" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>
