@@ -23,7 +23,7 @@ namespace Picodex
             Ray inputRay = Camera.main.ScreenPointToRay(Input.mousePosition);
             VolumeRaycastHit hit;
 
-            if (Picodex.Vxcm.Volume.Raycast(inputRay, out hit))
+            if (Picodex.Volume.Raycast(inputRay, out hit))
             {
                 Debug.DrawLine(Camera.main.transform.position, hit.point);
                 //MeshDeformer deformer = hit.collider.GetComponent<MeshDeformer>();

@@ -45,8 +45,8 @@ namespace Picodex
     public class DFVolumeCollider : MonoBehaviour
     {
         DFVolume volume;
-        GameObject proxyGameObject;
-        VXCMObject vxcmObject;
+      //  GameObject proxyGameObject;
+      //  VXCMObject vxcmObject;
            
         [System.NonSerialized]
         public Texture2D txt;// debug
@@ -55,6 +55,24 @@ namespace Picodex
         VectorInputComputeBuffer dirBuffer;
         VectorOutputComputeBuffer outBuffer;
         StdComputeShader compute = null;
+
+        GameObject _proxyGameObject = null;
+
+        public GameObject proxyGameObject
+        {
+            get
+            {
+                if (_proxyGameObject == null)
+                {
+                    if (gameObject.transform.childCount > 0)
+                    {
+                        // detach the child
+                        _proxyGameObject = gameObject.transform.GetChild(0).gameObject;
+                    }
+                }
+                return _proxyGameObject;
+            }
+        }
 
         //RenderTexture renderTexture;
 
@@ -78,40 +96,72 @@ namespace Picodex
 
             volume = GetComponent<DFVolumeFilter>().volume;
 
-         
+
             // buikd the mesh
             //
             //         Mesh mesh = new TransvoxelExtractor(new VXCMVolumeData(volume)).GenLodCell(new Vector3i(0, 0, 0), volume.resolution, 1);
 
-            proxyGameObject = GetComponent<DFVolumeRenderer>().proxyGameObject;
+            // proxyGameObject = GetComponent<DFVolumeRenderer>().proxyGameObject;
 
-            vxcmObject = proxyGameObject.GetComponent<VXCMObject>();
+            // vxcmObject = proxyGameObject.GetComponent<VXCMObject>();
+
+            Volume.AddVolume(this);
 
             compute = null;
         }
 
-     
-        public bool Raycast(Vector3 origin, Vector3 dir, ref float distance,ref Vector3 surfaceNormal)
+        void OnApplicationQuit()
         {
-            if (!vxcmObject) return false;
+            Volume.RemoveVolume(this);
+        }
 
-            if (compute==null)
+        public bool Raycast(Vector3 origin, Vector3 dir, ref float distance, ref Vector3 surfaceNormal)
+        {
+            VolumeRaycastRequest req = new VolumeRaycastRequest();
+            VolumeRaycastRequestEntry e = req.AddRaycast(origin, dir);
+            e.localDir = dir;
+            e.volumePos = origin;
+            if (Raycast(req) >0)
+            {
+                VolumeRaycastHit hit = req.GetMinDistanceHit();
+                distance = hit.distance;
+                surfaceNormal = hit.normal;
+                return true;
+            }
+            else
+                return false;
+        }
+
+        public int Raycast(VolumeRaycastRequest request)
+        {
+            if (!volume) return 0;
+
+            List<VolumeRaycastRequestEntry> entryList = new List<VolumeRaycastRequestEntry>();
+            request.FillActiveEntries(entryList);
+
+
+            if (entryList.Count == 0) return 0;
+            if (compute == null)
             {
                 compute = new StdComputeShader("Vxcm/Pick/ray_v01");
 
                 originBuffer = new VectorInputComputeBuffer(1);
                 dirBuffer = new VectorInputComputeBuffer(1);
                 outBuffer = new VectorOutputComputeBuffer(originBuffer);
-
-                // debug
-                txt = originBuffer.texture;
-                //renderTexture = outBuffer.renderTexture;
-
             }
 
+            originBuffer.Resize(entryList.Count);
+            dirBuffer.Resize(entryList.Count);
+            outBuffer.OnInputResize();
+
+            txt = originBuffer.texture;
+
             // load params
-            originBuffer.SetValue(0, origin);
-            dirBuffer.SetValue(0, dir);
+            for (int i = 0; i < entryList.Count; i++)
+            {
+                originBuffer.SetValue(0, entryList[i].volumePos);
+                dirBuffer.SetValue(0, entryList[i].localDir);
+            }
 
             originBuffer.Load();
             dirBuffer.Load();
@@ -121,7 +171,7 @@ namespace Picodex
             compute.material.SetTexture("_DirBuffer", dirBuffer.texture);
 
             // volume params
-            compute.material.SetTexture("_Volume", vxcmObject.texture);
+            compute.material.SetTexture("_Volume", proxyGameObject.GetComponent<VXCMObject>().texture);
             compute.material.SetFloat("DF_MIN", volume.distanceFieldRangeMin);
             compute.material.SetFloat("DF_MAX_MINUS_MIN", volume.distanceFieldRangeMax - volume.distanceFieldRangeMin);
 
@@ -134,18 +184,32 @@ namespace Picodex
             compute.Execute(originBuffer, outBuffer);
 
             // get out
-            Color outColor = originBuffer[0];
-            if (outColor.a > 0)
+            int hitCount = 0;
+            for (int i = 0; i < entryList.Count; i++)
             {
-                distance = outColor.a;
-                surfaceNormal.x = outColor.r;
-                surfaceNormal.y = outColor.g;
-                surfaceNormal.z = outColor.b;
-                return true;
-            }
-            else
-                return false;
-        }
+                Color outColor = originBuffer[i];
+                if (outColor.a > 0)
+                {
+                    VolumeRaycastRequestEntry entry = entryList[i];
+                    entry.hit.distance = outColor.a;
+                    entry.hit.normal = new Vector3(outColor.r, outColor.g, outColor.b);
 
+                    ////     Debug.Log("hit " + volumeDistance + " normal = " + surfaceNormal);
+
+                    entry.hit.volumePoint = entry.volumePos + entry.localDir * entry.hit.distance;
+
+                  
+                    entry.hit.point = entry.origin + (entry.direction * (entry.localDistance + entry.hit.distance * volume.resolution.x));
+
+                    entry.hit.distance = (entry.localDistance + entry.hit.distance * volume.resolution.x);
+
+                    entry.hit.colliderVolume = this;
+
+                    hitCount++;
+                }
+            }
+            return hitCount;
+        }
+            
     }
 }

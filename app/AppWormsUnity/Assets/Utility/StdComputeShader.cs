@@ -14,7 +14,7 @@ namespace Picodex
 
     public class InputComputeBuffer
     {
-        public int count;
+        public int count=0;
         public Texture2D texture;
         public TextureFormat format;
         public Color[] buffer;
@@ -33,24 +33,33 @@ namespace Picodex
 
         public InputComputeBuffer(int count, TextureFormat format)
         {
-            this.count=count;
             this.format = format;
-            int w = 0;
-            int h =0;
-            if (count < 1024)
+            Resize(count);
+        }
+
+        public virtual void Resize(int count)
+        {
+            if (this.count != count)
             {
-                w = (int)MathUtility.NextPowerOfTwo((uint)count);
-                h = 1;
+                this.count = count;
+                int w = 0;
+                int h = 0;
+                if (count < 1024)
+                {
+                    w = (int)MathUtility.NextPowerOfTwo((uint)count);
+                    h = 1;
+                }
+                else
+                {
+                    w = 1024;
+                    h = (int)((count / w));
+                }
+                // TODO, release texture ??
+                texture = new Texture2D(w, h, format, false, false);
+                texture.wrapMode = TextureWrapMode.Clamp;
+                texture.filterMode = FilterMode.Point;
+                buffer = new Color[w * h];
             }
-            else
-            {
-                w = 1024;
-                h = (int)((count / w) );
-            }
-            texture = new Texture2D(w, h, format, false, false);
-            texture.wrapMode = TextureWrapMode.Clamp;
-            texture.filterMode = FilterMode.Point;
-            buffer = new Color[w * h];
         }
 
         public void SetValue(int index, Vector3 value)
@@ -86,16 +95,12 @@ namespace Picodex
         public int count;
         public RenderTexture renderTexture;
         InputComputeBuffer input;
-
+        RenderTextureFormat format;
         public OutputComputeBuffer(InputComputeBuffer input)
         {
             this.input = input;
-            this.count = input.count;
-
-            int w = input.texture.width;
-            int h = input.texture.height;
-
-            RenderTextureFormat format = RenderTextureFormat.RFloat;
+          
+            format = RenderTextureFormat.RFloat;
             if (input.format == TextureFormat.RFloat)
             {
                 format = RenderTextureFormat.RFloat;
@@ -105,11 +110,30 @@ namespace Picodex
                 format = RenderTextureFormat.ARGBFloat;
             }
 
-            renderTexture = RenderTexture.GetTemporary(w, h, 0, format);
-            renderTexture.name = "VXCMBuffer";
-            renderTexture.wrapMode = TextureWrapMode.Clamp;
-            renderTexture.filterMode = FilterMode.Point;
-            
+            OnInputResize();
+            //int w = input.texture.width;
+            //int h = input.texture.height;
+
+            //renderTexture = RenderTexture.GetTemporary(w, h, 0, format);
+            //renderTexture.name = "VXCMBuffer";
+            //renderTexture.wrapMode = TextureWrapMode.Clamp;
+            //renderTexture.filterMode = FilterMode.Point;
+
+        }
+
+        public void OnInputResize()
+        {
+            if (input.count != count)
+            {
+                int w = input.texture.width;
+                int h = input.texture.height;
+                this.count = input.count;
+
+                renderTexture = RenderTexture.GetTemporary(w, h, 0, format);
+                renderTexture.name = "VXCMBuffer";
+                renderTexture.wrapMode = TextureWrapMode.Clamp;
+                renderTexture.filterMode = FilterMode.Point;
+            }
         }
 
         public virtual void Sync()

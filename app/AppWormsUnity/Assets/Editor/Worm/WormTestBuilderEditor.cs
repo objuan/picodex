@@ -33,18 +33,20 @@ namespace Picodex
                 if (Event.current.type == EventType.MouseDown)
                 {
                     WormTestBuilder builder = this.target as WormTestBuilder;
-                    DFVolumeRenderer volumeRenderer = builder.gameObject.GetComponent<DFVolumeRenderer>();
-
-                    Ray worldRay = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
-                    VolumeRaycastHit hit;
-
-                    // pick il volume interessato
-                    if (Picodex.Vxcm.Volume.Raycast(volumeRenderer, worldRay.origin, worldRay.direction, out hit))
+                    DFVolumeCollider volumeCollider = builder.gameObject.GetComponent<DFVolumeCollider>();
+                    if (volumeCollider)
                     {
+                        Ray worldRay = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
+                        VolumeRaycastHit hit;
 
-                        //Debug.Log("HIT");
-                        ((WormTestBuilder)target).AddObstacle(hit.point);
+                        // pick il volume interessato
+                        if (Picodex.Volume.Raycast(volumeCollider, worldRay.origin, worldRay.direction, out hit))
+                        {
 
+                            //Debug.Log("HIT");
+                            ((WormTestBuilder)target).AddObstacle(hit.point);
+
+                        }
                     }
                 }
                 Event.current.Use();

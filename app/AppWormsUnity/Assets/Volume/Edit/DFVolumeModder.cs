@@ -32,8 +32,9 @@ namespace Picodex
     {
         DFVolume volume=null;
         DFVolumeRenderer volumeRenderer;
+        DFVolumeCollider volumeCollider;
 
-        public  Color matColor = Color.white;
+        public Color matColor = Color.white;
         //  public VolumeEditor_Shape shape = new VolumeEditor_Shape();
         public VolumeEditor_ShapeType shape = VolumeEditor_ShapeType.Circle;
         public float ray = 4;
@@ -48,11 +49,11 @@ namespace Picodex
         void Start()
         {
             if (!GetComponent<DFVolumeFilter>()) return;
-            if (!GetComponent<DFVolumeRenderer>()) return;
+            if (!GetComponent<DFVolumeCollider>()) return;
 
             volume = GetComponent<DFVolumeFilter>().volume;
             volumeRenderer = GetComponent<DFVolumeRenderer>();
-
+            volumeCollider = GetComponent<DFVolumeCollider>();
         }
 
         public void Update()
@@ -66,7 +67,7 @@ namespace Picodex
 
         void HandleInput()
         {
-            if (!editEnabled) return;
+            if (!editEnabled || !volumeCollider) return;
 
             Ray inputRay = Camera.current.ScreenPointToRay(Input.mousePosition);
             VolumeRaycastHit hit;
@@ -74,7 +75,7 @@ namespace Picodex
          //   Debug.Log(inputRay);
 
             // pick il volume interessato
-            if (Picodex.Vxcm.Volume.Raycast(volumeRenderer,inputRay.origin, inputRay.direction, out hit))
+            if (Picodex.Volume.Raycast(volumeCollider, inputRay.origin, inputRay.direction, out hit))
             {
                 Debug.DrawLine(Camera.current.transform.position, hit.point);
 

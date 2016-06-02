@@ -91,7 +91,6 @@ namespace Picodex
 
             material = new Material(Shader.Find("Vxcm/Object/ray_v07"));
 
-            Volume.AddVolume(this);
 
         }
    
@@ -133,9 +132,8 @@ namespace Picodex
 
         void OnApplicationQuit()
         {
-            DestroyImmediate(proxyGameObject);
+           // DestroyImmediate(proxyGameObject);
 
-            Volume.RemoveVolume(this);
         }
 
         // It seems that we need to implement this function in order to make the volume pickable in the editor.
@@ -174,8 +172,8 @@ namespace Picodex
 
                     vxcmObject.volume = GetComponent<DFVolumeFilter>().volume;
 
-                    // proxyGameObject.hideFlags = HideFlags.DontSave;
-                    proxyGameObject.hideFlags = HideFlags.HideAndDontSave;
+                   proxyGameObject.hideFlags = HideFlags.DontSave;
+                   //  proxyGameObject.hideFlags = HideFlags.HideAndDontSave;
 
                 }
                 else
