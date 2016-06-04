@@ -28,6 +28,7 @@
 			float _SampleRate;
 			sampler2D _MainTex;
 			sampler2D _DirBuffer;
+			//int u_count;
 
 			struct v2f {
 				float4 pos : POSITION;
@@ -47,7 +48,6 @@
 			{
 				half2 ScreenUV = IN.uv;
 
-				
 				float3 rayOriginTex = tex2D(_MainTex, ScreenUV); 
 				float3 rayDirTex =  tex2D(_DirBuffer, ScreenUV);
 			

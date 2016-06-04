@@ -75,7 +75,7 @@ namespace Picodex
          //   Debug.Log(inputRay);
 
             // pick il volume interessato
-            if (Picodex.Volume.Raycast(volumeCollider, inputRay.origin, inputRay.direction, out hit))
+            if (Picodex.Volumetric.Raycast(volumeCollider, inputRay.origin, inputRay.direction, out hit))
             {
                 Debug.DrawLine(Camera.current.transform.position, hit.point);
 

@@ -6,52 +6,99 @@ using UnityEngine;
 
 namespace Picodex
 {
+    //
+    // Summary:
+    //     ///
+    //     The various primitives that can be created using the GameObject.CreatePrimitive
+    //     function.
+    //     ///
+    public enum PrimitiveType
+    {
+        //
+        // Summary:
+        //     ///
+        //     A sphere primitive.
+        //     ///
+        Sphere = 0,
+        //
+        // Summary:
+        //     ///
+        //     A capsule primitive.
+        //     ///
+        Capsule = 1,
+        //
+        // Summary:
+        //     ///
+        //     A cylinder primitive.
+        //     ///
+        Cylinder = 2,
+        //
+        // Summary:
+        //     ///
+        //     A cube primitive.
+        //     ///
+        Cube = 3,
+        //
+        // Summary:
+        //     ///
+        //     A plane primitive.
+        //     ///
+        Plane = 4,
+        //
+        // Summary:
+        //     ///
+        //     A Quad primitive.
+        //     ///
+        Quad = 5,
+        //
+        // Summary:
+        //     ///
+        //     A Quad primitive.
+        //     ///
+        Cone = 6
+    }
 
     public static class PrimitiveHelper
     {
-       // private static Dictionary<PrimitiveType, Mesh> primitiveMeshes = new Dictionary<PrimitiveType, Mesh>();
+        // private static Dictionary<PrimitiveType, Mesh> primitiveMeshes = new Dictionary<PrimitiveType, Mesh>();
 
-        public static GameObject CreatePrimitive(PrimitiveType type)
-        {
-            return CreatePrimitive(type, false);
-        }
 
-        public static GameObject CreatePrimitive(PrimitiveType type, bool withCollider)
+        public static GameObject CreatePrimitive(PrimitiveType type, float size = 1, bool withCollider = false)
         {
-            if (withCollider) { return GameObject.CreatePrimitive(type); }
+            if (withCollider) { return GameObject.CreatePrimitive((UnityEngine.PrimitiveType)type); }
 
             GameObject gameObject = new GameObject(type.ToString());
             MeshFilter meshFilter = gameObject.AddComponent<MeshFilter>();
             meshFilter.sharedMesh = new Mesh();
-            CreatePrimitiveMesh(meshFilter.sharedMesh,type);
+            CreatePrimitiveMesh(meshFilter.sharedMesh, type, size);
             gameObject.AddComponent<MeshRenderer>();
 
             return gameObject;
         }
 
-        //public static Mesh GetPrimitiveMesh(PrimitiveType type)
-        //{
-        //    if (!PrimitiveHelper.primitiveMeshes.ContainsKey(type))
-        //    {
-        //        PrimitiveHelper.CreatePrimitiveMesh(type);
-        //    }
 
-        //    return PrimitiveHelper.primitiveMeshes[type];
-        //}
-
-        private static void CreatePrimitiveMesh(Mesh mesh,PrimitiveType type)
+        private static void CreatePrimitiveMesh(Mesh mesh, PrimitiveType type, float size = 1)
         {
             if (type == PrimitiveType.Cube)
             {
-                CreateCube(mesh);
+                CreateCube(mesh, size, size, size);
                 mesh.name = "Cube";
             }
             else if (type == PrimitiveType.Sphere)
             {
-                CreateSphere(mesh);
+                CreateSphere(mesh, size);
                 mesh.name = "Sphere";
             }
-
+            else if (type == PrimitiveType.Cylinder)
+            {
+                CreateSphere(mesh, size);
+                mesh.name = "Cylinder";
+            }
+            else if (type == PrimitiveType.Cone)
+            {
+                CreateCone(mesh, size, size*0.5f,0.05f);
+                mesh.name = "Cone";
+            }
             //   GameObject gameObject = GameObject.CreatePrimitive(type);
 
             //  Mesh mesh = gameObject.GetComponent<MeshFilter>().sharedMesh;
@@ -61,7 +108,25 @@ namespace Picodex
             //return mesh;
         }
 
-        public static void CreateSphere(Mesh mesh, float radius=1f, int nbLong=24, int nbLat=16)
+        public static void TrasformMesh(Mesh mesh, Matrix4x4 trx)
+        {
+            Vector3[] vertices = mesh.vertices;
+            for(var i = 0; i < vertices.Length; i++)
+            {
+                vertices[i] = trx.MultiplyPoint(vertices[i]);
+            }
+            Vector3[] normals = mesh.normals;
+            for (var i = 0; i < normals.Length; i++)
+            {
+                normals[i] = trx.MultiplyVector(normals[i]);
+            }
+            mesh.vertices = vertices;
+            mesh.normals = normals;
+            mesh.RecalculateBounds();
+            mesh.Optimize();
+        }
+
+        public static void CreateSphere(Mesh mesh, float radius = 1f, int nbLong = 24, int nbLat = 16)
         {
             //MeshFilter filter = gameObject.AddComponent<MeshFilter>();
             //Mesh mesh = filter.mesh;
@@ -162,7 +227,7 @@ namespace Picodex
             mesh.RecalculateBounds();
             mesh.Optimize();
         }
-    
+
         public static void CreatePlane(Mesh mesh, float length, float width, int resX = 2, int resZ = 2)
         {
             //        float length = 1f;
@@ -230,7 +295,7 @@ namespace Picodex
             mesh.Optimize();
         }
 
-        public static void CreateCube(Mesh mesh, float length=1f, float width=1f, float height=1f)
+        public static void CreateCube(Mesh mesh, float length = 1f, float width = 1f, float height = 1f)
         {
             //MeshFilter filter = gameObject.AddComponent<MeshFilter>();
             //Mesh mesh = filter.mesh;
@@ -399,6 +464,552 @@ namespace Picodex
             mesh.triangles = triangles;
 
             mesh.RecalculateBounds();
+        }
+
+        // height in Y
+        public static void CreateCone(Mesh mesh, float height = 1f, float bottomRadius = .25f, float topRadius = .05f, int nbSides = 18, int nbHeightSeg = 1)
+        {
+            // MeshFilter filter = gameObject.AddComponent<MeshFilter>();
+            // Mesh mesh = filter.mesh;
+            mesh.Clear();
+
+            //float height = 1f;
+            //float bottomRadius = .25f;
+            //float topRadius = .05f;
+            //int nbSides = 18;
+            //int nbHeightSeg = 1; // Not implemented yet
+
+            int nbVerticesCap = nbSides + 1;
+            #region Vertices
+
+            // bottom + top + sides
+            Vector3[] vertices = new Vector3[nbVerticesCap + nbVerticesCap + nbSides * nbHeightSeg * 2 + 2];
+            int vert = 0;
+            float _2pi = Mathf.PI * 2f;
+
+            // Bottom cap
+            vertices[vert++] = new Vector3(0f, 0f, 0f);
+            while (vert <= nbSides)
+            {
+                float rad = (float)vert / nbSides * _2pi;
+                vertices[vert] = new Vector3(Mathf.Cos(rad) * bottomRadius, 0f, Mathf.Sin(rad) * bottomRadius);
+                vert++;
+            }
+
+            // Top cap
+            vertices[vert++] = new Vector3(0f, height, 0f);
+            while (vert <= nbSides * 2 + 1)
+            {
+                float rad = (float)(vert - nbSides - 1) / nbSides * _2pi;
+                vertices[vert] = new Vector3(Mathf.Cos(rad) * topRadius, height, Mathf.Sin(rad) * topRadius);
+                vert++;
+            }
+
+            // Sides
+            int v = 0;
+            while (vert <= vertices.Length - 4)
+            {
+                float rad = (float)v / nbSides * _2pi;
+                vertices[vert] = new Vector3(Mathf.Cos(rad) * topRadius, height, Mathf.Sin(rad) * topRadius);
+                vertices[vert + 1] = new Vector3(Mathf.Cos(rad) * bottomRadius, 0, Mathf.Sin(rad) * bottomRadius);
+                vert += 2;
+                v++;
+            }
+            vertices[vert] = vertices[nbSides * 2 + 2];
+            vertices[vert + 1] = vertices[nbSides * 2 + 3];
+            #endregion
+
+            #region Normales
+
+            // bottom + top + sides
+            Vector3[] normales = new Vector3[vertices.Length];
+            vert = 0;
+
+            // Bottom cap
+            while (vert <= nbSides)
+            {
+                normales[vert++] = Vector3.down;
+            }
+
+            // Top cap
+            while (vert <= nbSides * 2 + 1)
+            {
+                normales[vert++] = Vector3.up;
+            }
+
+            // Sides
+            v = 0;
+            while (vert <= vertices.Length - 4)
+            {
+                float rad = (float)v / nbSides * _2pi;
+                float cos = Mathf.Cos(rad);
+                float sin = Mathf.Sin(rad);
+
+                normales[vert] = new Vector3(cos, 0f, sin);
+                normales[vert + 1] = normales[vert];
+
+                vert += 2;
+                v++;
+            }
+            normales[vert] = normales[nbSides * 2 + 2];
+            normales[vert + 1] = normales[nbSides * 2 + 3];
+            #endregion
+
+            #region UVs
+            Vector2[] uvs = new Vector2[vertices.Length];
+
+            // Bottom cap
+            int u = 0;
+            uvs[u++] = new Vector2(0.5f, 0.5f);
+            while (u <= nbSides)
+            {
+                float rad = (float)u / nbSides * _2pi;
+                uvs[u] = new Vector2(Mathf.Cos(rad) * .5f + .5f, Mathf.Sin(rad) * .5f + .5f);
+                u++;
+            }
+
+            // Top cap
+            uvs[u++] = new Vector2(0.5f, 0.5f);
+            while (u <= nbSides * 2 + 1)
+            {
+                float rad = (float)u / nbSides * _2pi;
+                uvs[u] = new Vector2(Mathf.Cos(rad) * .5f + .5f, Mathf.Sin(rad) * .5f + .5f);
+                u++;
+            }
+
+            // Sides
+            int u_sides = 0;
+            while (u <= uvs.Length - 4)
+            {
+                float t = (float)u_sides / nbSides;
+                uvs[u] = new Vector3(t, 1f);
+                uvs[u + 1] = new Vector3(t, 0f);
+                u += 2;
+                u_sides++;
+            }
+            uvs[u] = new Vector2(1f, 1f);
+            uvs[u + 1] = new Vector2(1f, 0f);
+            #endregion
+
+            #region Triangles
+            int nbTriangles = nbSides + nbSides + nbSides * 2;
+            int[] triangles = new int[nbTriangles * 3 + 3];
+
+            // Bottom cap
+            int tri = 0;
+            int i = 0;
+            while (tri < nbSides - 1)
+            {
+                triangles[i] = 0;
+                triangles[i + 1] = tri + 1;
+                triangles[i + 2] = tri + 2;
+                tri++;
+                i += 3;
+            }
+            triangles[i] = 0;
+            triangles[i + 1] = tri + 1;
+            triangles[i + 2] = 1;
+            tri++;
+            i += 3;
+
+            // Top cap
+            //tri++;
+            while (tri < nbSides * 2)
+            {
+                triangles[i] = tri + 2;
+                triangles[i + 1] = tri + 1;
+                triangles[i + 2] = nbVerticesCap;
+                tri++;
+                i += 3;
+            }
+
+            triangles[i] = nbVerticesCap + 1;
+            triangles[i + 1] = tri + 1;
+            triangles[i + 2] = nbVerticesCap;
+            tri++;
+            i += 3;
+            tri++;
+
+            // Sides
+            while (tri <= nbTriangles)
+            {
+                triangles[i] = tri + 2;
+                triangles[i + 1] = tri + 1;
+                triangles[i + 2] = tri + 0;
+                tri++;
+                i += 3;
+
+                triangles[i] = tri + 1;
+                triangles[i + 1] = tri + 2;
+                triangles[i + 2] = tri + 0;
+                tri++;
+                i += 3;
+            }
+            #endregion
+
+            mesh.vertices = vertices;
+            mesh.normals = normales;
+            mesh.uv = uvs;
+            mesh.triangles = triangles;
+
+            mesh.RecalculateBounds();
+            mesh.Optimize();
+        }
+
+        public static void CreateTube(Mesh mesh, float height = 1f, int nbSides = 24, float bottomRadius1 = .5f
+              , float bottomRadius2 = .15f
+        , float topRadius1 = .5f
+        , float topRadius2 = .15f)
+        {
+            //  MeshFilter filter = gameObject.AddComponent<MeshFilter>();
+            //  Mesh mesh = filter.mesh;
+            mesh.Clear();
+
+            //  float height = 1f;
+            // int nbSides = 24;
+
+            // Outter shell is at radius1 + radius2 / 2, inner shell at radius1 - radius2 / 2
+            //float bottomRadius1 = .5f;
+            //float bottomRadius2 = .15f;
+            //float topRadius1 = .5f;
+            //float topRadius2 = .15f;
+
+            int nbVerticesCap = nbSides * 2 + 2;
+            int nbVerticesSides = nbSides * 2 + 2;
+            #region Vertices
+
+            // bottom + top + sides
+            Vector3[] vertices = new Vector3[nbVerticesCap * 2 + nbVerticesSides * 2];
+            int vert = 0;
+            float _2pi = Mathf.PI * 2f;
+
+            // Bottom cap
+            int sideCounter = 0;
+            while (vert < nbVerticesCap)
+            {
+                sideCounter = sideCounter == nbSides ? 0 : sideCounter;
+
+                float r1 = (float)(sideCounter++) / nbSides * _2pi;
+                float cos = Mathf.Cos(r1);
+                float sin = Mathf.Sin(r1);
+                vertices[vert] = new Vector3(cos * (bottomRadius1 - bottomRadius2 * .5f), 0f, sin * (bottomRadius1 - bottomRadius2 * .5f));
+                vertices[vert + 1] = new Vector3(cos * (bottomRadius1 + bottomRadius2 * .5f), 0f, sin * (bottomRadius1 + bottomRadius2 * .5f));
+                vert += 2;
+            }
+
+            // Top cap
+            sideCounter = 0;
+            while (vert < nbVerticesCap * 2)
+            {
+                sideCounter = sideCounter == nbSides ? 0 : sideCounter;
+
+                float r1 = (float)(sideCounter++) / nbSides * _2pi;
+                float cos = Mathf.Cos(r1);
+                float sin = Mathf.Sin(r1);
+                vertices[vert] = new Vector3(cos * (topRadius1 - topRadius2 * .5f), height, sin * (topRadius1 - topRadius2 * .5f));
+                vertices[vert + 1] = new Vector3(cos * (topRadius1 + topRadius2 * .5f), height, sin * (topRadius1 + topRadius2 * .5f));
+                vert += 2;
+            }
+
+            // Sides (out)
+            sideCounter = 0;
+            while (vert < nbVerticesCap * 2 + nbVerticesSides)
+            {
+                sideCounter = sideCounter == nbSides ? 0 : sideCounter;
+
+                float r1 = (float)(sideCounter++) / nbSides * _2pi;
+                float cos = Mathf.Cos(r1);
+                float sin = Mathf.Sin(r1);
+
+                vertices[vert] = new Vector3(cos * (topRadius1 + topRadius2 * .5f), height, sin * (topRadius1 + topRadius2 * .5f));
+                vertices[vert + 1] = new Vector3(cos * (bottomRadius1 + bottomRadius2 * .5f), 0, sin * (bottomRadius1 + bottomRadius2 * .5f));
+                vert += 2;
+            }
+
+            // Sides (in)
+            sideCounter = 0;
+            while (vert < vertices.Length)
+            {
+                sideCounter = sideCounter == nbSides ? 0 : sideCounter;
+
+                float r1 = (float)(sideCounter++) / nbSides * _2pi;
+                float cos = Mathf.Cos(r1);
+                float sin = Mathf.Sin(r1);
+
+                vertices[vert] = new Vector3(cos * (topRadius1 - topRadius2 * .5f), height, sin * (topRadius1 - topRadius2 * .5f));
+                vertices[vert + 1] = new Vector3(cos * (bottomRadius1 - bottomRadius2 * .5f), 0, sin * (bottomRadius1 - bottomRadius2 * .5f));
+                vert += 2;
+            }
+            #endregion
+
+            #region Normales
+
+            // bottom + top + sides
+            Vector3[] normales = new Vector3[vertices.Length];
+            vert = 0;
+
+            // Bottom cap
+            while (vert < nbVerticesCap)
+            {
+                normales[vert++] = Vector3.down;
+            }
+
+            // Top cap
+            while (vert < nbVerticesCap * 2)
+            {
+                normales[vert++] = Vector3.up;
+            }
+
+            // Sides (out)
+            sideCounter = 0;
+            while (vert < nbVerticesCap * 2 + nbVerticesSides)
+            {
+                sideCounter = sideCounter == nbSides ? 0 : sideCounter;
+
+                float r1 = (float)(sideCounter++) / nbSides * _2pi;
+
+                normales[vert] = new Vector3(Mathf.Cos(r1), 0f, Mathf.Sin(r1));
+                normales[vert + 1] = normales[vert];
+                vert += 2;
+            }
+
+            // Sides (in)
+            sideCounter = 0;
+            while (vert < vertices.Length)
+            {
+                sideCounter = sideCounter == nbSides ? 0 : sideCounter;
+
+                float r1 = (float)(sideCounter++) / nbSides * _2pi;
+
+                normales[vert] = -(new Vector3(Mathf.Cos(r1), 0f, Mathf.Sin(r1)));
+                normales[vert + 1] = normales[vert];
+                vert += 2;
+            }
+            #endregion
+
+            #region UVs
+            Vector2[] uvs = new Vector2[vertices.Length];
+
+            vert = 0;
+            // Bottom cap
+            sideCounter = 0;
+            while (vert < nbVerticesCap)
+            {
+                float t = (float)(sideCounter++) / nbSides;
+                uvs[vert++] = new Vector2(0f, t);
+                uvs[vert++] = new Vector2(1f, t);
+            }
+
+            // Top cap
+            sideCounter = 0;
+            while (vert < nbVerticesCap * 2)
+            {
+                float t = (float)(sideCounter++) / nbSides;
+                uvs[vert++] = new Vector2(0f, t);
+                uvs[vert++] = new Vector2(1f, t);
+            }
+
+            // Sides (out)
+            sideCounter = 0;
+            while (vert < nbVerticesCap * 2 + nbVerticesSides)
+            {
+                float t = (float)(sideCounter++) / nbSides;
+                uvs[vert++] = new Vector2(t, 0f);
+                uvs[vert++] = new Vector2(t, 1f);
+            }
+
+            // Sides (in)
+            sideCounter = 0;
+            while (vert < vertices.Length)
+            {
+                float t = (float)(sideCounter++) / nbSides;
+                uvs[vert++] = new Vector2(t, 0f);
+                uvs[vert++] = new Vector2(t, 1f);
+            }
+            #endregion
+
+            #region Triangles
+            int nbFace = nbSides * 4;
+            int nbTriangles = nbFace * 2;
+            int nbIndexes = nbTriangles * 3;
+            int[] triangles = new int[nbIndexes];
+
+            // Bottom cap
+            int i = 0;
+            sideCounter = 0;
+            while (sideCounter < nbSides)
+            {
+                int current = sideCounter * 2;
+                int next = sideCounter * 2 + 2;
+
+                triangles[i++] = next + 1;
+                triangles[i++] = next;
+                triangles[i++] = current;
+
+                triangles[i++] = current + 1;
+                triangles[i++] = next + 1;
+                triangles[i++] = current;
+
+                sideCounter++;
+            }
+
+            // Top cap
+            while (sideCounter < nbSides * 2)
+            {
+                int current = sideCounter * 2 + 2;
+                int next = sideCounter * 2 + 4;
+
+                triangles[i++] = current;
+                triangles[i++] = next;
+                triangles[i++] = next + 1;
+
+                triangles[i++] = current;
+                triangles[i++] = next + 1;
+                triangles[i++] = current + 1;
+
+                sideCounter++;
+            }
+
+            // Sides (out)
+            while (sideCounter < nbSides * 3)
+            {
+                int current = sideCounter * 2 + 4;
+                int next = sideCounter * 2 + 6;
+
+                triangles[i++] = current;
+                triangles[i++] = next;
+                triangles[i++] = next + 1;
+
+                triangles[i++] = current;
+                triangles[i++] = next + 1;
+                triangles[i++] = current + 1;
+
+                sideCounter++;
+            }
+
+
+            // Sides (in)
+            while (sideCounter < nbSides * 4)
+            {
+                int current = sideCounter * 2 + 6;
+                int next = sideCounter * 2 + 8;
+
+                triangles[i++] = next + 1;
+                triangles[i++] = next;
+                triangles[i++] = current;
+
+                triangles[i++] = current + 1;
+                triangles[i++] = next + 1;
+                triangles[i++] = current;
+
+                sideCounter++;
+            }
+            #endregion
+
+            mesh.vertices = vertices;
+            mesh.normals = normales;
+            mesh.uv = uvs;
+            mesh.triangles = triangles;
+
+            mesh.RecalculateBounds();
+            mesh.Optimize();
+        }
+
+        public static void CreateTorus(Mesh mesh, float radius1 = 1f,
+                                                    float radius2 = .3f,
+                                                    int nbRadSeg = 24,
+                                                    int nbSides = 18)
+        {
+          //  MeshFilter filter = gameObject.AddComponent<MeshFilter>();
+           // Mesh mesh = filter.mesh;
+            mesh.Clear();
+
+            //float radius1 = 1f;
+            //float radius2 = .3f;
+            //int nbRadSeg = 24;
+            //int nbSides = 18;
+
+            #region Vertices		
+            Vector3[] vertices = new Vector3[(nbRadSeg + 1) * (nbSides + 1)];
+            float _2pi = Mathf.PI * 2f;
+            for (int seg = 0; seg <= nbRadSeg; seg++)
+            {
+                int currSeg = seg == nbRadSeg ? 0 : seg;
+
+                float t1 = (float)currSeg / nbRadSeg * _2pi;
+                Vector3 r1 = new Vector3(Mathf.Cos(t1) * radius1, 0f, Mathf.Sin(t1) * radius1);
+
+                for (int side = 0; side <= nbSides; side++)
+                {
+                    int currSide = side == nbSides ? 0 : side;
+
+                    Vector3 normale = Vector3.Cross(r1, Vector3.up);
+                    float t2 = (float)currSide / nbSides * _2pi;
+                    Vector3 r2 = Quaternion.AngleAxis(-t1 * Mathf.Rad2Deg, Vector3.up) * new Vector3(Mathf.Sin(t2) * radius2, Mathf.Cos(t2) * radius2);
+
+                    vertices[side + seg * (nbSides + 1)] = r1 + r2;
+                }
+            }
+            #endregion
+
+            #region Normales		
+            Vector3[] normales = new Vector3[vertices.Length];
+            for (int seg = 0; seg <= nbRadSeg; seg++)
+            {
+                int currSeg = seg == nbRadSeg ? 0 : seg;
+
+                float t1 = (float)currSeg / nbRadSeg * _2pi;
+                Vector3 r1 = new Vector3(Mathf.Cos(t1) * radius1, 0f, Mathf.Sin(t1) * radius1);
+
+                for (int side = 0; side <= nbSides; side++)
+                {
+                    normales[side + seg * (nbSides + 1)] = (vertices[side + seg * (nbSides + 1)] - r1).normalized;
+                }
+            }
+            #endregion
+
+            #region UVs
+            Vector2[] uvs = new Vector2[vertices.Length];
+            for (int seg = 0; seg <= nbRadSeg; seg++)
+                for (int side = 0; side <= nbSides; side++)
+                    uvs[side + seg * (nbSides + 1)] = new Vector2((float)seg / nbRadSeg, (float)side / nbSides);
+            #endregion
+
+            #region Triangles
+            int nbFaces = vertices.Length;
+            int nbTriangles = nbFaces * 2;
+            int nbIndexes = nbTriangles * 3;
+            int[] triangles = new int[nbIndexes];
+
+            int i = 0;
+            for (int seg = 0; seg <= nbRadSeg; seg++)
+            {
+                for (int side = 0; side <= nbSides - 1; side++)
+                {
+                    int current = side + seg * (nbSides + 1);
+                    int next = side + (seg < (nbRadSeg) ? (seg + 1) * (nbSides + 1) : 0);
+
+                    if (i < triangles.Length - 6)
+                    {
+                        triangles[i++] = current;
+                        triangles[i++] = next;
+                        triangles[i++] = next + 1;
+
+                        triangles[i++] = current;
+                        triangles[i++] = next + 1;
+                        triangles[i++] = current + 1;
+                    }
+                }
+            }
+            #endregion
+
+            mesh.vertices = vertices;
+            mesh.normals = normales;
+            mesh.uv = uvs;
+            mesh.triangles = triangles;
+
+            mesh.RecalculateBounds();
+            mesh.Optimize();
         }
     }
 }

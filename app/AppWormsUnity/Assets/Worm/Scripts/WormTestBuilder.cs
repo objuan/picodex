@@ -11,8 +11,10 @@ public class WormTestBuilder : MonoBehaviour {
 
     public float ray = 10;
 
-	// Use this for initialization
-	void Start () {
+    public bool sphereMode = false;
+
+    // Use this for initialization
+    void Start () {
 
         //  Build();
         volume = GetComponent<DFVolumeFilter>().volume;
@@ -40,7 +42,10 @@ public class WormTestBuilder : MonoBehaviour {
         GeometrySample sample = new GeometrySample();
         sample.debugColor = new Vector3(1, 0, 0);
 
-        raster.RasterBox(new Vector3(-ray, -4,-ray), new Vector3(ray, 4, ray), sample);
+        if (!sphereMode)
+            raster.RasterBox(new Vector3(-ray, -4,-ray), new Vector3(ray, 4, ray), sample);
+        else
+            raster.RasterSphere(new Vector3(0,0,0), ray, sample);
     }
 
     public void AddObstacle(Vector3 pos)

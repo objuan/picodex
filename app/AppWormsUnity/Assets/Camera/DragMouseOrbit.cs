@@ -17,6 +17,8 @@ public class DragMouseOrbit : MonoBehaviour
 
     public float smoothTime = 2f;
 
+    public KeyCode enableKey;
+
     float rotationYAxis = 0.0f;
     float rotationXAxis = 0.0f;
 
@@ -41,6 +43,8 @@ public class DragMouseOrbit : MonoBehaviour
     {
         if (target!=null)
         {
+            if (enableKey != KeyCode.None && !Input.GetKey(enableKey)) return;
+
             if (Input.GetMouseButton(0))
             {;
                 velocityX += xSpeed * Input.GetAxis("Mouse X") *  0.02f; // *distance
@@ -70,6 +74,8 @@ public class DragMouseOrbit : MonoBehaviour
 
             velocityX = Mathf.Lerp(velocityX, 0, Time.deltaTime * smoothTime);
             velocityY = Mathf.Lerp(velocityY, 0, Time.deltaTime * smoothTime);
+
+           // Debug.Log(Event.current);
         }
 
     }

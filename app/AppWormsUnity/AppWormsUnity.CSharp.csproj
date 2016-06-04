@@ -96,8 +96,10 @@
     <Compile Include="Assets\Utility\TransformSerializationExtension.cs" />
     <Compile Include="Assets\Utility\UI\CanvasAABBInvestigator.cs" />
     <Compile Include="Assets\Utility\UI\Console.cs" />
+    <Compile Include="Assets\Utility\UI\DebugGame.cs" />
     <Compile Include="Assets\Utility\UI\DisplayManager.cs" />
     <Compile Include="Assets\Utility\UI\ModalPanel.cs" />
+    <Compile Include="Assets\Utility\UI\WorldAxis.cs" />
     <Compile Include="Assets\Utility\UI\ModalWindow.cs" />
     <Compile Include="Assets\Utility\UnitySingletonPersistent.cs" />
     <Compile Include="Assets\Volume\DFUtil.cs" />
@@ -107,6 +109,7 @@
     <Compile Include="Assets\Volume\DFVolumeFilter.cs" />
     <Compile Include="Assets\Volume\DFVolumeRenderer.cs" />
     <Compile Include="Assets\Volume\DFVolumeUI.cs" />
+    <Compile Include="Assets\Volume\Edit\DFVolumeProbe.cs" />
     <Compile Include="Assets\Volume\Edit\DFVolumeModder.cs" />
     <Compile Include="Assets\Volume\Edit\MeshDeformer.cs" />
     <Compile Include="Assets\Volume\Edit\MeshDeformerInput.cs" />
@@ -133,7 +136,7 @@
     <Compile Include="Assets\Volume\VXCMCamera.cs" />
     <Compile Include="Assets\Volume\VXCMObject.cs" />
     <Compile Include="Assets\Volume\VXCMObjectProxy.cs" />
-    <Compile Include="Assets\Volume\Volume.cs" />
+    <Compile Include="Assets\Volume\Volumetric.cs" />
     <Compile Include="Assets\Volume\vxcm\GeometrySample.cs" />
     <Compile Include="Assets\Volume\vxcm\VXCMException.cs" />
     <Compile Include="Assets\Volume\vxcm\VXCMMeshBuilder.cs" />
@@ -143,9 +146,13 @@
     <Compile Include="Assets\Volume\vxcm\VolumePrimitiveRaster.cs" />
     <Compile Include="Assets\Volume\vxcm\VolumeRegion.cs" />
     <Compile Include="Assets\Volume\vxcm\VolumeTypes.cs" />
+    <Compile Include="Assets\Worm\Scripts\WormVision.cs" />
     <Compile Include="Assets\Worm\Scripts\MCBlob.cs" />
     <Compile Include="Assets\Worm\Scripts\WormCollision.cs" />
+    <Compile Include="Assets\Worm\Scripts\WormGame.cs" />
     <Compile Include="Assets\Worm\Scripts\WormFood.cs" />
+    <Compile Include="Assets\Worm\Scripts\WormActor.cs" />
+    <Compile Include="Assets\Worm\Scripts\WormIA.cs" />
     <Compile Include="Assets\Worm\Scripts\WormRenderer.cs" />
     <Compile Include="Assets\Worm\Scripts\WormTestBuilder.cs" />
     <Compile Include="Assets\Worm\old\SnakeBody.cs" />

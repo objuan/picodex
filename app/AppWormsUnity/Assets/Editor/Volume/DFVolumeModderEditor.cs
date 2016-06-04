@@ -38,7 +38,7 @@ namespace Picodex
                         VolumeRaycastHit hit;
 
                         // pick il volume interessato
-                        if (Picodex.Volume.Raycast(volumeCollider, worldRay.origin, worldRay.direction, out hit))
+                        if (Picodex.Volumetric.Raycast(volumeCollider, worldRay.origin, worldRay.direction, out hit))
                         {
 
                             //Debug.Log("HIT");

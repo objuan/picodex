@@ -163,6 +163,7 @@ inline bool vxcm_intersectRayWithAABB(in float3 ro, in float3 rd,         // Ray
 	float3 v3Min = min(tempMax, tempMin);
 
 	tLeave = min(v3Max.x, min(v3Max.y, v3Max.z));
+	// tEnter = max (v3Min.x, max (v3Min.y, v3Min.z));    
 	tEnter = max(max(v3Min.x, 0.0), max(v3Min.y, v3Min.z));
 
 	return tLeave > tEnter;
@@ -266,18 +267,10 @@ float4 raycast(float3 rayOriginTex,float3 rayDirTex)
 
 		float dist = raycast(enter, exit, rayDirTex, clipPlaneY, count);
 
-		//dist = float(count) / 100;
-
 		// decode color
 		if (dist >0.01)
 		{
-			//finalColor = float3(dist, dist, dist);
-
-			// to eye coordinate
-		//	float4 objCoord = mul(u_objectToVolumeInvTrx, float4(rayOriginTex.xyz + rayDirTex * dist, 1));
-			//float4 vpos = mul(UNITY_MATRIX_MVP, objCoord);
-			//	o.depth = vpos.z / vpos.w;
-	
+			dist += tEnter;
 			retColor = float4(dist, dist, dist,1); //TODO BETTER
 		}
 
