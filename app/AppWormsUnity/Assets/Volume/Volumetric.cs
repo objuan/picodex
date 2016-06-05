@@ -246,79 +246,26 @@ namespace Picodex
             }
         }
 
+        // =============================================================================
+
         public static bool Raycast(DFVolumeCollider collider, VolumeRaycastRequest request)
         {
-            //    hitInfo = new VolumeRaycastHit();
-          //  float distance;
-            //float volumeDistance = 0;
-            //Vector3 surfaceNormal = new Vector3();
-
-            //GameObject go = collider.proxyGameObject;
-            //if (!go) return false;
-            //MeshRenderer proxyRenderer = go.GetComponent<MeshRenderer>();
-            //Vxcm.VXCMVolume volume = collider.GetComponent<DFVolumeFilter>().volume;
-            //// DFVolumeCollider collider = volumeCollider.gameObject.GetComponent<DFVolumeCollider>();
-            //////f (!collider) return false;
-
-            //Matrix4x4 worldToLocal = proxyRenderer.transform.worldToLocalMatrix;
-            //Bounds bounds = new Bounds(Vector3.zero, new Vector3(volume.resolution.x, volume.resolution.y, volume.resolution.z));
-
-            //foreach (VolumeRaycastRequestEntry entry in request.entryList)
-            //{
-            //    Vector3 localOrigin = worldToLocal.MultiplyPoint(entry.origin);
-            //    entry.localDir = worldToLocal.MultiplyVector(entry.direction);
-            //    Ray ray = new Ray(localOrigin, entry.localDir);
-
-            //    if (bounds.IntersectRay(ray, out distance))
-            //    {
-            //        Vector3 localPos = ray.GetPoint(distance);
-            //        entry.volumePos = volume.objectToVolumeTrx.MultiplyPoint(localPos);
-            //        entry.localDistance = distance;
-            //        entry.active = true;
-            //    }
-            //    else
-            //        entry.active = false;
-            //}
-            ////Debug.Log("hit " + distance);
-            ////Debug.Log("loc " + localPos);
-            ////Debug.Log("vol " + volumePos);
-
-            if (collider.Raycast(request) > 0)
-            {
-                return true;
-            }
-            //if (collider.Raycast(volumePos, localDir, ref volumeDistance, ref surfaceNormal))
-            //{
-            //    // volumeDistance is in volumeDistance
-            ////     Debug.Log("hit " + volumeDistance + " normal = " + surfaceNormal);
-
-            //    hitInfo.volumePoint = volumePos + direction * volumeDistance;
-            //    hitInfo.point = origin + (direction * (distance + volumeDistance * volume.resolution.x));
-            //    hitInfo.normal = surfaceNormal;
-            //    hitInfo.colliderVolume = collider;
-            //    return true;
-            //}
-            else
-                return false;
+            return (collider.Raycast(request) > 0);
         }
 
      
         public static bool RaycastSpherical(DFVolumeCollider collider, Vector3 origin, out VolumeRaycastRequest req)
         {
 
-            //GameObject go = collider.proxyGameObject;
-            //if (!go) return 0;
-            //MeshRenderer proxyRenderer = go.GetComponent<MeshRenderer>();
-            //Vxcm.VXCMVolume volume = collider.GetComponent<DFVolumeFilter>().volume;
-
-            //Matrix4x4 worldToLocal = proxyRenderer.transform.worldToLocalMatrix;
-            //Bounds bounds = new Bounds(Vector3.zero, new Vector3(volume.resolution.x, volume.resolution.y, volume.resolution.z));
-
-            //Vector3 localOrigin = worldToLocal.MultiplyPoint(origin);
-            //Vector3 volumePos = volume.objectToVolumeTrx.MultiplyPoint(localOrigin);
-
             return collider.RaycastSpherical(origin, out req)>0;
            
+        }
+
+        public static bool RaycastSemispherical(DFVolumeCollider collider, Vector3 origin, out VolumeRaycastRequest req)
+        {
+
+            return collider.RaycastSemispherical(origin,  out req) > 0;
+
         }
     }
 }
