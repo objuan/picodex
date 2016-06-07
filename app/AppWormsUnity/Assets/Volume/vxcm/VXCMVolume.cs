@@ -42,11 +42,20 @@ namespace Picodex.Vxcm
         [System.NonSerialized]
         public Vector4 resolutionInv;
 
-        [HideInInspector]
-        public Vector3i localToVolumeTrx;
-
+      
         [System.NonSerialized]
-        public Matrix4x4 objectToVolumeTrx;
+        public Matrix4x4 objectToTextureTrx;
+
+        //[System.NonSerialized]
+        //public Matrix4x4 objectToGridTrx;
+
+        [HideInInspector]
+        public Vector3i objectToGridOffset;
+        [HideInInspector]
+        public Vector3 objectToGridOffsetReal;
+
+        //    [System.NonSerialized]
+        //  public Matrix4x4 volumeToObjectTrx;
 
         [HideInInspector]
         public Vector3 volumeToObjectScale;
@@ -99,7 +108,11 @@ namespace Picodex.Vxcm
             // 
             float m = 1.0f / 2;
             resolutionInv = new Vector4(1.0f / resolution.x, 1.0f / resolution.y, 1.0f / resolution.z, 0);
-            objectToVolumeTrx.SetTRS(new Vector3(m, m, m), Quaternion.identity, resolutionInv);
+            objectToTextureTrx.SetTRS(new Vector3(m, m, m), Quaternion.identity, resolutionInv);
+
+            objectToGridOffset = -region.min;
+            objectToGridOffsetReal = new Vector3(objectToGridOffset.x, objectToGridOffset.y, objectToGridOffset.z);
+            //   volumeToObjectTrx = objectToVolumeTrx.inverse;
 
             _bounds = new Bounds(Vector3.zero, new Vector3(resolution.x, resolution.y, resolution.z));
             volumeToObjectScale = new Vector3(resolution.x, resolution.y, resolution.z);
@@ -140,7 +153,8 @@ namespace Picodex.Vxcm
 
             //  MemoryUtil.MemSetG<byte>(DF, 0);
 
-            localToVolumeTrx = -region.min;
+            objectToGridOffset = -region.min;
+            objectToGridOffsetReal = new Vector3(objectToGridOffset.x, objectToGridOffset.y, objectToGridOffset.z);
 
             accessor = null; // invalidate
             lastFrameChanged = true;

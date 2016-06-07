@@ -214,7 +214,7 @@ namespace Picodex
                // if (bounds.IntersectRay(ray, out distance))
                 {
                     //    Vector3 localPos = ray.GetPoint(distance);
-                    entry.volumePos = volume.objectToVolumeTrx.MultiplyPoint(localOrigin);
+                    entry.volumePos = volume.objectToTextureTrx.MultiplyPoint(localOrigin);
                     entry.localDistance = 0;// distance;
                  //   entry.active = true;
                 }
@@ -271,7 +271,7 @@ namespace Picodex
             Matrix4x4 worldToLocal = proxyGameObject.transform.worldToLocalMatrix;
 
             Vector3 localPos = worldToLocal.MultiplyPoint(origin);
-            Vector3 volumeOrigin = volume.objectToVolumeTrx.MultiplyPoint(localPos);
+            Vector3 volumeOrigin = volume.objectToTextureTrx.MultiplyPoint(localPos);
          //   Bounds bounds = new Bounds(Vector3.zero, new Vector3(volume.resolution.x, volume.resolution.y, volume.resolution.z));
 
             // for scan
@@ -303,97 +303,63 @@ namespace Picodex
 
             return _Raycast(sphericalRequest, sphericalHit);
 
-            //List<VolumeRaycastRequestEntry> entryList = sphericalRequest.entryList;
-
-            //sphericalHit.originBuffer.Load();
-            //sphericalHit.dirBuffer.Load();
-
-
-            //// execute
-            //sphericalHit.Execute(proxyGameObject, volume);
-
-            //// get out
-            //int hitCount = 0;
-            //for (int i = 0; i < entryList.Count; i++)
-            //{
-            //    Color outColor = sphericalHit.originBuffer[i];
-            //    if (outColor.a > 0)
-            //    {
-            //        entry = entryList[i];
-            //        entry.hit.distance = outColor.a;
-            //        entry.hit.normal = new Vector3(outColor.r, outColor.g, outColor.b);
-
-            //        //  Debug.Log("hh " + i+" " + entry.hit.distance + " normal = " + entry.hit.normal);
-
-            //        entry.hit.volumePoint = entry.volumePos + entry.localDir * entry.hit.distance;
-
-            //        entry.hit.point = entry.origin + (entry.direction * (entry.localDistance + entry.hit.distance * volume.resolution.x));
-
-            //        entry.hit.distance = (entry.localDistance + entry.hit.distance * volume.resolution.x);
-
-            //        entry.hit.colliderVolume = this;
-
-            //        hitCount++;
-            //    }
-            //}
-            //return hitCount;
         }
 
         // ===============================================
 
-        public int RaycastSemispherical(Vector3 origin, out VolumeRaycastRequest request)
-        {
-            request = semisphericalRequest;
+        //public int RaycastSemispherical(Vector3 origin, out VolumeRaycastRequest request)
+        //{
+        //    request = semisphericalRequest;
 
-            if (!volume) return 0;
+        //    if (!volume) return 0;
 
-            if (semisphericalProbe == null)
-            {
+        //    if (semisphericalProbe == null)
+        //    {
 
-                Mesh mesh = new Mesh();
-                PrimitiveHelper.CreateSphere(mesh, 1);
-                //   Matrix4x4 trx = Matrix4x4.TRS(Vector3.zero, Quaternion.Euler(90, 0, 0), Vector3.one);
-                //   PrimitiveHelper.TrasformMesh(mesh, trx); // best detail on Z
+        //        Mesh mesh = new Mesh();
+        //        PrimitiveHelper.CreateSphere(mesh, 1);
+        //        //   Matrix4x4 trx = Matrix4x4.TRS(Vector3.zero, Quaternion.Euler(90, 0, 0), Vector3.one);
+        //        //   PrimitiveHelper.TrasformMesh(mesh, trx); // best detail on Z
 
-                semisphericalProbe = new Vector3[mesh.vertices.Length];
-                for (var i = 0; i < mesh.vertices.Length; i++)
-                    semisphericalProbe[i] = mesh.vertices[i].normalized;
-            }
-            if (semisphericalHit == null)
-                semisphericalHit = new ShaderHit();
+        //        semisphericalProbe = new Vector3[mesh.vertices.Length];
+        //        for (var i = 0; i < mesh.vertices.Length; i++)
+        //            semisphericalProbe[i] = mesh.vertices[i].normalized;
+        //    }
+        //    if (semisphericalHit == null)
+        //        semisphericalHit = new ShaderHit();
 
-            Matrix4x4 worldToLocal = proxyGameObject.transform.worldToLocalMatrix;
-            Vector3 localPos = worldToLocal.MultiplyPoint(origin);
-            Vector3 volumeOrigin = volume.objectToVolumeTrx.MultiplyPoint(localPos);
+        //    Matrix4x4 worldToLocal = proxyGameObject.transform.worldToLocalMatrix;
+        //    Vector3 localPos = worldToLocal.MultiplyPoint(origin);
+        //    Vector3 volumeOrigin = volume.objectToTextureTrx.MultiplyPoint(localPos);
          
-            // for scan
-            semisphericalHit.Start(semisphericalProbe.Length);
+        //    // for scan
+        //    semisphericalHit.Start(semisphericalProbe.Length);
 
-            // first time
-            if (semisphericalRequest == null)
-            {
-                semisphericalRequest = new VolumeRaycastRequest();
-                for (int i = 0; i < semisphericalProbe.Length; i++)
-                {
-                    semisphericalRequest.AddRaycast(volumeOrigin, semisphericalProbe[i]);
-                    semisphericalHit.dirBuffer.SetValue(i, semisphericalProbe[i]);
-                }
-            }
-            VolumeRaycastRequestEntry entry;
-            // update origin
-            for (int i = 0; i < semisphericalProbe.Length; i++)
-            {
-                entry = semisphericalRequest.entryList[i];
-                semisphericalHit.originBuffer.SetValue(i, volumeOrigin);
+        //    // first time
+        //    if (semisphericalRequest == null)
+        //    {
+        //        semisphericalRequest = new VolumeRaycastRequest();
+        //        for (int i = 0; i < semisphericalProbe.Length; i++)
+        //        {
+        //            semisphericalRequest.AddRaycast(volumeOrigin, semisphericalProbe[i]);
+        //            semisphericalHit.dirBuffer.SetValue(i, semisphericalProbe[i]);
+        //        }
+        //    }
+        //    VolumeRaycastRequestEntry entry;
+        //    // update origin
+        //    for (int i = 0; i < semisphericalProbe.Length; i++)
+        //    {
+        //        entry = semisphericalRequest.entryList[i];
+        //        semisphericalHit.originBuffer.SetValue(i, volumeOrigin);
 
-                entry.origin = origin;
-                entry.volumePos = volumeOrigin; ;
-                entry.localDistance = 0;
-                entry.active = true;
-                entry.hit.colliderVolume = null;
-            }
+        //        entry.origin = origin;
+        //        entry.volumePos = volumeOrigin; ;
+        //        entry.localDistance = 0;
+        //        entry.active = true;
+        //        entry.hit.colliderVolume = null;
+        //    }
 
-            return _Raycast(sphericalRequest, semisphericalHit);
-        }
+        //    return _Raycast(sphericalRequest, semisphericalHit);
+        //}
     }
 }

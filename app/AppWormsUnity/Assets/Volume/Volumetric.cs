@@ -261,11 +261,11 @@ namespace Picodex
            
         }
 
-        public static bool RaycastSemispherical(DFVolumeCollider collider, Vector3 origin, out VolumeRaycastRequest req)
-        {
+        //public static bool RaycastSemispherical(DFVolumeCollider collider, Vector3 origin, out VolumeRaycastRequest req)
+        //{
 
-            return collider.RaycastSemispherical(origin,  out req) > 0;
+        //    return collider.RaycastSemispherical(origin,  out req) > 0;
 
-        }
+        //}
     }
 }

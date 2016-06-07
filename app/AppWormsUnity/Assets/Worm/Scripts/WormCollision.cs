@@ -29,11 +29,11 @@ namespace Picodex
 
             //request.AddRaycast();
 
-            float offsetMult = 3;
+            float offsetMult = 4;
 
             foreach (WormSegment segment in actor.segmentList)
             {
-                request.AddRaycast(segment.position + segment.up * (segment.ray* offsetMult), -segment.up);
+                request.AddRaycast(segment.symPosition + segment.up * (segment.ray* offsetMult), -segment.up);
             }
 
             // pick il volume interessato
@@ -59,7 +59,7 @@ namespace Picodex
                     { 
                         //  Debug.Log("HIT " + i+") "+request.entryList[i].origin +" -> "+ request.entryList[i].hit.distance);
 
-                        float dist = request.entryList[i].hit.distance - actor.segmentList[i].ray * (offsetMult+1);
+                        float dist = request.entryList[i].hit.distance - actor.segmentList[i].ray * (offsetMult);
 
                        // Quaternion rot = Quaternion.FromToRotation(actor.segmentList[i].up, request.entryList[i].hit.normal);
 
@@ -68,8 +68,8 @@ namespace Picodex
                         //if (i == 0) // solo per la testa
                         //    actor.segmentList[i].forward = rot * actor.segmentList[i].forward;
 
-                        if (Mathf.Abs(dist)> 0.1f)
-                            actor.segmentList[i].position += actor.segmentList[i].up * -dist;
+                         if (Mathf.Abs(dist)> 0.1f)
+                             actor.segmentList[i].symPosition =   actor.segmentList[i].symPosition + actor.segmentList[i].up * -dist;
                     }
                     else
                     {

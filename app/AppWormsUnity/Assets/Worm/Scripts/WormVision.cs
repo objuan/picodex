@@ -15,9 +15,9 @@ namespace Picodex
         {
             volumeCollider = GameObject.FindGameObjectWithTag("Planet").GetComponent<DFVolumeCollider>();
 
-            Mesh mesh = new Mesh();
-            PrimitiveHelper.CreateSphere(mesh, 1);
-            gameObject.AddComponent<MeshFilter>().sharedMesh = mesh;
+            //Mesh mesh = new Mesh();
+            //PrimitiveHelper.CreateSphere(mesh, 1);
+            //gameObject.AddComponent<MeshFilter>().sharedMesh = mesh;
         }
 
         public void Update()

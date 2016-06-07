@@ -18,6 +18,7 @@ namespace Picodex.Vxcm
         float distanceFieldRangeW;
         int size;
         int size2;
+        public byte isoValue;
      
 
         // from 0 (trasparent) to 1 (opaque)
@@ -25,7 +26,7 @@ namespace Picodex.Vxcm
         public bool CutMode = false;
         GeometrySample tmpGeometrySample = new GeometrySample();
 
-        Vector3i localToVolumeTrx;
+        Vector3i objectToGridOffset;
         VolumeRegion volumeLocalRegion;
 
         //bool isEditing;
@@ -41,8 +42,10 @@ namespace Picodex.Vxcm
             distanceFieldRangeMax = volume.distanceFieldRangeMax;
             distanceFieldRangeW = distanceFieldRangeMax - distanceFieldRangeMin;
 
-            localToVolumeTrx = volume.localToVolumeTrx;
+            objectToGridOffset = volume.objectToGridOffset;
             volumeLocalRegion = volume.region;
+
+            isoValue = EncodeDistanceField(0);
 
         }
 
@@ -119,7 +122,7 @@ namespace Picodex.Vxcm
         // csg operation
         public void csgUnion(Vector3i localAddress, GeometrySample voxel)
         {
-            Vector3i address = localAddress + localToVolumeTrx;
+            Vector3i address = localAddress + objectToGridOffset;
 
             Debug.Assert(address.x >= 0); Debug.Assert(address.y >= 0); Debug.Assert(address.z >= 0);
             Debug.Assert(localAddress.x < volumeLocalRegion.max.x); Debug.Assert(localAddress.y < volumeLocalRegion.max.y); Debug.Assert(localAddress.z < volumeLocalRegion.max.z);
@@ -168,7 +171,7 @@ namespace Picodex.Vxcm
 
         public void csgDifference(Vector3i localAddress, GeometrySample voxel)
         {
-            Vector3i address = localAddress + localToVolumeTrx;
+            Vector3i address = localAddress + objectToGridOffset;
             Debug.Assert(address.x >= 0); Debug.Assert(address.y >= 0); Debug.Assert(address.z >= 0);
             Debug.Assert(localAddress.x < volumeLocalRegion.max.x); Debug.Assert(localAddress.y < volumeLocalRegion.max.y); Debug.Assert(localAddress.z < volumeLocalRegion.max.z);
 

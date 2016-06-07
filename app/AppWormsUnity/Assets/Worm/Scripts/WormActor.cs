@@ -5,19 +5,24 @@ namespace Picodex
 {
     public class WormSegment
     {
-        public Vector3 position; // in world coordinate
+        
+        public Vector3 symPosition; // in world coordinate
         public GameObject obj;
         public float ray;
+
+        public Vector3 _gfxPosition; // in world coordinate
 
         // runtime
 
         public Vector3 forward = Vector3.forward;// in world coordinate
         public Vector3 up = Vector3.up;// in world coordinate
 
+
         public void SetTrx()
         {
-            obj.transform.position = position;
-            obj.transform.LookAt(position + forward, up);
+            _gfxPosition = symPosition + up * ray;
+            obj.transform.position = _gfxPosition;
+            obj.transform.LookAt(_gfxPosition + forward, up);
 
         }
     }
@@ -44,9 +49,9 @@ namespace Picodex
         {
             get { return segmentList[0].ray; }
         }
-        public Vector3 position
+        public Vector3 symPosition
         {
-            get { return segmentList[0].position; }
+            get { return segmentList[0].symPosition; }
         }
         public Vector3 up
         {
@@ -91,12 +96,12 @@ namespace Picodex
          
             for (var i = 0; i < objects - 1; i++)
             {
-                setSegment(i + 1, segmentList[i].position);
+                setSegment(i + 1, segmentList[i].symPosition);
             }
 
 #if UNITY_EDITOR
-            Vector3 gravity = segmentList[0].up;
-            Debug.DrawLine(segmentList[0].position, segmentList[0].position + gravity * 20, Color.yellow);
+            Debug.DrawLine(segmentList[0].symPosition, segmentList[0].symPosition + segmentList[0].up * 10, Color.green);
+            Debug.DrawLine(segmentList[0].symPosition, segmentList[0].symPosition + segmentList[0].forward * 10, Color.blue);
 #endif
         }
 
@@ -104,7 +109,7 @@ namespace Picodex
         {
             WormSegment segment = new WormSegment();
             segmentList.Add(segment);
-            segment.position = new Vector3(0,0,0);
+            segment.symPosition = new Vector3(0,0,0);
             segment.ray = ray;
             renderer.CreateMesh(segment);
             return segment;
@@ -115,7 +120,7 @@ namespace Picodex
             // new pos
 
         
-            segmentList[0].position = pos;
+            segmentList[0].symPosition = pos;
             segmentList[0].forward = forward;
         }
 
@@ -126,7 +131,7 @@ namespace Picodex
             Quaternion rotInv = Quaternion.Inverse(rot);
 
             Vector3 prevPosLoc = rot * prevPos;
-            Vector3 posLoc = rot * segmentList[i].position;
+            Vector3 posLoc = rot * segmentList[i].symPosition;
 
             Vector3 d = prevPosLoc - posLoc;
             float angle1 = Mathf.Atan2(d.z, d.x); // plane XZ
@@ -136,8 +141,8 @@ namespace Picodex
             newLocPos.z = prevPos.z - Mathf.Sin(angle1) * segmentList[i].ray*2;
             newLocPos.y = posLoc.y;
 
-            segmentList[i].position = rotInv * newLocPos;
-            segmentList[i].forward = (prevPos-segmentList[i].position).normalized;
+            segmentList[i].symPosition = rotInv * newLocPos;
+            segmentList[i].forward = (prevPos-segmentList[i].symPosition).normalized;
             // set object pos
             segmentList[i].SetTrx();
 
