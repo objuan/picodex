@@ -22,10 +22,31 @@ namespace Picodex
 
         // runtime, in grid position
         Vector3 currentPos;
-        Vector3 targetPos;
+        VolumePathPoint _targetPos;
 
         Vector3 lastPos;
 
+        public int Count
+        {
+            get
+            {
+                return volumePath.pointList.Count;
+            }
+        }
+        public VolumePathPoint nextPoint
+        {
+            get
+            {
+                return volumePath.pointList[0];
+            }
+        }
+        public VolumePathPoint targetPos
+        {
+            get
+            {
+                return _targetPos;
+            }
+        }
         public VolumeNavigator(DFVolumeCollider collider)
         {
             this.collider = collider;
@@ -44,6 +65,7 @@ namespace Picodex
             pathFinder = new PathFinder(volume);
             pathFinder.OnEnd += PathFinder_OnEnd;
 
+            _targetPos = new VolumePathPoint();
             volumePath = new VolumePath();
         }
 
@@ -56,7 +78,8 @@ namespace Picodex
             currentPos = _currentPos + volume.objectToGridOffsetReal;
 
             Vector3i i_currentPos = new Vector3i(currentPos );
-            Vector3i i_targetPos = new Vector3i(targetPos);
+            Vector3i i_targetPos = new Vector3i(_targetPos.gridP);
+            Vector3 targetPos = _targetPos.worldPosition;
 
             Vector3 point;
             Vector3i i_point;
@@ -65,8 +88,9 @@ namespace Picodex
             Vector3 fwDirection = (currentPos - lastPos).normalized;
 
             float distanceW = 1;
-            float dirW = 1;
+            float dirW = 2;
 
+            int idx = -1;
             float bestW = 99999;
             Vector3 bestPoint=Vector3.zero;
             if (dist > 0)
@@ -75,9 +99,12 @@ namespace Picodex
                 {
                     point = currentPos + nearOffset[i];
                     i_point = new Vector3i(point);
+
                     if (IsWalkable(i_point))
                     {
+                     //    d = PathFinder.Distance(point, targetPos);
                         d = PathFinder.Distance(i_point, i_targetPos);
+                        // d = (point - targetPos).magnitude;
                         // dir
                         Vector3 dir = (point - lastPos).normalized;
                         float dot = 1.0f - Vector3.Dot(dir, fwDirection);
@@ -86,6 +113,7 @@ namespace Picodex
                         {
                             bestW = w ;
                             bestPoint = point;
+                            idx = i;
                         }
                     }
                 }
@@ -93,8 +121,13 @@ namespace Picodex
 
             // OUT
             volumePath.Clear();
-            if (bestW != 0)
+            if (bestW != 99999)
             {
+                Vector3 dir = (bestPoint - lastPos).normalized;
+                float dot = 1.0f - Vector3.Dot(dir, fwDirection);
+
+                Debug.Log("pos "+pos+" dir " + dir+ " dot " + dot+ " idx " + idx);
+
                 VolumePathPoint  p = new VolumePathPoint();
                 p.set(bestPoint, gridToObjectOffset, localToWorldMatrix);
                 volumePath.pointList.Add(p);
@@ -106,7 +139,7 @@ namespace Picodex
         {
             // to grid coordinate
             Vector3 _toPointObj = transform.worldToLocalMatrix.MultiplyPoint(toPoint);
-            targetPos = _toPointObj + volume.objectToGridOffsetReal;
+            _targetPos.set(_toPointObj + volume.objectToGridOffsetReal,gridToObjectOffset,localToWorldMatrix);
 
             //Vector3i point;
             //volumePath.Clear();

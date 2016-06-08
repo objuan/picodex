@@ -8,6 +8,8 @@ namespace Picodex
     {
         WormActor actor;
 
+        float scale = 0.5f;
+
         // Use this for initialization
         void Start()
         {
@@ -26,7 +28,7 @@ namespace Picodex
         public void CreateMesh(WormSegment segment)
         {
             // segment.obj = PrimitiveHelper.CreatePrimitive(PrimitiveType.Sphere, segment.ray);
-            segment.obj = PrimitiveHelper.CreatePrimitive(PrimitiveType.Cone, segment.ray*2);
+            segment.obj = PrimitiveHelper.CreatePrimitive(PrimitiveType.Cone, segment.ray*2 * scale);
             segment.obj.transform.parent = this.transform;
 
             Matrix4x4 trx = Matrix4x4.TRS(Vector3.zero,Quaternion.Euler(90,0,0),Vector3.one);

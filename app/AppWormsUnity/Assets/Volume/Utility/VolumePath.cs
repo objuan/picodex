@@ -7,7 +7,7 @@ namespace Picodex
     {
         Matrix4x4 localToWorldTrx;
 
-        Vector3 gridP;
+        public Vector3 gridP;
         public Vector3 localPosition;
         //public Vector3 volumePosition;
 
@@ -18,6 +18,7 @@ namespace Picodex
                 return localToWorldTrx.MultiplyPoint(localPosition);
             }
         }
+
         public VolumePathPoint set(Vector3 gridP,Vector3i gridToObjectOffset, Matrix4x4 localToWorldTrx)
         {
             this.gridP = gridP;

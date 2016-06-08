@@ -25,59 +25,60 @@ namespace Picodex
           //  Vector3 gravity = actor.worldToWormTrx.MultiplyPoint(new Vector3(0, -1, 0));
             // Vector3 gravity = new Vector3(0, -1, 0);
 
-            VolumeRaycastRequest request = new VolumeRaycastRequest();
+            //VolumeRaycastRequest request = new VolumeRaycastRequest();
 
-            //request.AddRaycast();
+            ////request.AddRaycast();
 
-            float offsetMult = 4;
+            //float offsetMult = 4;
 
-            foreach (WormSegment segment in actor.segmentList)
-            {
-                request.AddRaycast(segment.symPosition + segment.up * (segment.ray* offsetMult), -segment.up);
-            }
+            //foreach (WormSegment segment in actor.segmentList)
+            //{
+            //    request.AddRaycast(segment.symPosition + segment.up * (segment.ray* offsetMult), -segment.up);
+            //}
 
-            // pick il volume interessato
-            if (Picodex.Volumetric.Raycast(planetCollider, request))
-            {
-                for(int i=0;i< actor.segmentList.Count;i++)
-                {
+            //// pick il volume interessato
+            //if (Picodex.Volumetric.Raycast(planetCollider, request))
+            //{
+            //    for(int i=0;i< actor.segmentList.Count;i++)
+            //    {
 
-                    if (!request.entryList[i].hasCollision)
-                    {
-                        VolumeRaycastRequest req;
-                        Picodex.Volumetric.RaycastSpherical(planetCollider, request.entryList[i].origin, out req);
-                        if (req != null)
-                        {
-                            VolumeRaycastHit hit = req.GetMinDistanceHit();
-                            request.entryList[i].hit = hit; // assign thew nearest
+            //        if (!request.entryList[i].hasCollision)
+            //        {
+            //            VolumeRaycastRequest req;
+            //            Picodex.Volumetric.RaycastSpherical(planetCollider, request.entryList[i].origin, out req);
+            //            if (req != null)
+            //            {
+            //                VolumeRaycastHit hit = req.GetMinDistanceHit();
+            //                request.entryList[i].hit = hit; // assign thew nearest
 
-                            Debug.Log("SCAN HIT !!! " + i);
-                        }
-                    }
+            //                Debug.Log("SCAN HIT !!! " + i);
+            //            }
+            //        }
 
-                    if (request.entryList[i].hasCollision)
-                    { 
-                        //  Debug.Log("HIT " + i+") "+request.entryList[i].origin +" -> "+ request.entryList[i].hit.distance);
+            //        if (request.entryList[i].hasCollision)
+            //        { 
+            //            //  Debug.Log("HIT " + i+") "+request.entryList[i].origin +" -> "+ request.entryList[i].hit.distance);
 
-                        float dist = request.entryList[i].hit.distance - actor.segmentList[i].ray * (offsetMult);
+            //            float dist = request.entryList[i].hit.distance - actor.segmentList[i].ray * (offsetMult);
 
-                       // Quaternion rot = Quaternion.FromToRotation(actor.segmentList[i].up, request.entryList[i].hit.normal);
+            //           // Quaternion rot = Quaternion.FromToRotation(actor.segmentList[i].up, request.entryList[i].hit.normal);
 
-                        actor.segmentList[i].up = request.entryList[i].hit.normal;
+            //          //  actor.segmentList[i].up = request.entryList[i].hit.normal;
 
-                        //if (i == 0) // solo per la testa
-                        //    actor.segmentList[i].forward = rot * actor.segmentList[i].forward;
+            //            //if (i == 0) // solo per la testa
+            //            //    actor.segmentList[i].forward = rot * actor.segmentList[i].forward;
 
-                         if (Mathf.Abs(dist)> 0.1f)
-                             actor.segmentList[i].symPosition =   actor.segmentList[i].symPosition + actor.segmentList[i].up * -dist;
-                    }
-                    else
-                    {
-                        Debug.Log("NO COLL !!! " + i);
-                    }
-                }
-                //Debug.Log("Move " + hit.point);
-            }
+            //             //if (Mathf.Abs(dist)> 0.1f)
+            //             //    actor.segmentList[i].symPosition =   actor.segmentList[i].symPosition +
+            //             //       request.entryList[i].hit.normal * -dist;
+            //        }
+            //        else
+            //        {
+            //            Debug.Log("NO COLL !!! " + i);
+            //        }
+            //    }
+            //    //Debug.Log("Move " + hit.point);
+            //}
 
         }
 

@@ -201,9 +201,9 @@ float raycast(
 	float stepLength = length(leave - enter);
 
 	float3 sample_size = u_textureRes.xyz; // TODO
-	float iso_level = sample_size * 0.1;
+	float iso_level =  sample_size * 0.1;
 	float t = 0.0;
-	float d = 1.0;
+	float d = 2;
 	float2 prec = 0.0; // previous values
 	//[unroll(10)]
 	for (count = 0; count < 100; ++count) {
@@ -211,6 +211,9 @@ float raycast(
 
 		prec.x = d;
 		d = DF(samplePos);
+		//
+		//distance = d;
+		//break;
 		if (d > iso_level)
 		{
 			//  vado avanti
@@ -230,12 +233,11 @@ float raycast(
 			distance = prec.y + factor  * (t - prec.y);
 			//distance = t;// +u_textureRes.x;// lerp(prec.y, t, factor);
 			//distance = lerp(prec.y, t,factor);
-			//distance = t;
+		//	distance = t;
 			//distance = factor;
-
+		//	distance = 0.5;
 			//float factor = (d - iso_level ) / (d - prec.x);
 			//distance = t - factor * (t - prec.y);
-
 			break;
 		}
 	}
@@ -261,19 +263,21 @@ float4 raycast(float3 rayOriginTex,float3 rayDirTex)
 		float3 enter, exit;
 		int count = 0;
 		float clipPlaneY = 0;
-
+		
 		enter = rayOriginTex.xyz + tEnter * rayDirTex;
 		exit = rayOriginTex.xyz + tLeave * rayDirTex;
 
-		float dist = raycast(enter, exit, rayDirTex, clipPlaneY, count);
-
+		float retDist = raycast(enter, exit, rayDirTex, clipPlaneY, count);
+		
+		//dist = 0.5;
 		// decode color
-		if (dist >0.01)
+		/*if (retDist >0.01)
 		{
-			dist += tEnter;
-			retColor = float4(dist, dist, dist,1); //TODO BETTER
-		}
-
+			retDist += tEnter;
+			retColor = float4(retDist, retDist, retDist,1); //TODO BETTER
+		}*/
+		float dist = retDist + tEnter;
+		retColor = float4(dist, dist, dist, sign(retDist));
 	}
 	return retColor;
 }

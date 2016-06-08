@@ -7,33 +7,33 @@ namespace Picodex
 {
     public struct VolumeRaycastHit
     {
-    
+
         //
         // Summary:
         //     ///
         //     The distance from the ray's origin to the impact point.
         //     ///
-        public float distance { get; set; }
-     
+        public float distance;
+
         //
         // Summary:
         //     ///
         //     The normal of the surface the ray hit.
         //     ///
-        public Vector3 normal { get; set; }
+        public Vector3 normal;
         //
         // Summary:
         //     ///
         //     The impact point in world space where the ray hit the collider.
         //     ///
-        public Vector3 point { get; set; }
+        public Vector3 point;
 
         //
         // Summary:
         //     ///
         //     The impact point in world space where the ray hit the collider.
         //     ///
-        public Vector3 volumePoint { get; set; }
+        public Vector3 volumePoint;
 
         public DFVolumeCollider colliderVolume { get; set; }
     }
@@ -86,19 +86,33 @@ namespace Picodex
             return entry;
         }
 
+        int att = 0;
+
         public VolumeRaycastHit GetMinDistanceHit()
         {
             float d = 999999;
             VolumeRaycastHit min = new VolumeRaycastHit();
             min.colliderVolume = null;
-            foreach (VolumeRaycastRequestEntry entry in entryList)
+            int bestEntry = -1;
+            VolumeRaycastRequestEntry entry;
+           // foreach (VolumeRaycastRequestEntry entry in entryList)
+            for (int i=0;i< entryList.Count;i++)
             {
+                entry = entryList[i];
+              //  if ( entry.direction.y == -1)
+              //      Debug.Log("" + i + ") " + entry.origin+" "+entry.direction + " " + entry.hit.distance);
                 if (entry.hasCollision && entry.hit.distance < d)
                 {
                     d = entry.hit.distance;
                     min = entry.hit;
+                    bestEntry = i;
+
+                   // Debug.Log("" +i +") "+entry.direction+" "+ entry.hit.distance);
                 }
             }
+          //  if (bestEntry != -1)
+           //     Debug.Log("BEST " + bestEntry + ") " + entryList[bestEntry].origin + " " + entryList[bestEntry].direction + " " + min.distance);
+            att++;
             return min;
         }
 
@@ -254,10 +268,10 @@ namespace Picodex
         }
 
      
-        public static bool RaycastSpherical(DFVolumeCollider collider, Vector3 origin, out VolumeRaycastRequest req)
+        public static int RaycastSpherical(DFVolumeCollider collider, Vector3 origin, out VolumeRaycastRequest req)
         {
 
-            return collider.RaycastSpherical(origin, out req)>0;
+            return collider.RaycastSpherical(origin, out req);
            
         }
 

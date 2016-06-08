@@ -102,7 +102,8 @@ namespace Picodex
 
         //RenderTexture renderTexture;
 
-        void Start()
+        // void Start()
+        void Awake()
         {
             if (GetComponent<DFVolumeFilter>() == null) return;
             if (GetComponent<DFVolumeRenderer>() == null) return;
@@ -180,7 +181,8 @@ namespace Picodex
                     entry.hit.distance = outColor.a;
                     entry.hit.normal = new Vector3(outColor.r, outColor.g, outColor.b);
 
-                   // Debug.Log("hh " + i + " " + entry.hit.distance + " normal = " + entry.hit.normal);
+                  //  if (entry.direction.y == -1)
+                  //      Debug.Log("hh " + i + " " + entry.hit.distance + " normal = " + entry.hit.normal);
 
                     entry.hit.volumePoint = entry.volumePos + entry.localDir * entry.hit.distance;
 
@@ -246,7 +248,7 @@ namespace Picodex
 
         // ===============================================
 
-     
+        // origin is in world space
         public int RaycastSpherical(Vector3 origin, out VolumeRaycastRequest request)
         {
             request = sphericalRequest;
@@ -257,7 +259,7 @@ namespace Picodex
             {
                
                 Mesh mesh = new Mesh();
-                PrimitiveHelper.CreateSphere(mesh, 1);
+                PrimitiveHelper.CreateIsoSphere(mesh, 1,3);
              //   Matrix4x4 trx = Matrix4x4.TRS(Vector3.zero, Quaternion.Euler(90, 0, 0), Vector3.one);
              //   PrimitiveHelper.TrasformMesh(mesh, trx); // best detail on Z
 
@@ -265,28 +267,33 @@ namespace Picodex
                 for (var i = 0; i < mesh.vertices.Length; i++)
                     sphericalProbe[i] = mesh.vertices[i].normalized;
             }
+
             if (sphericalHit == null)
+            {
                 sphericalHit = new ShaderHit();
+                // for scan
+                sphericalHit.Start(sphericalProbe.Length);
+            }
 
-            Matrix4x4 worldToLocal = proxyGameObject.transform.worldToLocalMatrix;
-
-            Vector3 localPos = worldToLocal.MultiplyPoint(origin);
-            Vector3 volumeOrigin = volume.objectToTextureTrx.MultiplyPoint(localPos);
-         //   Bounds bounds = new Bounds(Vector3.zero, new Vector3(volume.resolution.x, volume.resolution.y, volume.resolution.z));
-
-            // for scan
-            sphericalHit.Start(sphericalProbe.Length);
-
-            // first time
             if (sphericalRequest == null)
             {
                 sphericalRequest = new VolumeRaycastRequest();
                 for (int i = 0; i < sphericalProbe.Length; i++)
                 {
-                    sphericalRequest.AddRaycast(volumeOrigin, sphericalProbe[i]);
+                    sphericalRequest.AddRaycast(Vector3.zero, sphericalProbe[i]);
                     sphericalHit.dirBuffer.SetValue(i, sphericalProbe[i]);
                 }
             }
+
+            Matrix4x4 worldToLocal = proxyGameObject.transform.worldToLocalMatrix;
+
+            Vector3 localPos = worldToLocal.MultiplyPoint(origin);
+            Vector3 volumeOrigin = volume.objectToTextureTrx.MultiplyPoint(localPos);
+       
+          
+
+            // first time
+          
             VolumeRaycastRequestEntry entry;
             // update origin
             for (int i = 0; i < sphericalProbe.Length; i++)
@@ -301,6 +308,7 @@ namespace Picodex
                 entry.hit.colliderVolume = null;
             }
 
+            request = sphericalRequest;
             return _Raycast(sphericalRequest, sphericalHit);
 
         }

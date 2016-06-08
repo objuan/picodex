@@ -26,20 +26,70 @@ namespace Picodex
 
         }
     }
+    public enum WormState
+    {
+        Dead,
+        GetLive,
+        Iddle,
+        Moving
+    }
 
     // [AddComponentMenu("Planet/Worm")]
     public class WormActor : MonoBehaviour
     {
+        class MovePath
+        {
+            public Vector3[] path_pos;
+            public Vector3[] path_fw;
+            public Vector3[] path_up;
+            public int turn = -1;
+            int size;
+            public Vector3 position
+            {
+                get { return path_pos[turn]; }
+            }
+            public Vector3 forward
+            {
+                get { return path_fw[turn]; }
+            }
+            public Vector3 up
+            {
+                get { return path_up[turn]; }
+            }
+            public MovePath(int size)
+            {
+                this.size = size;
+                path_pos = new Vector3[size];
+                path_fw = new Vector3[size];
+                path_up = new Vector3[size];
+            }
+            public void Add(Vector3 p)
+            {
+                Vector3 last = (turn > 0) ? path_pos[turn - 1] : p;
+
+                turn++; if (turn == size) turn = 0;
+                path_pos[turn] = p;
+                path_fw[turn] = (p - last).normalized;
+                path_up[turn] = Vector3.up;
+            }
+        }
+
         new WormRenderer renderer;
         WormGame wormGame;
 
         public float speed = 1;
 
+        public WormState state = WormState.Dead;
+
         // PARAMS
-       // public float segLength = 10f;  // distance between objects
-                                        // prefab obj
-      // how many objects
+        // public float segLength = 10f;  // distance between objects
+        // prefab obj
+        // how many objects
         public int objects = 5;
+
+        public Vector3 symPosition;
+        // path
+        MovePath path;
 
         [System.NonSerialized]
         public List<WormSegment> segmentList = new List<WormSegment>();
@@ -49,10 +99,10 @@ namespace Picodex
         {
             get { return segmentList[0].ray; }
         }
-        public Vector3 symPosition
-        {
-            get { return segmentList[0].symPosition; }
-        }
+        //public Vector3 symPosition
+        //{
+        //    get { return segmentList[0].symPosition; }
+        //}
         public Vector3 up
         {
             get { return segmentList[0].up; }
@@ -80,30 +130,80 @@ namespace Picodex
             for (var i = 0; i < objects; i++)
                 AppendSegment(5 - ((float)i * 0.5f));
 
+            path = new MovePath(10);
+            path.Add(symPosition); // first
         }
 
         // Update is called once per frame
         void Update()
         {
-            if (segmentList.Count==0) return;
+            if (segmentList.Count == 0) return;
 
             //Matrix4x4 _worldToWormTrx = worldToWormTrx;
             //Matrix4x4 _worldToWormInvTrx = worldToWormTrx.inverse;
 
+            float stepDist = (symPosition - path.position).magnitude;
             // update positions
             // setSegment(0, segmentList[0].position);
-            segmentList[0].SetTrx();
-         
-            for (var i = 0; i < objects - 1; i++)
+            if (state == WormState.Iddle && stepDist > 0.1)
             {
-                setSegment(i + 1, segmentList[i].symPosition);
+                state = WormState.Moving;
+            }
+            if (state == WormState.Moving && stepDist < 0.1)
+            {
+                state = WormState.Iddle;
             }
 
+            if (state == WormState.Moving)
+            {
+                path.Add(symPosition);
+
+                segmentList[0].symPosition = path.position;
+                segmentList[0].forward = path.forward;
+                segmentList[0].up = path.up;
+
+                segmentList[0].SetTrx();
+
+                for (var i = 0; i < objects - 1; i++)
+                {
+                    setSegment(i + 1, segmentList[i].symPosition);
+                }
+            }
+        }
+
+        public void OnRenderObject()
+        {
 #if UNITY_EDITOR
-            Debug.DrawLine(segmentList[0].symPosition, segmentList[0].symPosition + segmentList[0].up * 10, Color.green);
-            Debug.DrawLine(segmentList[0].symPosition, segmentList[0].symPosition + segmentList[0].forward * 10, Color.blue);
+            DebugGame.DrawLine(segmentList[0].symPosition, segmentList[0].symPosition + segmentList[0].up * 5, Color.green);
+            DebugGame.DrawLine(segmentList[0].symPosition, segmentList[0].symPosition + segmentList[0].forward * 5, Color.blue);
+
+            for(int i = 0; i < path.path_pos.Length; i++)
+            {
+                DebugGame.DrawLine(path.path_pos[i], path.path_pos[i]+ path.path_fw[i] * 0.2f, Color.red);
+            }
 #endif
         }
+
+        public void Born()
+        {
+            state = WormState.GetLive;
+        }
+
+        public void Ready(Vector3 pos)
+        {
+            symPosition = pos;
+            state = WormState.Iddle;
+        }
+
+        //public void Go()
+        //{
+        //    state = WormState.Moving;
+        //}
+
+        //public void Stop()
+        //{
+        //    state = WormState.Iddle;
+        //}
 
         public WormSegment AppendSegment(float ray)
         {
@@ -115,13 +215,13 @@ namespace Picodex
             return segment;
         }
 
-        public void Move(Vector3 pos, Vector3 forward )
+        public void Move(Vector3 pos) // , Vector3 forward
         {
+            symPosition = pos;
             // new pos
 
-        
-            segmentList[0].symPosition = pos;
-            segmentList[0].forward = forward;
+            //segmentList[0].symPosition = pos;
+            //segmentList[0].forward = forward;
         }
 
         void setSegment(int i, Vector3 prevPos)

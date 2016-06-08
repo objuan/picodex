@@ -15,7 +15,7 @@ namespace Picodex
         DFVolumeCollider volumeCollider;
 
         public GameObject volumeObject;
-
+        public bool axeMode = false;
 
         void Start()
         {
@@ -31,14 +31,26 @@ namespace Picodex
             if (!volume) return;
 
             VolumeRaycastRequest req;
-            if (Volumetric.RaycastSpherical(volumeCollider, transform.position, out req) )
+            if (Volumetric.RaycastSpherical(volumeCollider, transform.position, out req) >0)
             {
                 if (req==null) return;
                 List<VolumeRaycastRequestEntry> entryList = new List<VolumeRaycastRequestEntry>();
 
                 req.FillCollidedEntries(entryList);
-                foreach(VolumeRaycastRequestEntry e in entryList)
-                    Debug.DrawLine(transform.position,e.hit.point,Color.cyan);
+                foreach (VolumeRaycastRequestEntry e in entryList)
+                {
+                    if (axeMode)
+                    {
+                        if (e.direction.x == -1 || e.direction.x== 1)
+                            Debug.DrawLine(transform.position, e.hit.point,  Color.red );
+                        if (e.direction.y == -1 || e.direction.y == 1)
+                            Debug.DrawLine(transform.position, e.hit.point, Color.green);
+                        if (e.direction.z == -1 || e.direction.z == 1)
+                            Debug.DrawLine(transform.position, e.hit.point, Color.blue);
+                    }
+                    else
+                        Debug.DrawLine(transform.position, e.hit.point, Color.cyan);
+                }
 
             }
         }

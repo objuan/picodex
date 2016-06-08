@@ -53,7 +53,6 @@
 			
 				float4 rayEnc = raycast(rayOriginTex, rayDirTex);
 			
-
 				if (rayEnc.a > 0)
 				{
 					appdata_vcxm_fs i;

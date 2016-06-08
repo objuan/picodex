@@ -361,5 +361,23 @@ namespace Picodex
 
             return x + y + z;
         }
+
+        public static float Distance(Vector3 a, Vector3 b)
+        {
+            var x = a.x - b.x;
+            var y = a.y - b.y;
+            var z = a.z - b.z;
+
+            if (x < 0)
+                x *= -1;
+
+            if (y < 0)
+                y *= -1;
+
+            if (z < 0)
+                z *= -1;
+
+            return x + y + z;
+        }
     }
 }
