@@ -4,27 +4,31 @@ using System.Threading;
 
 namespace Picodex
 {
-  
-    public class VolumeNavigator
+    public abstract class VolumeNavigator
     {
-        DFVolume volume;
-        Vxcm.VXCMVolumeAccessor accessor;
-        DFVolumeCollider collider;
-        byte isoValue;
-        int MAX_X, MAX_Y, MAX_Z;
+        protected DFVolume volume;
+        protected Vxcm.VXCMVolumeAccessor accessor;
 
-        Transform transform;
-        Vector3i gridToObjectOffset;
-        Matrix4x4 localToWorldMatrix;
-        PathFinder pathFinder;
+        protected  byte isoValue;
+        protected int MAX_X, MAX_Y, MAX_Z;
 
-        public VolumePath volumePath;
+    //    protected VolumePathPoint _targetPos;
+        protected DFVolumeCollider collider;
+        protected VolumePath _volumePath;
 
-        // runtime, in grid position
-        Vector3 currentPos;
-        VolumePathPoint _targetPos;
+        protected Transform transform;
+        protected Vector3i gridToObjectOffset;
+        protected Matrix4x4 localToWorldMatrix;
 
-        Vector3 lastPos;
+        public Vector3 targetPos;
+
+        public VolumePath volumePath
+        {
+            get
+            {
+                return _volumePath;
+            }
+        }
 
         public int Count
         {
@@ -40,14 +44,8 @@ namespace Picodex
                 return volumePath.pointList[0];
             }
         }
-        public VolumePathPoint targetPos
-        {
-            get
-            {
-                return _targetPos;
-            }
-        }
-        public VolumeNavigator(DFVolumeCollider collider)
+
+        public VolumeNavigator( DFVolumeCollider collider)
         {
             this.collider = collider;
             volume = collider.gameObject.GetComponent<DFVolumeFilter>().volume;
@@ -62,116 +60,45 @@ namespace Picodex
             gridToObjectOffset = -volume.objectToGridOffset;
             localToWorldMatrix = transform.localToWorldMatrix;
 
+            _volumePath = new VolumePath(gridToObjectOffset, localToWorldMatrix);
+        }
+
+        public abstract void Update(Vector3 pos);
+
+        public abstract void MoveTo(Vector3 toPointW);
+    }
+
+    // ======================================================================
+    // ======================================================================
+
+    public class VolumeNavigator_AStar : VolumeNavigator
+    {
+        PathFinder pathFinder;
+        Vector3 currentPosW;
+        Vector3 lastPosW;
+
+        public VolumeNavigator_AStar(DFVolumeCollider collider) : base(collider)
+        {
             pathFinder = new PathFinder(volume);
             pathFinder.OnEnd += PathFinder_OnEnd;
-
-            _targetPos = new VolumePathPoint();
-            volumePath = new VolumePath();
         }
 
-        static Vector3[] nearOffset = new Vector3[] { new Vector3(1, 0, 0), new Vector3(-1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, -1, 0), new Vector3(0, 0, 1), new Vector3(0, 0, -1) };
-
-        public void Update(Vector3 pos)
-        {
-            // to grid coordinate
-            Vector3 _currentPos = transform.worldToLocalMatrix.MultiplyPoint(pos);
-            currentPos = _currentPos + volume.objectToGridOffsetReal;
-
-            Vector3i i_currentPos = new Vector3i(currentPos );
-            Vector3i i_targetPos = new Vector3i(_targetPos.gridP);
-            Vector3 targetPos = _targetPos.worldPosition;
-
-            Vector3 point;
-            Vector3i i_point;
-            float d;
-            float dist = PathFinder.Distance(i_currentPos, i_targetPos);
-            Vector3 fwDirection = (currentPos - lastPos).normalized;
-
-            float distanceW = 1;
-            float dirW = 2;
-
-            int idx = -1;
-            float bestW = 99999;
-            Vector3 bestPoint=Vector3.zero;
-            if (dist > 0)
-            {
-                for(int i=0;i< nearOffset.Length; i++)
-                {
-                    point = currentPos + nearOffset[i];
-                    i_point = new Vector3i(point);
-
-                    if (IsWalkable(i_point))
-                    {
-                     //    d = PathFinder.Distance(point, targetPos);
-                        d = PathFinder.Distance(i_point, i_targetPos);
-                        // d = (point - targetPos).magnitude;
-                        // dir
-                        Vector3 dir = (point - lastPos).normalized;
-                        float dot = 1.0f - Vector3.Dot(dir, fwDirection);
-                        float w = d * distanceW + dot * dirW;
-                        if (w < bestW)
-                        {
-                            bestW = w ;
-                            bestPoint = point;
-                            idx = i;
-                        }
-                    }
-                }
-            }
-
-            // OUT
-            volumePath.Clear();
-            if (bestW != 99999)
-            {
-                Vector3 dir = (bestPoint - lastPos).normalized;
-                float dot = 1.0f - Vector3.Dot(dir, fwDirection);
-
-                Debug.Log("pos "+pos+" dir " + dir+ " dot " + dot+ " idx " + idx);
-
-                VolumePathPoint  p = new VolumePathPoint();
-                p.set(bestPoint, gridToObjectOffset, localToWorldMatrix);
-                volumePath.pointList.Add(p);
-            }
-            lastPos = currentPos;
-        }
-
-        public void MoveTo( Vector3 toPoint)
-        {
-            // to grid coordinate
-            Vector3 _toPointObj = transform.worldToLocalMatrix.MultiplyPoint(toPoint);
-            _targetPos.set(_toPointObj + volume.objectToGridOffsetReal,gridToObjectOffset,localToWorldMatrix);
-
-            //Vector3i point;
-            //volumePath.Clear();
-            //VolumePathPoint p;
-            //for (var i = 0; i < nearOffset.Length; i++)
-            //{
-            //    point = new Vector3i(fromPoint + nearOffset[i]);
-
-            //    byte val = volume.Accessor.GetDistanceField(point);
-            //    return val > 0 && val <= isoValue;//TODO
-
-            //    // 
-            //    p = new VolumePathPoint();
-            //    p.set(point, gridToObjectOffset, localToWorldMatrix);
-            //    volumePath.pointList.Add(p);
-            //}
-            //volume.Accessor.GetDistanceField();
-        }
-
-        public bool IsWalkable(Vector3i pos)
-        {
-            // fuori bound ?? 
-            //int sum = pos.x + pos.y + pos.z;
-            //if (sum == 0 || sum == MAX_SUM) return false;
-
-            // get value
-            byte val = accessor.GetDistanceField(pos);
-            return val > 0 && val <= isoValue;//TODO
-        }
 
         // =================
 
+        public override void Update(Vector3 posW)
+        {
+            lastPosW = currentPosW;
+            currentPosW = posW;
+            // ho raggiunto il nodo ?? 
+            if (Count > 0)
+            {
+                Vector3 wayPoint = nextPoint.worldPosition;
+
+                Vector3 a = currentPosW - wayPoint;
+                Vector3 b = lastPosW - wayPoint;
+            }
+        }
 
         // multithread
         private void PathFinder_OnEnd(PathFinder pathFinder)
@@ -180,22 +107,23 @@ namespace Picodex
             volumePath.Clear();
             foreach (Vector3i point in pathFinder.path)
             {
-                p = new VolumePathPoint();
-                p.set(new Vector3(point.x, point.y, point.z), gridToObjectOffset, localToWorldMatrix);
-                volumePath.pointList.Add(p);
+                //p = new VolumePathPoint();
+                //p.set(new Vector3(point.x, point.y, point.z), gridToObjectOffset, localToWorldMatrix);
+                 p = volumePath.Append(new Vector3(point.x, point.y, point.z));
             }
         }
 
-        public void CreatePathW(Vector3 fromPoint, Vector3 toPoint)
+        public override void MoveTo(Vector3 toPoint)
         {
-            Vector3 _fromPointObj = transform.worldToLocalMatrix.MultiplyPoint(fromPoint);
+            targetPos = toPoint;
+            Vector3 _fromPointObj = transform.worldToLocalMatrix.MultiplyPoint(currentPosW);
             Vector3 _toPointObj = transform.worldToLocalMatrix.MultiplyPoint(toPoint);
 
             Vector3i _fromPoint = new Vector3i(_fromPointObj) + volume.objectToGridOffset;
             Vector3i _toPoint = new Vector3i(_toPointObj) + volume.objectToGridOffset;
             //  Vector3i gridToObjectOffset = -volume.objectToGridOffset;
 
-            VolumePath path = new VolumePath();
+         //   VolumePath path = new VolumePath();
             pathFinder.Start(new Vector3i(_fromPoint), new Vector3i(_toPoint));
 
             //VolumePathPoint p;

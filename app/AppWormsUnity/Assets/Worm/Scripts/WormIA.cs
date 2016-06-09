@@ -3,7 +3,13 @@ using System.Collections;
  
 namespace Picodex
 {
-  
+
+    public enum WormPathMode
+    { 
+        None,
+        Search,
+        Incremental
+    }
     // [AddComponentMenu("Planet/Worm")]
     public class WormIA : MonoBehaviour
     {
@@ -19,6 +25,9 @@ namespace Picodex
 
         Vector3 borningPos;
 
+        WormPathMode oldMode = WormPathMode.None;
+        public WormPathMode mode = WormPathMode.Search;
+
         //   VolumePath volumePath;
 
         // Use this for initialization
@@ -29,8 +38,8 @@ namespace Picodex
             volumeExtra = GameObject.FindGameObjectWithTag("Planet").GetComponent<DFVolumeExtra>();
             // volume = volumeCollider.GetComponent<DFVolumeFilter>().volume;
             planetCollider = volumeExtra.GetComponent<DFVolumeCollider>();
-            navigator = new VolumeNavigator(planetCollider);
 
+            oldMode = WormPathMode.None;
             // navigator.SetPos(actor.symPosition);
 
             // DEBUG
@@ -63,6 +72,14 @@ namespace Picodex
 
        void FixedUpdate()
         {
+            if (mode != oldMode)
+            {
+                if (mode == WormPathMode.Incremental)
+                    navigator = new VolumeNavigator_Incremental(planetCollider);
+                else
+                    navigator = new VolumeNavigator_AStar(planetCollider);
+                oldMode = mode;
+            }
             // return;
             // STATE MACHINE
             if (actor.state == WormState.GetLive)
@@ -186,8 +203,8 @@ namespace Picodex
         public void OnRenderObject()
         {
 #if UNITY_EDITOR
-            DebugGame.DrawLine(navigator.targetPos.worldPosition, navigator.targetPos.worldPosition+ Vector3.up*5,Color.yellow);
-            DebugGame.DrawLine(navigator.targetPos.worldPosition, navigator.targetPos.worldPosition + force * 5, Color.magenta);
+            DebugGame.DrawLine(navigator.targetPos, navigator.targetPos+ Vector3.up*5,Color.yellow);
+            DebugGame.DrawLine(navigator.targetPos, navigator.targetPos + force * 5, Color.magenta);
 
             VolumePath volumePath  = navigator.volumePath;
             // DEBUG PATH
