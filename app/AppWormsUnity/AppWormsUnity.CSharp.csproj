@@ -85,6 +85,18 @@
     <Compile Include="Assets\Utility\GeneralUtils.cs" />
     <Compile Include="Assets\Utility\MemoryUtil.cs" />
     <Compile Include="Assets\Utility\Mesh\PrimitiveHelper.cs" />
+    <Compile Include="Assets\Utility\Path1\IShortestPath.cs" />
+    <Compile Include="Assets\Utility\PriorityQueue.cs" />
+    <Compile Include="Assets\Volume\Utility\ShortestPathGraphSearch.cs" />
+    <Compile Include="Assets\Utility\Path\Connection.cs" />
+    <Compile Include="Assets\Utility\Path\Marker.cs" />
+    <Compile Include="Assets\Utility\Path\Navigation.cs" />
+    <Compile Include="Assets\Utility\Path\Navigator.cs" />
+    <Compile Include="Assets\Utility\Path\Path.cs" />
+    <Compile Include="Assets\Utility\Path\Resources.cs" />
+    <Compile Include="Assets\Utility\Path\Seeker.cs" />
+    <Compile Include="Assets\Utility\Path\SeekerData.cs" />
+    <Compile Include="Assets\Utility\Path\Waypoint.cs" />
     <Compile Include="Assets\Utility\PathUtils.cs" />
     <Compile Include="Assets\Utility\Singleton.cs" />
     <Compile Include="Assets\Utility\Splitter\IMeshSplitter.cs" />
@@ -136,8 +148,8 @@
     <Compile Include="Assets\Volume\Test\VXCMTexture3D_Off_v02.cs" />
     <Compile Include="Assets\Volume\Test\VXCMTexture3D_Off_v03.cs" />
     <Compile Include="Assets\Volume\Utility\PathFinder.cs" />
-    <Compile Include="Assets\Volume\Utility\VolumeNavigator_Incremental.cs" />
     <Compile Include="Assets\Volume\Utility\VolumeNavigator.cs" />
+    <Compile Include="Assets\Volume\Utility\VolumeNavigator_Incremental.cs" />
     <Compile Include="Assets\Volume\Utility\VolumePath.cs" />
     <Compile Include="Assets\Volume\VXCMCamera.cs" />
     <Compile Include="Assets\Volume\VXCMObject.cs" />
@@ -152,6 +164,7 @@
     <Compile Include="Assets\Volume\vxcm\VolumePrimitiveRaster.cs" />
     <Compile Include="Assets\Volume\vxcm\VolumeRegion.cs" />
     <Compile Include="Assets\Volume\vxcm\VolumeTypes.cs" />
+    <Compile Include="Assets\Worm\Scenes\Path\DemoSeeker.cs" />
     <Compile Include="Assets\Worm\Scripts\MCBlob.cs" />
     <Compile Include="Assets\Worm\Scripts\WormActor.cs" />
     <Compile Include="Assets\Worm\Scripts\WormCollision.cs" />
@@ -197,6 +210,8 @@
     <None Include="Assets\Volume\Shaders\test\RayCast shader.shader" />
     <None Include="Assets\Volume\Shaders\test\TestTrasparent.shader" />
     <None Include="Assets\Volume\Shaders\test\TestTrasparent_v02.shader" />
+    <None Include="Assets\Worm\Scenes\Path\Path\Changelog.txt" />
+    <None Include="Assets\Worm\Scenes\Path\Path\License.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>

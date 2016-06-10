@@ -104,6 +104,8 @@
   <ItemGroup>
     <Compile Include="Assets\Editor\AssetManager.cs" />
     <Compile Include="Assets\Editor\Menu.cs" />
+    <Compile Include="Assets\Editor\Path\PathAbout.cs" />
+    <Compile Include="Assets\Editor\Path\PathInspector.cs" />
     <Compile Include="Assets\Editor\Utils\EditorGUIHelper.cs" />
     <Compile Include="Assets\Editor\Utils\GeneralUtils.cs" />
     <Compile Include="Assets\Editor\Utils\ObjectSelectorWrapper.cs" />
@@ -119,6 +121,9 @@
     <Compile Include="Assets\Editor\VolumeAddressDrawer.cs" />
     <Compile Include="Assets\Editor\VolumeAddressEditor.cs" />
     <Compile Include="Assets\Editor\Worm\WormTestBuilderEditor.cs" />
+    <Compile Include="Assets\Worm\Scenes\Path\Path\Editor\NavigationInspector.cs" />
+    <Compile Include="Assets\Worm\Scenes\Path\Path\Editor\PathAboutWindow.cs" />
+    <Compile Include="Assets\Worm\Scenes\Path\Path\Editor\WaypointInspector.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shaders\Base\MyCutof.shader" />
@@ -153,6 +158,8 @@
     <None Include="Assets\Volume\Shaders\test\RayCast shader.shader" />
     <None Include="Assets\Volume\Shaders\test\TestTrasparent.shader" />
     <None Include="Assets\Volume\Shaders\test\TestTrasparent_v02.shader" />
+    <None Include="Assets\Worm\Scenes\Path\Path\Changelog.txt" />
+    <None Include="Assets\Worm\Scenes\Path\Path\License.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>

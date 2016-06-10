@@ -73,14 +73,16 @@ namespace Picodex
 
     public class VolumeNavigator_AStar : VolumeNavigator
     {
-        PathFinder pathFinder;
+        //    PathFinder pathFinder;
+        ShortestPathGraphSearch pathFinder;
         Vector3 currentPosW;
         Vector3 lastPosW;
 
         public VolumeNavigator_AStar(DFVolumeCollider collider) : base(collider)
         {
-            pathFinder = new PathFinder(volume);
-            pathFinder.OnEnd += PathFinder_OnEnd;
+            // pathFinder = new PathFinder(volume);
+            pathFinder = new ShortestPathGraphSearch(volume);
+         //   pathFinder.OnEnd += PathFinder_OnEnd;
         }
 
 
@@ -124,8 +126,12 @@ namespace Picodex
             //  Vector3i gridToObjectOffset = -volume.objectToGridOffset;
 
          //   VolumePath path = new VolumePath();
-            pathFinder.Start(new Vector3i(_fromPoint), new Vector3i(_toPoint));
-
+           List<Vector3i > list = new ShortestPathGraphSearch(volume).Start(new Vector3i(_fromPoint), new Vector3i(_toPoint));
+            volumePath.Clear();
+            foreach (Vector3i point in list)
+            {
+                volumePath.Append(new Vector3(point.x, point.y, point.z));
+            }
             //VolumePathPoint p;
             //foreach (Vector3i point in pathFinder.path)
             //{

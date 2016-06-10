@@ -37,6 +37,10 @@ namespace Picodex
         public static readonly Vector3i unitY = new Vector3i(0, 1, 0);
         public static readonly Vector3i unitZ = new Vector3i(0, 0, 1);
 
+        public float magnitude
+        {
+            get { return Mathf.Sqrt(x * x + y * y + z * z); }
+        }
 
         /// Constructs a vector from the supplied components.
         public Vector3i(int x, int y, int z)
