@@ -7,8 +7,10 @@ public class WormGame : MonoBehaviour {
     [Range(0,1)]
     public float symulationTime = 1;
 
-	// Use this for initialization
-	void Start () {
+    public AnimationCurve eartWormCurve;
+
+    // Use this for initialization
+    void Start () {
 	
 	}
 	

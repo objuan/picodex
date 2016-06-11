@@ -3,29 +3,6 @@ using System.Collections.Generic;
  
 namespace Picodex
 {
-    public class WormSegment
-    {
-        
-        public Vector3 symPosition; // in world coordinate
-        public GameObject obj;
-        public float ray;
-
-        public Vector3 _gfxPosition; // in world coordinate
-
-        // runtime
-
-        public Vector3 forward = Vector3.forward;// in world coordinate
-        public Vector3 up = Vector3.up;// in world coordinate
-
-
-        public void SetTrx()
-        {
-            _gfxPosition = symPosition + up * ray;
-            obj.transform.position = _gfxPosition;
-            obj.transform.LookAt(_gfxPosition + forward, up);
-
-        }
-    }
     public enum WormState
     {
         Dead,
@@ -35,49 +12,12 @@ namespace Picodex
     }
 
     // [AddComponentMenu("Planet/Worm")]
-    public class WormActor : MonoBehaviour
+    public abstract class WormActor : MonoBehaviour
     {
-        class MovePath
-        {
-            public Vector3[] path_pos;
-            public Vector3[] path_fw;
-            public Vector3[] path_up;
-            public int turn = -1;
-            int size;
-            public Vector3 position
-            {
-                get { return path_pos[turn]; }
-            }
-            public Vector3 forward
-            {
-                get { return path_fw[turn]; }
-            }
-            public Vector3 up
-            {
-                get { return path_up[turn]; }
-            }
-            public MovePath(int size)
-            {
-                this.size = size;
-                path_pos = new Vector3[size];
-                path_fw = new Vector3[size];
-                path_up = new Vector3[size];
-            }
-            public void Add(Vector3 p)
-            {
-                Vector3 last = (turn > 0) ? path_pos[turn - 1] : p;
-
-                turn++; if (turn == size) turn = 0;
-                path_pos[turn] = p;
-                path_fw[turn] = (p - last).normalized;
-                path_up[turn] = Vector3.up;
-            }
-        }
-
         new WormRenderer renderer;
         WormGame wormGame;
 
-        public float speed = 1;
+        public float speed = 10;
 
         public WormState state = WormState.Dead;
 
@@ -91,8 +31,9 @@ namespace Picodex
         public Vector3 symNormal;
 
         // path
-        MovePath path;
+        HistoryPath path;
 
+ 
         [System.NonSerialized]
         public List<WormSegment> segmentList = new List<WormSegment>();
         //  private MCBlob blob = null;
@@ -113,14 +54,11 @@ namespace Picodex
         {
             get { return segmentList[0].forward; }
         }
-        //TODO, parametrico
-        //public Matrix4x4 worldToWormTrx
-        //{
-        //    get
-        //    {
-        //        return Matrix4x4.TRS(Vector3.zero, Quaternion.Euler(0, 0, 0), Vector3.one);
-        //    }
-        //}
+
+        protected abstract void OnStart();
+
+        protected abstract void OnUpdate();
+
 
         // Use this for initialization
         void Start()
@@ -132,19 +70,23 @@ namespace Picodex
             for (var i = 0; i < objects; i++)
                 AppendSegment(5 - ((float)i * 0.5f));
 
-            path = new MovePath(10);
-            path.Add(symPosition); // first
+            path = new HistoryPath(20);
+            path.Add(symPosition, symNormal); // first
+
+            OnStart();
         }
 
+
         // Update is called once per frame
-        void Update()
+        void FixedUpdate()
         {
             if (segmentList.Count == 0) return;
 
             //Matrix4x4 _worldToWormTrx = worldToWormTrx;
             //Matrix4x4 _worldToWormInvTrx = worldToWormTrx.inverse;
 
-            float stepDist = (symPosition - path.position).magnitude;
+            //    float stepDist = (symPosition - path.position).magnitude;
+            float stepDist = path.headPoint.distance;
             // update positions
             // setSegment(0, segmentList[0].position);
             if (state == WormState.Iddle && stepDist > 0.1)
@@ -158,18 +100,26 @@ namespace Picodex
 
             if (state == WormState.Moving)
             {
-                path.Add(symPosition);
+                path.Add(symPosition,symNormal);
 
-                segmentList[0].symPosition = path.position;
-                segmentList[0].forward = path.forward;
-                segmentList[0].up = symNormal;// path.up;
-
-                segmentList[0].SetTrx();
-
+                HistoryPathPoint point = new HistoryPathPoint();
                 for (var i = 0; i < objects - 1; i++)
                 {
-                    setSegment(i + 1, segmentList[i].symPosition);
+                    path.GetInfo(0,ref point);
+                    segmentList[0].symPosition = point.position;
+                    segmentList[0].forward = point.forward;
+                    segmentList[0].up = point.up;
                 }
+                //segmentList[0].symPosition = path.position;
+                //segmentList[0].forward = path.forward;
+                //segmentList[0].up = symNormal;// path.up;
+
+                    //segmentList[0].SetTrx();
+
+                    //for (var i = 0; i < objects - 1; i++)
+                    //{
+                    //    setSegment(i + 1, segmentList[i].symPosition);
+                    //}
             }
         }
 
@@ -179,9 +129,9 @@ namespace Picodex
             DebugGame.DrawLine(segmentList[0].symPosition, segmentList[0].symPosition + segmentList[0].up * 5, Color.green);
             DebugGame.DrawLine(segmentList[0].symPosition, segmentList[0].symPosition + segmentList[0].forward * 5, Color.blue);
 
-            for(int i = 0; i < path.path_pos.Length; i++)
+            for(int i = 0; i < path.path.Length; i++)
             {
-                DebugGame.DrawLine(path.path_pos[i], path.path_pos[i]+ path.path_fw[i] * 0.2f, Color.red);
+                DebugGame.DrawLine(path.path[i].position, path.path[i].position+ path.path[i].up , Color.red);
             }
 #endif
         }
@@ -221,10 +171,6 @@ namespace Picodex
         {
             symPosition = pos;
             symNormal = normal;
-            // new pos
-
-            //segmentList[0].symPosition = pos;
-            //segmentList[0].forward = forward;
         }
 
         void setSegment(int i, Vector3 prevPos)
