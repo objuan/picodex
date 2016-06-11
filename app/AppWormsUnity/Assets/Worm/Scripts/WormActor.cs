@@ -88,6 +88,8 @@ namespace Picodex
         public int objects = 5;
 
         public Vector3 symPosition;
+        public Vector3 symNormal;
+
         // path
         MovePath path;
 
@@ -160,7 +162,7 @@ namespace Picodex
 
                 segmentList[0].symPosition = path.position;
                 segmentList[0].forward = path.forward;
-                segmentList[0].up = path.up;
+                segmentList[0].up = symNormal;// path.up;
 
                 segmentList[0].SetTrx();
 
@@ -215,9 +217,10 @@ namespace Picodex
             return segment;
         }
 
-        public void Move(Vector3 pos) // , Vector3 forward
+        public void Move(Vector3 pos,Vector3 normal) // , Vector3 forward
         {
             symPosition = pos;
+            symNormal = normal;
             // new pos
 
             //segmentList[0].symPosition = pos;

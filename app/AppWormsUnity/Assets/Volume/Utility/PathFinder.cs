@@ -9,6 +9,7 @@ namespace Picodex
     public class PathFinder
     {
         DFVolume world;
+        Vxcm.VXCMVolumeAccessor accessor;
 
         Dictionary<Vector3i, Heuristics> open = new Dictionary<Vector3i, Heuristics>();
         Dictionary<Vector3i, Heuristics> closed = new Dictionary<Vector3i, Heuristics>();
@@ -28,6 +29,9 @@ namespace Picodex
         int MAX_Z;
         int MAX_Y;
         int MAX_X;
+
+        Vector3i[] nextDir = new Vector3i[26];
+        float[] nextDist = new float[26];
 
         public event PathFinderHandler OnEnd;
 
@@ -52,11 +56,26 @@ namespace Picodex
         {
             isoValue = world.Accessor.isoValue;
             this.world = world;
+            accessor = world.Accessor;
             MAX_X = world.resolution.x - 1;
             MAX_Y = world.resolution.y - 1;
             MAX_Z = world.resolution.z - 1;
 
-          
+            int idx = 0;
+            for (int x = -1; x <= 1; x++)
+            {
+                for (int y = -1; y <= 1; y++)
+                {
+                    for (int z = -1; z <= 1; z++)
+                    {
+                        if (x == 0 && y == 0 && z == 0) continue;
+
+                        nextDir[idx] =  new Vector3i(x,y,z);
+                        nextDist[idx] = nextDir[idx].magnitude;
+                        idx++;
+                    }
+                }
+            }
         }
 
         public void Start(Vector3i startLocation, Vector3i targetLocation)
@@ -126,6 +145,8 @@ namespace Picodex
                 if (!closed.TryGetValue(pos.parent, out pos))
                     break;
             }
+            // final, target pos
+            //path.Add(targetLocation);
         }
 
         void ProcessBest()
@@ -190,106 +211,33 @@ namespace Picodex
             List<Vector3i> adjacentPositions = new List<Vector3i>();
             List<float> distanceFromStart = new List<float>();
 
-            //Cardinal directions
-            if (pos.z < MAX_Z)
+            Vector3i p;
+            for (int i=0;i< nextDir.Length;i++)
             {
-                adjacentPositions.Add(new Vector3i(pos.x, pos.y, pos.z + 1));
-                distanceFromStart.Add(dist.g + 1);
-            }
-            if (pos.x < MAX_X)
-            {
-                adjacentPositions.Add(new Vector3i(pos.x + 1, pos.y, pos.z));
-                distanceFromStart.Add(dist.g + 1);
-            }
-            if (pos.z >0)
-            {
-                adjacentPositions.Add(new Vector3i(pos.x, pos.y, pos.z - 1));
-                distanceFromStart.Add(dist.g + 1);
-            }
-            if (pos.x> 0)
-            {
-                adjacentPositions.Add(new Vector3i(pos.x - 1, pos.y, pos.z));
-                distanceFromStart.Add(dist.g + 1);
-            }
+                p = pos + nextDir[i];
 
-            //diagonal directions
-            if (pos.x < MAX_X && pos.z < MAX_Z)
-            {
-                adjacentPositions.Add(new Vector3i(pos.x + 1, pos.y, pos.z + 1));
-                distanceFromStart.Add(dist.g + 1.414f);
+                if (!closed.ContainsKey(p))
+                {
+                    byte val = accessor.GetDistanceField(p);
+                    if (val > 0 && val <= isoValue)
+                    {
+                        adjacentPositions.Add(p);
+                        distanceFromStart.Add(dist.g + nextDist[i]);
+                    }
+                }
             }
-            if (pos.x < MAX_X && pos.z >0)
-            {
-                adjacentPositions.Add(new Vector3i(pos.x + 1, pos.y, pos.z - 1));
-                distanceFromStart.Add(dist.g + 1.414f);
-            }
-            if (pos.x >0 && pos.z >0)
-            {
-                adjacentPositions.Add(new Vector3i(pos.x - 1, pos.y, pos.z - 1));
-                distanceFromStart.Add(dist.g + 1.414f);
-            }
-            if (pos.x >0 && pos.z < MAX_Z)
-            {
-                adjacentPositions.Add(new Vector3i(pos.x - 1, pos.y, pos.z + 1));
-                distanceFromStart.Add(dist.g + 1.414f);
-            }
-
-            //climb up directions
-            if (pos.y < MAX_Y && pos.z < MAX_Z)
-            {
-                adjacentPositions.Add(new Vector3i(pos.x, pos.y + 1, pos.z + 1));
-                distanceFromStart.Add(dist.g + 1.414f);
-            }
-            if (pos.y < MAX_Y && pos.x < MAX_X)
-            {
-                adjacentPositions.Add(new Vector3i(pos.x + 1, pos.y + 1, pos.z));
-                distanceFromStart.Add(dist.g + 1.414f);
-            }
-            if (pos.y < MAX_Y && pos.z >0)
-            {
-                adjacentPositions.Add(new Vector3i(pos.x, pos.y + 1, pos.z - 1));
-                distanceFromStart.Add(dist.g + 1.414f);
-            }
-            if (pos.y < MAX_Y && pos.x >0)
-            {
-                adjacentPositions.Add(new Vector3i(pos.x - 1, pos.y + 1, pos.z));
-                distanceFromStart.Add(dist.g + 1.414f);
-            }
-
-            //climb down directions
-            if (pos.y >0  && pos.z < MAX_Z)
-            {
-                adjacentPositions.Add(new Vector3i(pos.x, pos.y - 1, pos.z + 1));
-                distanceFromStart.Add(dist.g + 1.414f);
-            }
-            if (pos.y > 0 && pos.x < MAX_X)
-            {
-                adjacentPositions.Add(new Vector3i(pos.x + 1, pos.y - 1, pos.z));
-                distanceFromStart.Add(dist.g + 1.414f);
-            }
-            if (pos.y > 0 && pos.z >0)
-            {
-                adjacentPositions.Add(new Vector3i(pos.x, pos.y - 1, pos.z - 1));
-                distanceFromStart.Add(dist.g + 1.414f);
-            }
-            if (pos.y > 0 && pos.x >0)
-            {
-                adjacentPositions.Add(new Vector3i(pos.x - 1, pos.y - 1, pos.z));
-                distanceFromStart.Add(dist.g + 1.414f);
-            }
-
+          
             for (int i = 0; i < adjacentPositions.Count; i++)
             {
-                if (!closed.ContainsKey(adjacentPositions[i]))
+              //  if (!closed.ContainsKey(adjacentPositions[i]))
                 {
-
                     var h = new Heuristics(
                                 distanceFromStart[i],
                                 Distance(targetLocation,
                                 adjacentPositions[i]),
                                 pos);
 
-                    if (IsWalkable(world, adjacentPositions[i]))
+                   // if (IsWalkable(world, adjacentPositions[i]))
                     {
 
                         Heuristics existingTile;
@@ -314,34 +262,12 @@ namespace Picodex
 
         }
 
-        public bool IsWalkable(DFVolume world, Vector3i pos)
+        public bool IsWalkable( Vector3i pos)
         {
-            // fuori bound ?? 
-            //int sum = pos.x + pos.y + pos.z;
-            //if (sum == 0 || sum == MAX_SUM) return false;
 
             // get value
             byte val = world.Accessor.GetDistanceField(pos);
             return val > 0 && val <= isoValue;//TODO
-
-            //TODO
-            //Block block = world.GetBlock(pos);
-
-            //if (!block.controller.CanBeWalkedOn(block))
-            //    return false;
-
-            //for (int y = 1; y < entityHeight + 1; y++)
-            //{
-            //    block = world.GetBlock(pos.Add(0, y, 0));
-
-            //    if (!block.controller.CanBeWalkedThrough(block))
-            //    {
-            //        return false;
-            //    }
-            //}
-
-           // return true;
-
         }
 
         public static float Distance(Vector3i a, Vector3i b)

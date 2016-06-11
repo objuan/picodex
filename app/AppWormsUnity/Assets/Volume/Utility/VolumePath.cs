@@ -62,5 +62,10 @@ namespace Picodex
             return p;
         }
 
+        public void Pop()
+        {
+            pointList.RemoveAt(0);//TODO BETTER
+        }
+
     }
 }

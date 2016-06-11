@@ -73,16 +73,17 @@ namespace Picodex
 
     public class VolumeNavigator_AStar : VolumeNavigator
     {
-        //    PathFinder pathFinder;
-        ShortestPathGraphSearch pathFinder;
+        PathFinder pathFinder;
+        //ShortestPathGraphSearch pathFinder;
         Vector3 currentPosW;
+        Vector3 lastWaypointW;
         Vector3 lastPosW;
 
         public VolumeNavigator_AStar(DFVolumeCollider collider) : base(collider)
         {
-            // pathFinder = new PathFinder(volume);
-            pathFinder = new ShortestPathGraphSearch(volume);
-         //   pathFinder.OnEnd += PathFinder_OnEnd;
+             pathFinder = new PathFinder(volume);
+           // pathFinder = new ShortestPathGraphSearch(volume);
+            pathFinder.OnEnd += PathFinder_OnEnd;
         }
 
 
@@ -90,15 +91,29 @@ namespace Picodex
 
         public override void Update(Vector3 posW)
         {
+            Debug.Log("Update "+ posW);
+
             lastPosW = currentPosW;
             currentPosW = posW;
+
             // ho raggiunto il nodo ?? 
-            if (Count > 0)
+            while (Count >0)
             {
                 Vector3 wayPoint = nextPoint.worldPosition;
+                // Vector3 n = (wayPoint - lastWaypointW).normalized;
+                Vector3 n = (currentPosW - lastPosW).normalized;
 
-                Vector3 a = currentPosW - wayPoint;
-                Vector3 b = lastPosW - wayPoint;
+                Plane p = new Plane(wayPoint, n);
+                if (p.PointSide(currentPosW) > 0)
+                {
+                    lastWaypointW = wayPoint;
+                    volumePath.Pop();
+                    Debug.Log("POP ");
+                }
+               // else
+                {
+                    break;
+                }
             }
         }
 
@@ -113,6 +128,12 @@ namespace Picodex
                 //p.set(new Vector3(point.x, point.y, point.z), gridToObjectOffset, localToWorldMatrix);
                  p = volumePath.Append(new Vector3(point.x, point.y, point.z));
             }
+
+            if (volumePath.pointList.Count>0)
+                lastWaypointW = volumePath.pointList[0].worldPosition;
+            volumePath.Pop(); // toilgo il primo
+            // metto il target
+   
         }
 
         public override void MoveTo(Vector3 toPoint)
@@ -125,21 +146,22 @@ namespace Picodex
             Vector3i _toPoint = new Vector3i(_toPointObj) + volume.objectToGridOffset;
             //  Vector3i gridToObjectOffset = -volume.objectToGridOffset;
 
+            pathFinder.Start(new Vector3i(_fromPoint),new Vector3i(_toPoint));
          //   VolumePath path = new VolumePath();
-           List<Vector3i > list = new ShortestPathGraphSearch(volume).Start(new Vector3i(_fromPoint), new Vector3i(_toPoint));
-            volumePath.Clear();
-            foreach (Vector3i point in list)
-            {
-                volumePath.Append(new Vector3(point.x, point.y, point.z));
-            }
-            //VolumePathPoint p;
-            //foreach (Vector3i point in pathFinder.path)
-            //{
-            //    p = new VolumePathPoint();
-            //    p.set(point, gridToObjectOffset,transform.localToWorldMatrix);
-            //    path.pointList.Add(p);
-            //}
-            // return path;
+         //List<Vector3i > list = new ShortestPathGraphSearch(volume).Start(new Vector3i(_fromPoint), new Vector3i(_toPoint));
+         // volumePath.Clear();
+         // foreach (Vector3i point in list)
+         // {
+         //     volumePath.Append(new Vector3(point.x, point.y, point.z));
+         // }
+         //VolumePathPoint p;
+         //foreach (Vector3i point in pathFinder.path)
+         //{
+         //    p = new VolumePathPoint();
+         //    p.set(point, gridToObjectOffset,transform.localToWorldMatrix);
+         //    path.pointList.Add(p);
+         //}
+         // return path;
         }
 
 

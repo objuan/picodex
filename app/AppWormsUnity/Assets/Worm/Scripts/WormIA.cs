@@ -28,6 +28,7 @@ namespace Picodex
         WormPathMode oldMode = WormPathMode.None;
         public WormPathMode mode = WormPathMode.Search;
 
+        Vector3 surfaceNormal;
         //   VolumePath volumePath;
 
         // Use this for initialization
@@ -88,7 +89,7 @@ namespace Picodex
                 if (CheckPos(ref a))
                 {
                     actor.Ready(a);
-                    navigator.MoveTo(a);
+                   // navigator.MoveTo(a);
                     navigator.Update(a);
                     // targetPos = a; //reset
                 }
@@ -122,10 +123,13 @@ namespace Picodex
                 //   Vector3 heading = (planeP - actor.symPosition);
                 VolumePathPoint nextPoint = navigator.nextPoint;
 
-                Vector3 heading = (nextPoint.worldPosition - actor.symPosition);
+                Vector3 targetPos = nextPoint.worldPosition;
+                CheckPos(ref targetPos); // set to volume
+
+                Vector3 heading = (targetPos - actor.symPosition);
                 //Vector3 targetVector = (targetPos - actor.symPosition);
 
-                float distance = heading.magnitude;
+             //   float distance = heading.magnitude;
 
                 float delta = Time.deltaTime * actor.speed * wormGame.symulationTime;
 
@@ -137,11 +141,11 @@ namespace Picodex
 
                 // collision
 
-                CheckPos(ref newPos);
+               //  CheckPos(ref newPos);
 
                 //
 
-                actor.Move(newPos);// + off * delta);
+                actor.Move(newPos, surfaceNormal);// + off * delta);
             }
             //else
             //    actor.Stop();
@@ -180,6 +184,7 @@ namespace Picodex
                 if (Picodex.Volumetric.Raycast(planetCollider, req))
                 {
                     hit = req.GetMinDistanceHit();
+                    surfaceNormal = hit.normal;
                 }
                 else
                     return false;
@@ -192,6 +197,7 @@ namespace Picodex
                 dist = actor.ray - hit.distance;
             }
 
+            surfaceNormal = hit.normal;
             pos = hit.point + (hit.normal * 0.5f);
 
         //    Debug.Log(pos + " N:" + hit.normal + " d:" + dist);
