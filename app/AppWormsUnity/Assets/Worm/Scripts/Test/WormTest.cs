@@ -10,7 +10,7 @@ namespace Picodex
         public float radius = 30;
         public float angle = 0;
         public float period = 6f;
-
+        int dir = -1;
         // Use this for initialization
         void Start()
         {
@@ -22,12 +22,22 @@ namespace Picodex
         // Update is called once per frame
         void FixedUpdate()
         {
-            angle += period * Time.deltaTime;
-            float x = Mathf.Cos(angle) * radius + center.transform.position.x; //x=cos(angle)*R+a;
-            float y = Mathf.Sin(angle) * radius + center.transform.position.y; //y=sin(angle)*R+b;
+            if (false)
+            {
+                angle += period * Time.deltaTime;
+                float x = Mathf.Cos(angle) * radius + center.transform.position.x; //x=cos(angle)*R+a;
+                float y = Mathf.Sin(angle) * radius + center.transform.position.y; //y=sin(angle)*R+b;
 
-            actor.Move(new Vector3(x,0,y),Vector3.up);
-         //   this.gameObject.transform.position = new Vector2(x, y);
+                actor.Move(new Vector3(x, 0, y), Vector3.up);
+                //   this.gameObject.transform.position = new Vector2(x, y);
+            }
+
+            if(true)
+            {
+                if (Mathf.Abs(actor.symPosition.x) > 100) dir = -dir;
+
+                actor.Move(new Vector3(actor.symPosition.x +  30 * Time.deltaTime*dir, 0, actor.symPosition.z), Vector3.up);
+            }
         }
 
   

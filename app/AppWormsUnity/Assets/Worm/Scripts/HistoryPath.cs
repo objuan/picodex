@@ -16,19 +16,6 @@ namespace Picodex
         private int turn = -1;
         private int size;
 
-        //public Vector3 position
-        //{
-        //    get { return path[turn]; }
-        //}
-        //public Vector3 forward
-        //{
-        //    get { return path_fw[turn]; }
-        //}
-        //public Vector3 up
-        //{
-        //    get { return path_up[turn]; }
-        //}
-
         public HistoryPathPoint headPoint
         {
             get
@@ -45,7 +32,7 @@ namespace Picodex
 
         public void Add(Vector3 pos, Vector3 up)
         {
-            Vector3 last = (turn > 0) ? path[turn - 1].position : pos;
+            Vector3 last = (turn >= 0) ? path[turn ].position : pos;
 
             turn++; if (turn == size) turn = 0;
 
@@ -56,9 +43,22 @@ namespace Picodex
             path[turn].up = Vector3.up;
         }
 
-        public void GetInfo(float headDistance,ref HistoryPathPoint point)
+        public void GetInfo(float distance,ref HistoryPathPoint point)
         {
+            float d = path[turn].distance; // PRIMO
 
+            int i_turn = turn -1; if (i_turn < 0) i_turn = path.Length - 1; // ciclica
+
+            while (d < distance && i_turn != turn)
+            {
+                d += path[i_turn].distance;
+
+                i_turn--;if (i_turn < 0) i_turn = path.Length-1; // ciclica
+            }
+            if (i_turn != turn)
+                point = path[i_turn];
+            else
+                point = path[turn];
         }
     }
 }

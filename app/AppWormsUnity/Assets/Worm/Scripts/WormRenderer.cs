@@ -8,7 +8,7 @@ namespace Picodex
     {
         WormActor actor;
 
-        float scale = 0.5f;
+        float scale = 1.0f;
 
         // Use this for initialization
         void Start()
