@@ -11,7 +11,7 @@ namespace Picodex
         // public int keyDistance = 4;
         bool turn = false;
 
-        public List<float> distanceList;
+        public List<float> distanceList = new List<float>();
 
         public EarthWormBodyModder(WormBody body):base(body)
         {

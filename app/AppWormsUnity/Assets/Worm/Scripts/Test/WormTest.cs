@@ -22,7 +22,7 @@ namespace Picodex
         // Update is called once per frame
         void FixedUpdate()
         {
-            if (false)
+            if (true)
             {
                 angle += period * Time.deltaTime;
                 float x = Mathf.Cos(angle) * radius + center.transform.position.x; //x=cos(angle)*R+a;
@@ -32,7 +32,7 @@ namespace Picodex
                 //   this.gameObject.transform.position = new Vector2(x, y);
             }
 
-            if(true)
+            if(false)
             {
                 if (Mathf.Abs(actor.symPosition.x) > 100) dir = -dir;
 
